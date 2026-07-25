@@ -1,0 +1,264 @@
+export const portfolioData = {
+  name: 'Sharayah Hefner',
+  title: 'Frontend UX Engineer · Design Engineer · E-Commerce Front-End Developer',
+  tagline: 'Creative Engineer',
+  email: 'SharayahDesigns@gmail.com',
+  linkedin: 'https://linkedin.com/in/SharayahHefner',
+  github: 'https://github.com/sharayahDesigns',
+  location: 'Herriman, Utah',
+  availability: 'Remote-friendly',
+  summary:
+    'I’m Sharayah Hefner, a product-focused frontend engineer with 3+ years of production development experience and 15+ years in visual design and animation. I combine thoughtful UX with reliable React, Next.js, and e-commerce engineering to turn complex workflows into clear, polished experiences.',
+
+  stats: [
+    { number: '5+', label: 'E-Commerce Brands' },
+    { number: '850K+', label: 'Annual Site Visits Supported' },
+    { number: '389+', label: 'Amazon Marketing Assets' },
+  ],
+
+  about: {
+    heading: 'Where design thinking meets production engineering',
+    paragraphs: [
+      "I’m a Frontend UX Engineer and Design Engineer based in Herriman, Utah. My career began in visual design, animation, and large-scale themed environments, where I learned how to turn ambitious concepts into experiences people could actually interact with.",
+      "Since moving into software development, I’ve applied that same thinking to e-commerce platforms, SaaS dashboards, marketing websites, design systems, and interactive products. I work across the entire frontend process—from wireframes and interface design to React development, API integration, testing, and production deployment.",
+      "I’m at my best when a project needs someone who can understand the user experience, recognize the technical constraints, and build the final interface.",
+    ],
+    cards: [
+      {
+        icon: 'code',
+        title: 'Frontend Engineering',
+        desc: 'Production React, Next.js, JavaScript, TypeScript, responsive interfaces, APIs, and scalable component architecture.',
+      },
+      {
+        icon: 'layers',
+        title: 'UX & Product Design',
+        desc: 'User flows, wireframes, prototypes, interaction design, accessibility, and complex workflow simplification.',
+      },
+      {
+        icon: 'palette',
+        title: 'Visual Systems',
+        desc: 'Design systems, branding, typography, Adobe Creative Suite, Figma, animation, and visual consistency.',
+      },
+      {
+        icon: 'rocket',
+        title: 'Production Delivery',
+        desc: 'E-commerce integrations, Cloudflare, AWS, Vercel, performance optimization, SEO, QA, and secure releases.',
+      },
+    ],
+  },
+
+  projects: [
+    {
+      name: 'Cabana Filters',
+      type: 'E-Commerce · UX Engineering · Product Discovery',
+      summary:
+        'Designed and developed a customer-focused e-commerce experience that simplifies product discovery and helps customers confidently find the correct replacement filter.',
+      role: 'UX/UI Design · Frontend Development · E-Commerce · Responsive Design',
+      outcome: 'Simplified a complex catalog into an intuitive filter-finding flow that made filter differences easier to scan and understand.',
+      technologies: ['React', 'JavaScript', 'Responsive Design', 'E-Commerce'],
+      color: '#00ffc6',
+      accent: 'teal',
+      visual: 'cabana',
+      slug: 'cabana-filters',
+      link: 'https://cabanafilters.com/',
+      linkLabel: 'View Live Site',
+      featured: true,
+    },
+    {
+      name: 'StudioPlayer',
+      type: 'SaaS Dashboard · UX Redesign · Frontend Engineering',
+      summary:
+        'Redesigned a media-management dashboard to simplify complex workflows, improve interface consistency, and create a more intuitive experience for managing digital content.',
+      role: 'Product Design · Dashboard UX · Frontend Development · AWS Deployment',
+      outcome: 'Streamlined media management workflows and deployed a redesigned interface to production via AWS.',
+      technologies: ['React', 'JavaScript', 'CSS Modules', 'AWS', 'Figma'],
+      color: '#4dc9ff',
+      accent: 'blue',
+      visual: 'dashboard',
+      slug: 'studioplayer',
+      link: 'https://studioplayer.com/',
+      linkLabel: 'View Live Site',
+      featured: true,
+    },
+    {
+      name: 'My Logo Mat',
+      type: 'Product Customization · Checkout · Frontend Architecture',
+      summary:
+        'Designed and developed e-commerce frontend experiences for a custom product brand on Shopify Hydrogen, including product-focused layouts, visual hierarchy, customer education, and conversion-oriented page structure.',
+      role: 'Frontend Development · E-Commerce Integration · Shopify Hydrogen',
+      outcome: 'Built a Shopify Hydrogen storefront with custom product flows and customer education content.',
+      technologies: ['Shopify Hydrogen', 'React', 'REST APIs', 'Zakeke', 'PayPal', 'Google Places', 'Cloudflare'],
+      color: '#00ffc6',
+      accent: 'teal',
+      visual: 'ecommerce',
+      slug: 'my-logo-mat',
+      link: 'https://mylogomat.com/',
+      linkLabel: 'View Live Site',
+      featured: true,
+    },
+    {
+      name: 'Barnes Hauling & Disposal',
+      type: 'Client Project · Active Development',
+      summary:
+        'Designed and developed a responsive dumpster-rental website that helps customers compare sizes, understand pricing and begin the service-booking process. Deployed on Vercel with a Supabase backend; administrative workflows are in progress.',
+      role: 'Product Design · Frontend Implementation · Responsive Experience',
+      outcome: 'Delivered the visual system, responsive frontend, pricing experience and foundation for online booking and administrative workflows.',
+      technologies: ['Next.js', 'Supabase', 'Vercel', 'Admin Dashboard'],
+      color: '#00d97e',
+      accent: 'green',
+      visual: 'barnes',
+      slug: 'barnes-hauling',
+      link: 'https://barnes-hauling.vercel.app/',
+      linkLabel: 'View Live Site',
+      featured: true,
+    },
+    {
+      name: 'Atlas League',
+      type: 'Mobile Product · Game UX · Creative Development',
+      summary:
+        'Designed and developed a mobile geography-learning game that combines competitive progression, exploration, country collections, rankings, and an atlas-inspired visual system.',
+      role: 'Product Strategy · UX/UI Design · Game Progression · Mobile Interface · Branding & Visual Systems',
+      outcome: 'Owned product strategy, game progression design, mobile interface, and the full atlas-inspired brand system.',
+      technologies: ['React', 'JavaScript', 'Game UX', 'Mobile Development'],
+      color: '#ffb84d',
+      accent: 'gold',
+      visual: 'atlas',
+      slug: 'atlas-league',
+      link: null,
+      linkLabel: null,
+      featured: true,
+    },
+  ],
+
+  experiments: [
+    {
+      name: 'Jukebox',
+      type: 'Video Management Platform',
+      summary:
+        'Social media sharing app using Java, YouTube API, React, and Firebase — allowing users to build personal playlists.',
+      technologies: ['React', 'Firebase', 'YouTube API', 'Java'],
+      color: '#00ffc6',
+    },
+    {
+      name: 'Treasure Hunters Hub',
+      type: 'Geospatial Research Tool',
+      summary:
+        'Analytical tool for building map overlays, organizing data, and separating knowns from unknowns for field research.',
+      technologies: ['React', 'Node.js', 'Google Maps API', 'Firebase'],
+      color: '#4dc9ff',
+    },
+  ],
+
+  experience: [
+    {
+      title: 'Front-End UX Engineer / E-Commerce Front-End Developer',
+      company: 'Red7 Systems',
+      period: 'July 2023 — Present',
+      color: '#00ffc6',
+      bullets: [
+        'Designed and developed frontend UX/UI experiences across e-commerce, SaaS, and marketing websites, owning work from wireframes and visual direction through frontend implementation.',
+        'Built and maintained customer-facing websites using React, Next.js, Shopify Hydrogen, WordPress, PHP, JavaScript, HTML, and CSS.',
+        'Launched 1 Shopify Hydrogen storefront and 3 React/Next.js applications supporting direct-to-consumer and B2B brands.',
+        'Supported digital experiences across 5+ e-commerce brands, 100+ product offerings, and approximately 850,000+ annual website visits.',
+        'Designed and produced 389+ Amazon listing assets including infographics, comparison graphics, lifestyle imagery, sizing diagrams, and product marketing visuals.',
+        'Used AI-assisted workflows to accelerate UX/UI ideation, wireframe planning, frontend problem-solving, content refinement, and QA checklist creation.',
+        'Collaborated with leadership, developers, marketing, and operations in a 5-person cross-functional team to deliver web experiences from concept through launch.',
+      ],
+    },
+    {
+      title: 'UX/UI Front-End Developer',
+      company: 'Monnit Software',
+      period: '2022 — 2023',
+      color: '#4dc9ff',
+      bullets: [
+        'Generated $65,000 in client revenue through custom software design and implementation.',
+        'Redesigned software onboarding, homepage, and setup experiences using research, testing, and data-driven decisions.',
+        'Created high-fidelity mockups, user flows, prototypes, and front-end experiences.',
+        'Built software interfaces using HTML, CSS, and JavaScript, while producing multimedia content and user-centered software experiences.',
+      ],
+    },
+    {
+      title: 'UX/UI Designer',
+      company: 'Eufaula Properties',
+      period: '2018 — 2019',
+      color: '#ffb84d',
+      bullets: [
+        'Designed website experiences and generated leads through marketing initiatives.',
+        'Created wireframes and prototypes for testing and development.',
+      ],
+    },
+    {
+      title: 'Art Director',
+      company: 'Cemrock Landscapes',
+      period: '2015 — 2020',
+      color: '#00d97e',
+      bullets: [
+        'Increased company profits by $1.2M through process improvements.',
+        'Managed a team of artists and executed large-scale architectural design projects.',
+      ],
+    },
+  ],
+
+  skillGroups: [
+    {
+      label: 'Frontend Engineering',
+      skills: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'HTML5', 'CSS3', 'Shopify Hydrogen', 'WordPress', 'PHP', 'Responsive Development', 'Component Architecture', 'REST API Integration'],
+    },
+    {
+      label: 'UX & Design',
+      skills: ['UX/UI Design', 'Interaction Design', 'Design Systems', 'Wireframing', 'Prototyping', 'Accessibility', 'Responsive Design', 'Figma', 'Adobe Photoshop', 'Adobe Illustrator', 'Adobe XD'],
+    },
+    {
+      label: 'E-Commerce & Product',
+      skills: ['Shopify', 'Product Pages', 'Landing Pages', 'Customer Education', 'Custom Product Configuration', 'Conversion-Focused Design', 'Checkout Integrations', 'PayPal', 'Zakeke'],
+    },
+    {
+      label: 'AI-Assisted Workflow',
+      skills: ['Prompt Engineering', 'UX/UI Ideation', 'Frontend Debugging', 'Content Refinement', 'SEO Copy Support', 'QA Checklist Creation', 'Documentation'],
+    },
+    {
+      label: 'Delivery & Optimization',
+      skills: ['Git', 'GitHub', 'AWS', 'Vercel', 'Cloudflare', 'Performance Optimization', 'Technical SEO', 'QA and Production Releases'],
+    },
+  ],
+
+  additionalSkills: ['Python', 'C#', 'SaltStack', 'Infrastructure-as-Code', 'CIS Benchmarks', 'PCI-DSS', 'DISA STIGs'],
+
+  education: [
+    {
+      degree: 'B.S. — Graphic Design & Animation',
+      institution: 'Southern New Hampshire University',
+      period: '2018 — 2020',
+    },
+    {
+      degree: 'Full Stack Development Certification',
+      institution: 'DevPoint Labs',
+      period: '2022',
+    },
+  ],
+
+  featuredCertifications: [
+    { name: 'Full Stack Development Certification', source: 'DevPoint Labs', year: '2022' },
+    { name: 'UX Design: 1 Overview', source: 'LinkedIn Learning', year: '—' },
+    { name: 'Adobe Photoshop Professional', source: 'LinkedIn Learning', year: '2024' },
+    { name: 'Adobe Illustrator Professional', source: 'LinkedIn Learning', year: '2024' },
+    { name: 'Shopify Hydrogen Training', source: 'Shopify', year: '—' },
+  ],
+
+  allCertifications: [
+    { name: 'Learn JavaScript Course', year: '—', source: 'Codecademy' },
+    { name: 'UX Design: 1 Overview', year: '—', source: 'LinkedIn Learning' },
+    { name: 'HTML Essential Training', year: '—', source: 'LinkedIn Learning' },
+    { name: 'Illustrator CC 2015 Essential Training', year: '—', source: 'Adobe' },
+    { name: 'Drawing and Painting in Photoshop', year: '—', source: 'Lynda.com' },
+    { name: 'SoloLearn PHP Certificate', year: '2023' },
+    { name: 'SoloLearn Game Dev with JavaScript', year: '2023' },
+    { name: 'Adobe Photoshop Professional', year: '2024', source: 'LinkedIn Learning' },
+    { name: 'Adobe Illustrator Professional', year: '2024', source: 'LinkedIn Learning' },
+    { name: 'SoloLearn SQL Certificate', year: '2024' },
+    { name: 'SoloLearn Python Certificate', year: '2025' },
+    { name: 'Python Essential Training', year: '2025', source: 'LinkedIn Learning' },
+    { name: 'Using Python for Automation', year: '2025', source: 'LinkedIn Learning' },
+    { name: 'Safeguarding Customer Credit Card Data: PCI Compliance', year: '2025', source: 'LinkedIn Learning' },
+  ],
+}
