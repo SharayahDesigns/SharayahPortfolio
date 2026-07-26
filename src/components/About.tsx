@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import type { MotionValue, Variants } from 'framer-motion'
+import { useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
@@ -25,23 +24,6 @@ export default function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
   const reducedMotion = useReducedMotion() ?? false
   const { about } = portfolioData
-
-  // Documented Motion recipe: a tall track with a `position: sticky` 100vh
-  // stage inside it. The stage holds the portrait centred, so its pinned
-  // position is its starting position and it never shifts — scroll progress
-  // only drives the transforms.
-  const runwayRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress: dive } = useScroll({
-    target: runwayRef,
-    offset: ['start start', 'end end'],
-  })
-
-  // Accelerates into the screen once the About content has been read.
-  const diveScale = useTransform(dive, [0, 0.28, 0.55, 1], [1, 2.2, 7, 22])
-  const chromeFade = useTransform(dive, [0.02, 0.2], [1, 0])
-  const screenFade = useTransform(dive, [0.18, 0.34], [0, 1])
-  const phoneFade = useTransform(dive, [0.6, 0.8], [1, 0])
-  const glowFade = useTransform(dive, [0.3, 0.6, 0.85], [0, 0.45, 0])
 
   const container = {
     hidden: {},
@@ -94,43 +76,16 @@ export default function About() {
             </motion.p>
           </div>
 
-          {/* ===== Portrait column — pins, then dives ===== */}
+          {/* ===== Portrait column — pins alongside the copy ===== */}
           <div className="about-portrait">
             <motion.div className="about-portrait-stage" variants={item}>
               {/* everything anchors to the phone box, not the full-height stage */}
               <div className="about-portrait-rig">
-                <motion.span
-                  className="about-portrait-dots"
-                  aria-hidden="true"
-                  style={reducedMotion ? undefined : { opacity: chromeFade }}
-                />
-                <motion.span
-                  className="about-portrait-glow"
-                  aria-hidden="true"
-                  style={reducedMotion ? undefined : { opacity: chromeFade }}
-                />
+                <span className="about-portrait-dots" aria-hidden="true" />
+                <span className="about-portrait-glow" aria-hidden="true" />
 
-                {/* the screen plate carries the Selected Work background out
-                    of the phone as it swallows the viewport */}
-                <motion.span
-                  className="about-portrait-screen"
-                  aria-hidden="true"
-                  style={reducedMotion ? { opacity: 0 } : { scale: diveScale, opacity: screenFade }}
-                >
-                  <motion.span
-                    className="about-portrait-screen-glow"
-                    style={reducedMotion ? undefined : { opacity: glowFade }}
-                  />
-                </motion.span>
-
-                <Portrait
-                  scale={reducedMotion ? undefined : diveScale}
-                  opacity={reducedMotion ? undefined : phoneFade}
-                />
-                <motion.div
-                  className="about-tech"
-                  style={reducedMotion ? undefined : { opacity: chromeFade }}
-                >
+                <Portrait />
+                <div className="about-tech">
                   <p className="about-tech-label">{about.techLabel}</p>
                   <ul className="about-tech-grid">
                     {about.tech.map((tech) => (
@@ -142,7 +97,7 @@ export default function About() {
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
         </div>
@@ -192,7 +147,6 @@ export default function About() {
             </motion.figure>
           </div>
 
-          {!reducedMotion && <div className="about-runway" ref={runwayRef} aria-hidden="true" />}
         </motion.div>
       </div>
     </section>
@@ -200,7 +154,7 @@ export default function About() {
 }
 
 /** Falls back to a monogram panel until the portrait file is added. */
-function Portrait({ scale, opacity }: { scale?: MotionValue<number>; opacity?: MotionValue<number> }) {
+function Portrait() {
   const { portrait, eyebrow } = portfolioData.about
   const [failed, setFailed] = useState(false)
 
@@ -217,14 +171,13 @@ function Portrait({ scale, opacity }: { scale?: MotionValue<number>; opacity?: M
 
   return (
     <div className="about-portrait-frame">
-      <motion.img
+      <img
         src={portrait.src}
         alt={portrait.alt}
         width={portrait.width}
         height={portrait.height}
         loading="lazy"
         decoding="async"
-        style={{ scale, opacity }}
         onError={() => setFailed(true)}
       />
     </div>

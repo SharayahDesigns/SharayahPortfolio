@@ -8,6 +8,7 @@ import Projects from './components/Projects'
 import Experience from './components/Experience'
 import Skills from './components/Skills'
 import Education from './components/Education'
+import StoryParallax from './components/StoryParallax'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ScrollProgress from './components/ScrollProgress'
@@ -67,6 +68,7 @@ function HomePage() {
           <Experience />
           <Skills />
           <Education />
+          <StoryParallax />
           <Contact />
         </div>
       </main>

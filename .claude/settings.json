@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "WebFetch(domain:mountain.learnframer.site)",
+      "Bash(node ref.mjs)",
+      "Bash(git diff *)"
+    ]
+  }
+}

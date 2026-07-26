@@ -32,7 +32,7 @@ export const portfolioData = {
       height: 1306,
     },
     stats: [
-      { icon: 'code', value: '3+', label: 'Years Experience' },
+      { icon: 'code', value: '4+', label: 'Years Experience' },
       { icon: 'rocket', value: '20+', label: 'Projects Delivered' },
       { icon: 'users', value: 'Happy', label: 'Clients & Teams' },
       { icon: 'pin', value: 'Utah', label: 'Based' },
@@ -66,6 +66,31 @@ export const portfolioData = {
       location: 'Herriman, Utah',
       ctaLabel: 'Let’s build something great together',
       ctaHref: '/#contact',
+    },
+  },
+
+  story: {
+    eyebrow: 'The Long View',
+    headingLead: 'Designing is',
+    headingAccent: 'Storytelling',
+    body:
+      'Every interface is a narrative — where someone starts, what they need, and how they get there. I design the arc before I write the code.',
+    sky: {
+      src: '/images/sky.webp',
+      width: 1448,
+      height: 1086,
+    },
+    // Sky is transparent in this one, so the `sky` layer reads through it.
+    range: {
+      src: '/images/mountain2.webp',
+      width: 1448,
+      height: 1086,
+    },
+    figure: {
+      src: '/images/OnyxandmeOnMountain.webp',
+      alt: 'Sharayah Hefner sitting on a rocky overlook beside her white shepherd, Onyx, both looking out over the valley',
+      width: 1448,
+      height: 1086,
     },
   },
 

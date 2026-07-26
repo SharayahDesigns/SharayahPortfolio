@@ -64,7 +64,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.h1 className="hero-headline" variants={item}>
-            I design and build digital products that feel as good as they work.
+            Sharayah Hefner
           </motion.h1>
 
           <motion.p className="hero-title" variants={item}>

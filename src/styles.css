@@ -615,24 +615,19 @@
    heading instead of a padding's height below it. */
 .about-section {
   padding-top: 40px;
-  /* The dive scales the phone to ~22x, so its box extends thousands of pixels
-     past this section and would paint over — and swallow clicks on — every
-     section below it. `clip` contains that without creating a scroll
-     container, so the sticky stage inside still pins to the viewport. */
-  overflow: clip;
 }
 
 /* One grid for the whole section so the portrait can pin across it */
 .about-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  /* explicit rows so the portrait can span them: intro / panels / runway */
-  grid-template-rows: auto auto auto;
+  /* explicit rows so the portrait can span them: intro / panels */
+  grid-template-rows: auto auto;
   column-gap: 56px;
   align-items: start;
 }
 .about-intro { grid-column: 1; grid-row: 1; padding-top: 110px; }
-.about-portrait { grid-column: 2; grid-row: 1 / span 3; align-self: stretch; position: relative; z-index: 0; }
+.about-portrait { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; position: relative; z-index: 0; }
 
 .about-heading {
   font-family: var(--font-display);
@@ -736,33 +731,6 @@
   width: calc(var(--about-phone-h) * 0.4917);
   height: var(--about-phone-h);
 }
-/* sized to the artwork's screen cutout so it reads as the phone's display */
-.about-portrait-screen {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(var(--about-phone-h) * 0.4453);
-  height: calc(var(--about-phone-h) * 0.9656);
-  margin: calc(var(--about-phone-h) * -0.4828) 0 0 calc(var(--about-phone-h) * -0.2227);
-  border-radius: calc(var(--about-phone-h) * 0.055);
-  background: var(--bg-secondary);
-  overflow: hidden;
-  will-change: transform;
-}
-.about-portrait-screen-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 55%, rgba(0,255,198,0.2), transparent 62%);
-}
-
-/* scroll distance for the dive, after the panels have passed */
-.about-runway {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  /* 100vh of this is consumed by the sticky stage, so progress 0 -> 1 maps
-     exactly onto the pinned duration (the documented track/sticky pairing). */
-  height: 250vh;
-}
 /* The artwork is a full device mockup, so it floats rather than sitting in a
    cropped photo card — the phone supplies its own frame. */
 .about-portrait-frame {
@@ -778,7 +746,6 @@
   height: var(--about-phone-h);
   max-height: none;
   object-fit: contain;
-  will-change: transform;
   filter: drop-shadow(0 34px 60px rgba(0, 0, 0, 0.55));
 }
 .about-portrait-placeholder {
@@ -1041,9 +1008,8 @@
 @media (max-width: 1100px) {
   .about-grid { grid-template-columns: 1fr; row-gap: 56px; }
   .about-intro, .about-portrait, .about-panels { grid-column: 1; }
-  .about-portrait { grid-row: 2 / span 3; justify-self: center; width: 100%; max-width: 460px; }
+  .about-portrait { grid-row: 2 / span 2; justify-self: center; width: 100%; max-width: 460px; }
   .about-panels { grid-row: 3; }
-  .about-runway { grid-row: 4; }
   .about-panels { grid-template-columns: 1fr; }
   .approach-intro { padding-top: 0; }
 }
@@ -1072,10 +1038,6 @@
 
 /* ===== PROJECTS ===== */
 .projects-section {
-  /* Rises over the tail of the dive once the zoom has completed. The pull-up
-     lives here, not on the runway — a negative margin inside the About grid
-     would shorten the portrait's sticky track and unpin it mid-zoom. */
-  margin-top: -100vh;
   position: relative;
   z-index: 3;
   background: var(--bg-secondary);
@@ -2124,6 +2086,204 @@
 }
 .cert-toggle-icon--open {
   transform: rotate(180deg);
+}
+
+/* ===== STORY PARALLAX ===== */
+/* Full-bleed: the section escapes the 1200px container rhythm on purpose so
+   the scene reads as a break between the resume content and Contact.
+
+   Four stacked layers, painted back to front:
+     1 sky        2 copy        3 range (peaks)        4 figure
+   Motion owns `transform` on each of those, so nothing here may use
+   `transform` for layout — positioning is done with insets only. */
+.story {
+  position: relative;
+  z-index: 1;
+}
+
+/* Taller than the viewport on purpose: the extra height is scroll runway for
+   the overtake, and it lets the range and the figure sit at a larger scale
+   without the cutout's crop or the valley running out of frame. */
+.story-stage {
+  position: relative;
+  height: clamp(680px, 118vh, 1180px);
+  overflow: hidden;
+  background: var(--bg-secondary);
+  isolation: isolate;
+}
+
+/* The sky is nearly pinned (lag 0.95), so it slides a long way down inside the
+   stage. The 50% overhang keeps its top edge above the visible band for the
+   whole pass. */
+.story-sky {
+  position: absolute;
+  inset: -50% 0;
+  z-index: 1;
+  will-change: transform;
+}
+.story-sky img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+/* Hands the bright sky off to the dark section above. Glued to the stage — it
+   belongs to the section edge, not to any parallax layer. */
+.story-daybreak {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(5, 5, 8, 0.96) 0%, rgba(5, 5, 8, 0.5) 7%, rgba(5, 5, 8, 0) 20%);
+}
+
+/* Spans the full stage and centres with padding + `margin: auto` rather than a
+   translate, which Motion would overwrite. */
+.story-copy {
+  position: absolute;
+  top: 8%;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 0 40px;
+  text-align: center;
+  will-change: transform;
+}
+.story-copy > * {
+  position: relative;
+  max-width: 780px;
+  margin-inline: auto;
+}
+/* The legibility haze rides *with* the copy. Glued to the stage it would slide
+   out from behind the type, since the two lag by different amounts. */
+.story-copy::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -22%;
+  width: min(1100px, 130%);
+  height: 150%;
+  /* max(), not min() — these are negatives, so max() is the smaller magnitude
+     and matches half of the min() width above. */
+  margin-left: max(-550px, -65%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(8, 10, 22, 0.68) 0%, rgba(8, 10, 22, 0.34) 55%, rgba(8, 10, 22, 0) 100%);
+  pointer-events: none;
+}
+
+.story-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
+}
+
+.story-heading {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 7.4vw, 92px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #f7f8ff;
+  text-shadow: 0 4px 44px rgba(6, 8, 18, 0.72), 0 1px 3px rgba(6, 8, 18, 0.55);
+}
+.story-heading-accent {
+  color: var(--teal);
+  text-shadow: 0 0 40px rgba(0, 255, 198, 0.35), 0 4px 44px rgba(6, 8, 18, 0.7);
+}
+
+.story-body {
+  max-width: 46ch;
+  margin: 20px auto 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(240, 242, 255, 0.9);
+  text-shadow: 0 2px 20px rgba(6, 8, 18, 0.9);
+}
+
+/* Cropped from the top so only the peaks break the skyline; the box runs well
+   past the stage floor so the valley always fills the lower half. */
+.story-range {
+  position: absolute;
+  top: 34%;
+  bottom: -30%;
+  left: -9%;
+  right: -9%;
+  z-index: 3;
+  will-change: transform;
+}
+.story-range img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Sits *on* the stage floor, not below it, so the stone the pair are sitting
+   on clears the floor gradient. The cutout's flat bottom crop never shows: the
+   layer only ever drifts down (lag 0.2, y >= 0), so its bottom edge is always
+   at or below the stage's clip. */
+.story-figure {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  will-change: transform;
+}
+.story-figure img {
+  width: min(880px, 92vw);
+  height: auto;
+  filter: drop-shadow(0 22px 36px rgba(10, 14, 24, 0.5));
+}
+
+/* Sits above every layer so the scene dissolves into Contact instead of ending
+   on the cutout's cropped edge. */
+.story-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 15%;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    var(--bg-secondary) 0%,
+    rgba(13, 13, 20, 0.88) 24%,
+    rgba(13, 13, 20, 0.36) 60%,
+    rgba(13, 13, 20, 0) 100%
+  );
+}
+
+@media (max-width: 900px) {
+  .story-copy { top: 7%; }
+  .story-range { top: 38%; }
+}
+
+@media (max-width: 600px) {
+  .story-stage { height: clamp(620px, 104vh, 900px); }
+  .story-copy { padding: 0 20px; }
+  .story-heading { font-size: clamp(40px, 11vw, 56px); }
+  .story-body { font-size: 15px; margin-top: 14px; }
+  /* Overscaled past the viewport: the cutout's subject only fills the middle
+     ~55% of a 4:3 frame, so at 100vw the pair reads tiny. The stage clips the
+     overhang. */
+  .story-figure img { width: 148vw; max-width: none; }
+}
+
+/* No drift, so the extra scroll runway buys nothing — shrink the stage back
+   inside the viewport and let the base composition stand on its own. */
+@media (prefers-reduced-motion: reduce) {
+  .story-stage { height: clamp(560px, 88vh, 860px); }
+  .story-sky { inset: 0; }
+  .story-range { top: 38%; }
 }
 
 /* ===== CONTACT ===== */
@@ -3398,10 +3558,7 @@ a.resume-contact-item:hover { color: var(--teal); }
   }
 }
 
-/* No runway is rendered under reduced motion, so there is no dive tail to
-   pull Selected Work over. */
 @media (prefers-reduced-motion: reduce) {
-  .projects-section { margin-top: 0; }
   /* relative, not static — the tech card is positioned against this box */
   .about-portrait-stage { position: relative; height: auto; padding: 0 0 42px; }
 }
