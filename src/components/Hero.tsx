@@ -1,16 +1,41 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import ParticleField from './ParticleField'
 import { portfolioData } from '../data/portfolio'
 import { Github, Linkedin, Mail, ArrowDown, FileText } from 'lucide-react'
 
+const HeroAvatar = lazy(() => import('./HeroAvatar'))
+
 export default function Hero() {
   const [reducedMotion, setReducedMotion] = useState(false)
+  const heroRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     setReducedMotion(mq.matches)
+  }, [])
+
+  // The hero sticks so the content below scrolls up over it. When the hero is
+  // taller than the viewport it pins at a negative offset instead of 0, so the
+  // bottom of the hero is fully readable before the stack covers it.
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+
+    const updateStickyOffset = () => {
+      const overflow = Math.max(0, el.offsetHeight - window.innerHeight)
+      el.style.setProperty('--hero-sticky-top', `${-overflow}px`)
+    }
+
+    updateStickyOffset()
+    const observer = new ResizeObserver(updateStickyOffset)
+    observer.observe(el)
+    window.addEventListener('resize', updateStickyOffset)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateStickyOffset)
+    }
   }, [])
 
   const containerVariants = {
@@ -23,7 +48,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="hero" id="hero">
+    <section className="hero" id="hero" ref={heroRef}>
       {!reducedMotion && <ParticleField />}
 
       <div className="hero-noise" />
@@ -49,6 +74,15 @@ export default function Hero() {
           <motion.p className="hero-summary" variants={item}>
             {portfolioData.summary}
           </motion.p>
+
+          <motion.ul className="hero-stats" variants={item} aria-label="Career highlights">
+            {portfolioData.stats.map((stat) => (
+              <li className="hero-stat-card" key={stat.label}>
+                <div className="stat-number">{stat.number}</div>
+                <div className="stat-label">{stat.label}</div>
+              </li>
+            ))}
+          </motion.ul>
 
           <motion.div className="hero-actions" variants={item}>
             <a href="#projects" className="btn btn-primary">
@@ -80,51 +114,26 @@ export default function Hero() {
 
         <motion.div
           className="hero-graphic"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+          // Fade only — a scale transform here would be measured by the R3F
+          // canvas mid-animation and lock it to the wrong size until the first
+          // scroll re-measures it.
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="avatar-frame">
+          <div className="avatar-frame hero-avatar-frame">
             <div className="avatar-ring avatar-ring--1" />
             <div className="avatar-ring avatar-ring--2" />
-            <div className="avatar-mono">
-              <span>SH</span>
+            <div className="hero-avatar-shell">
+              <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
+                <HeroAvatar reducedMotion={reducedMotion} />
+              </Suspense>
             </div>
             <div className="avatar-badge">
               <span className="avatar-badge-dot" />
               Open to Work
             </div>
           </div>
-
-          <motion.div
-            className="hero-stat-card hero-stat-card--1"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            <div className="stat-number">{portfolioData.stats[0].number}</div>
-            <div className="stat-label">{portfolioData.stats[0].label}</div>
-          </motion.div>
-
-          <motion.div
-            className="hero-stat-card hero-stat-card--2"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
-            <div className="stat-number">{portfolioData.stats[1].number}</div>
-            <div className="stat-label">{portfolioData.stats[1].label}</div>
-          </motion.div>
-
-          <motion.div
-            className="hero-stat-card hero-stat-card--3"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
-            <div className="stat-number">{portfolioData.stats[2].number}</div>
-            <div className="stat-label">{portfolioData.stats[2].label}</div>
-          </motion.div>
         </motion.div>
       </div>
 

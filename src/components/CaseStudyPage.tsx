@@ -44,12 +44,19 @@ export default function CaseStudyPage() {
   const { prev, next } = getAdjacentCaseStudies(study.slug)
   const [heroRef, heroInView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
+  // Sections are numbered in render order so optional sections never leave gaps.
+  let sectionIndex = 0
+  const sectionNumber = () => (sectionIndex += 1)
+
   return (
     <>
       <SEO
         title={study.seo.title}
         description={study.seo.description}
         path={`/work/${study.slug}`}
+        image={study.ogImage}
+        ogTitle={study.seo.ogTitle}
+        ogDescription={study.seo.ogDescription}
       />
 
       <motion.article
@@ -138,17 +145,37 @@ export default function CaseStudyPage() {
               animate={heroInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.4, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
             >
-              <ProjectVisual type={study.visual} color={study.color} />
+              {study.heroImage ? (
+                <div className="project-shot">
+                  <img
+                    src={study.heroImage}
+                    srcSet={study.heroImageSmall && study.heroImageWidth
+                      ? `${study.heroImageSmall} 720w, ${study.heroImage} ${study.heroImageWidth}w`
+                      : undefined}
+                    sizes={study.heroImageSmall ? '(max-width: 900px) 100vw, 560px' : undefined}
+                    alt={study.heroImageAlt || `${study.title} website homepage`}
+                    width={study.heroImageWidth}
+                    height={study.heroImageHeight}
+                    decoding="async"
+                  />
+                </div>
+              ) : study.visual ? (
+                <ProjectVisual type={study.visual} color={study.color} />
+              ) : null}
             </motion.div>
           </div>
         </header>
 
         <div className="container cs-body">
           {/* ===== OVERVIEW GRID ===== */}
-          <CsSection index={1} label="Overview">
+          <CsSection index={sectionNumber()} label="Overview">
+            {study.overviewIntro && <p className="cs-paragraph">{study.overviewIntro}</p>}
             <div className="cs-overview-grid">
+              {study.client && <CsOverviewItem label="Client" value={study.client} />}
+              {study.projectType && <CsOverviewItem label="Project Type" value={study.projectType} />}
               <CsOverviewItem label="My Role" value={study.role.join(' · ')} />
               <CsOverviewItem label="Responsibilities" value={study.responsibilities.join(' · ')} />
+              {study.audience && <CsOverviewItem label="Audience" value={study.audience} />}
               <CsOverviewItem label="Platform" value={study.platform} />
               <CsOverviewItem label="Technologies" value={study.technologies.join(' · ')} />
               {study.status && <CsOverviewItem label="Status" value={study.status} />}
@@ -156,113 +183,184 @@ export default function CaseStudyPage() {
             </div>
           </CsSection>
 
-          {/* ===== CHALLENGE ===== */}
-          <CsSection index={2} label="The Challenge">
-            <p className="cs-paragraph">{study.challenge}</p>
-          </CsSection>
+          {/* ===== NARRATIVE SECTIONS (studies that define their own storyline) ===== */}
+          {study.sections?.map((section) => (
+            <CsSection index={sectionNumber()} label={section.label} key={section.label}>
+              <h3 className="cs-narrative-heading">{section.heading}</h3>
 
-          {/* ===== MY CONTRIBUTION ===== */}
-          <CsSection index={3} label="My Contribution">
-            <ul className="cs-contribution-list">
-              {study.responsibilities.map((r, i) => (
-                <li key={i}>
-                  <span className="cs-check-dot" style={{ background: study.color }} />
-                  {r}
-                </li>
+              {section.paragraphs?.map((p, i) => (
+                <p className="cs-paragraph" key={i}>{p}</p>
               ))}
-            </ul>
-            {study.constraints && study.constraints.length > 0 && (
-              <div className="cs-constraints">
-                <h4 className="cs-constraints-title">
-                  <AlertCircle size={16} className="gold" /> Constraints
-                </h4>
-                <ul className="cs-constraints-list">
-                  {study.constraints.map((c, i) => (
-                    <li key={i}>{c}</li>
+
+              {section.list && section.list.length > 0 && (
+                <ul className="cs-contribution-list">
+                  {section.list.map((entry, i) => (
+                    <li key={i}>
+                      <span className="cs-check-dot" style={{ background: study.color }} />
+                      {entry}
+                    </li>
                   ))}
                 </ul>
-              </div>
-            )}
-          </CsSection>
+              )}
+
+              {section.cards && section.cards.length > 0 && (
+                <div className="cs-solution-features">
+                  {section.cards.map((card, i) => (
+                    <motion.div
+                      className="cs-feature-card"
+                      key={card.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.4, delay: i * 0.08 }}
+                    >
+                      <div className="cs-feature-dot" style={{ background: study.color }} />
+                      <h4 className="cs-feature-title">{card.title}</h4>
+                      <p className="cs-feature-desc">{card.description}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+
+              {section.steps && section.steps.length > 0 && (
+                <ol className="cs-process-grid cs-process-grid--flow">
+                  {section.steps.map((step, i) => (
+                    <motion.li
+                      className="cs-process-step"
+                      key={step}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.4, delay: i * 0.06 }}
+                    >
+                      <div className="cs-process-number">{String(i + 1).padStart(2, '0')}</div>
+                      <p className="cs-process-title">{step}</p>
+                    </motion.li>
+                  ))}
+                </ol>
+              )}
+            </CsSection>
+          ))}
+
+          {/* ===== CHALLENGE ===== */}
+          {study.challenge && (
+            <CsSection index={sectionNumber()} label="The Challenge">
+              <p className="cs-paragraph">{study.challenge}</p>
+            </CsSection>
+          )}
+
+          {/* ===== MY CONTRIBUTION ===== */}
+          {!study.sections && (
+            <CsSection index={sectionNumber()} label="My Contribution">
+              <ul className="cs-contribution-list">
+                {study.responsibilities.map((r, i) => (
+                  <li key={i}>
+                    <span className="cs-check-dot" style={{ background: study.color }} />
+                    {r}
+                  </li>
+                ))}
+              </ul>
+              {study.constraints && study.constraints.length > 0 && (
+                <div className="cs-constraints">
+                  <h4 className="cs-constraints-title">
+                    <AlertCircle size={16} className="gold" /> Constraints
+                  </h4>
+                  <ul className="cs-constraints-list">
+                    {study.constraints.map((c, i) => (
+                      <li key={i}>{c}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </CsSection>
+          )}
 
           {/* ===== PROCESS ===== */}
-          <CsSection index={4} label="Process">
-            <div className="cs-process-grid">
-              {study.process.map((step, i) => {
-                const Icon = processIcons[i] || Target
-                return (
+          {study.process && study.process.length > 0 && (
+            <CsSection index={sectionNumber()} label="Process">
+              <div className="cs-process-grid">
+                {study.process.map((step, i) => {
+                  const Icon = processIcons[i] || Target
+                  return (
+                    <motion.div
+                      className="cs-process-step"
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.4, delay: i * 0.06 }}
+                    >
+                      <div className="cs-process-icon" style={{ color: study.color }}>
+                        <Icon size={20} />
+                      </div>
+                      <div className="cs-process-number">0{i + 1}</div>
+                      <h4 className="cs-process-title">{step.title}</h4>
+                      <p className="cs-process-desc">{step.description}</p>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </CsSection>
+          )}
+
+          {/* ===== SOLUTION ===== */}
+          {study.solution && study.solution.length > 0 && (
+            <CsSection index={sectionNumber()} label="Solution">
+              <div className="cs-solution-text">
+                {study.solution.map((s, i) => (
+                  <p className="cs-paragraph" key={i}>{s}</p>
+                ))}
+              </div>
+              <div className="cs-solution-features">
+                {study.solutionFeatures?.map((f, i) => (
                   <motion.div
-                    className="cs-process-step"
+                    className="cs-feature-card"
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.4, delay: i * 0.06 }}
+                    transition={{ duration: 0.4, delay: i * 0.08 }}
                   >
-                    <div className="cs-process-icon" style={{ color: study.color }}>
-                      <Icon size={20} />
-                    </div>
-                    <div className="cs-process-number">0{i + 1}</div>
-                    <h4 className="cs-process-title">{step.title}</h4>
-                    <p className="cs-process-desc">{step.description}</p>
+                    <div className="cs-feature-dot" style={{ background: study.color }} />
+                    <h4 className="cs-feature-title">{f.title}</h4>
+                    <p className="cs-feature-desc">{f.description}</p>
                   </motion.div>
-                )
-              })}
-            </div>
-          </CsSection>
-
-          {/* ===== SOLUTION ===== */}
-          <CsSection index={5} label="Solution">
-            <div className="cs-solution-text">
-              {study.solution.map((s, i) => (
-                <p className="cs-paragraph" key={i}>{s}</p>
-              ))}
-            </div>
-            <div className="cs-solution-features">
-              {study.solutionFeatures.map((f, i) => (
-                <motion.div
-                  className="cs-feature-card"
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.4, delay: i * 0.08 }}
-                >
-                  <div className="cs-feature-dot" style={{ background: study.color }} />
-                  <h4 className="cs-feature-title">{f.title}</h4>
-                  <p className="cs-feature-desc">{f.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </CsSection>
+                ))}
+              </div>
+            </CsSection>
+          )}
 
           {/* ===== TECHNICAL IMPLEMENTATION ===== */}
-          <CsSection index={6} label="Technical Implementation">
-            <ul className="cs-tech-list">
-              {study.technicalImplementation.map((t, i) => (
-                <li key={i}>
-                  <span className="cs-tech-bullet" style={{ background: study.color }} />
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </CsSection>
+          {study.technicalImplementation && study.technicalImplementation.length > 0 && (
+            <CsSection index={sectionNumber()} label="Technical Implementation">
+              <ul className="cs-tech-list">
+                {study.technicalImplementation.map((t, i) => (
+                  <li key={i}>
+                    <span className="cs-tech-bullet" style={{ background: study.color }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </CsSection>
+          )}
 
           {/* ===== OUTCOMES ===== */}
-          <CsSection index={7} label="Outcomes">
-            <ul className="cs-outcomes-list">
-              {study.outcomes.map((o, i) => (
-                <li key={i}>
-                  <CheckCircle2 size={18} style={{ color: study.color }} />
-                  {o}
-                </li>
-              ))}
-            </ul>
-          </CsSection>
+          {study.outcomes && study.outcomes.length > 0 && (
+            <CsSection index={sectionNumber()} label="Outcomes">
+              <ul className="cs-outcomes-list">
+                {study.outcomes.map((o, i) => (
+                  <li key={i}>
+                    <CheckCircle2 size={18} style={{ color: study.color }} />
+                    {o}
+                  </li>
+                ))}
+              </ul>
+            </CsSection>
+          )}
 
           {/* ===== GALLERY ===== */}
           {study.images.length > 0 && (
-            <CsSection index={8} label="Gallery">
+            <CsSection index={sectionNumber()} label="Gallery">
               <div className="cs-gallery">
                 {study.images.map((img, i) => (
                   <motion.figure
@@ -278,19 +376,24 @@ export default function CaseStudyPage() {
                         <picture>
                           <img
                             src={img.src}
+                            srcSet={img.srcSmall && img.width
+                              ? `${img.srcSmall} 720w, ${img.src} ${img.width}w`
+                              : undefined}
+                            sizes={img.srcSmall ? '(max-width: 940px) 100vw, 900px' : undefined}
                             alt={img.alt}
                             width={img.width || 1200}
                             height={img.height || 750}
                             loading={i > 0 ? 'lazy' : 'eager'}
+                            decoding="async"
                             className="cs-gallery-screenshot"
                           />
                         </picture>
-                      ) : (
+                      ) : img.visual ? (
                         <>
                           <ProjectVisual type={img.visual} color={img.color} />
                           <span className="cs-gallery-illustration-label">Simplified interface illustration</span>
                         </>
-                      )}
+                      ) : null}
                     </div>
                     {img.caption && (
                       <figcaption className="cs-gallery-caption">{img.caption}</figcaption>
@@ -328,18 +431,42 @@ export default function CaseStudyPage() {
           {/* ===== CONTACT CTA ===== */}
           <section className="cs-contact-cta">
             <div className="cs-contact-glow" />
-            <h3 className="cs-contact-heading">
-              Have a product that needs equal parts{' '}
-              <br />
-              <span className="teal">design thinking and frontend engineering?</span>
-            </h3>
-            <p className="cs-contact-body">
-              I'm currently open to Frontend UX Engineer, Design Engineer, and
-              product-focused frontend opportunities. Let's talk about what you're building.
-            </p>
-            <a href={`mailto:${portfolioData.email}`} className="btn btn-primary">
-              Start a Conversation
-            </a>
+            {study.finalCta ? (
+              <>
+                <h3 className="cs-contact-heading">
+                  {study.finalCta.heading}{' '}
+                  <br />
+                  <span className="teal">{study.finalCta.highlight}</span>
+                </h3>
+                <p className="cs-contact-body">{study.finalCta.body}</p>
+                <div className="cs-contact-actions">
+                  <Link to="/#contact" className="btn btn-primary">
+                    Let's Talk
+                  </Link>
+                  <Link to={`/work/${next.slug}`} className="btn btn-ghost">
+                    View Next Project <ArrowRight size={16} />
+                  </Link>
+                  <Link to="/#projects" className="btn btn-ghost">
+                    Back to All Work
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="cs-contact-heading">
+                  Have a product that needs equal parts{' '}
+                  <br />
+                  <span className="teal">design thinking and frontend engineering?</span>
+                </h3>
+                <p className="cs-contact-body">
+                  I'm currently open to Frontend UX Engineer, Design Engineer, and
+                  product-focused frontend opportunities. Let's talk about what you're building.
+                </p>
+                <a href={`mailto:${portfolioData.email}`} className="btn btn-primary">
+                  Start a Conversation
+                </a>
+              </>
+            )}
           </section>
         </div>
       </motion.article>

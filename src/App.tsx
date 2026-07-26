@@ -59,14 +59,16 @@ function HomePage() {
         type="website"
       />
       <Nav />
-      <main>
+      <main className="home-main">
         <Hero />
-        <About />
-        <Projects />
-        <Experience />
-        <Skills />
-        <Education />
-        <Contact />
+        <div className="home-content-stack">
+          <About />
+          <Projects />
+          <Experience />
+          <Skills />
+          <Education />
+          <Contact />
+        </div>
       </main>
       <Footer />
     </>

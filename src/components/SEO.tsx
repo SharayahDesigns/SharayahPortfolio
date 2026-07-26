@@ -8,6 +8,10 @@ type SEOProps = {
   image?: string
   type?: string
   noindex?: boolean
+  /** Social-share title; falls back to the page title. */
+  ogTitle?: string
+  /** Social-share description; falls back to the meta description. */
+  ogDescription?: string
 }
 
 function upsertMeta(name: string, content: string, attr: 'name' | 'property' = 'name') {
@@ -46,10 +50,12 @@ function removeJsonLd(id: string) {
   if (el) el.remove()
 }
 
-export default function SEO({ title, description, path, image = '/og-image.png', type = 'article', noindex = false }: SEOProps) {
+export default function SEO({ title, description, path, image = '/og-image.png', type = 'article', noindex = false, ogTitle, ogDescription }: SEOProps) {
   useEffect(() => {
     const url = `${siteConfig.origin}${path}`
     const img = image.startsWith('http') ? image : `${siteConfig.origin}${image}`
+    const socialTitle = ogTitle || title
+    const socialDescription = ogDescription || description
 
     document.title = title
 
@@ -63,21 +69,21 @@ export default function SEO({ title, description, path, image = '/og-image.png',
       if (robotsEl) robotsEl.remove()
     }
 
-    upsertMeta('og:title', title, 'property')
-    upsertMeta('og:description', description, 'property')
+    upsertMeta('og:title', socialTitle, 'property')
+    upsertMeta('og:description', socialDescription, 'property')
     upsertMeta('og:url', url, 'property')
     upsertMeta('og:image', img, 'property')
     upsertMeta('og:type', type, 'property')
 
     upsertMeta('twitter:card', 'summary_large_image')
-    upsertMeta('twitter:title', title)
-    upsertMeta('twitter:description', description)
+    upsertMeta('twitter:title', socialTitle)
+    upsertMeta('twitter:description', socialDescription)
     upsertMeta('twitter:image', img)
 
     return () => {
       removeJsonLd('page-jsonld')
     }
-  }, [title, description, path, image, type, noindex])
+  }, [title, description, path, image, type, noindex, ogTitle, ogDescription])
 
   return null
 }

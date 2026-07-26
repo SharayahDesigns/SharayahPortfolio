@@ -1,12 +1,35 @@
 export type ProjectImage = {
   src?: string
+  /** 720w variant served to narrow viewports via srcset. */
+  srcSmall?: string
   type: 'desktop' | 'mobile' | 'dashboard' | 'storefront' | 'game'
-  visual: 'cabana' | 'dashboard' | 'ecommerce' | 'barnes' | 'atlas'
+  /** Only needed when no `src` is supplied and the simplified illustration is used instead. */
+  visual?: 'cabana' | 'dashboard' | 'ecommerce' | 'barnes' | 'atlas'
   alt: string
   caption?: string
   width?: number
   height?: number
   color: string
+}
+
+/**
+ * A narrative section rendered inside the standard case-study section frame.
+ * Studies that supply `sections` use them in place of the default fixed body
+ * sections, so a case study can follow its own storyline while reusing the
+ * same headings, cards, lists and motion as every other study.
+ */
+export type CaseStudySection = {
+  /** Section rail label, rendered as the section h2. */
+  label: string
+  /** Section heading, rendered as an h3 beneath the label. */
+  heading: string
+  paragraphs?: string[]
+  /** Bulleted supporting points. */
+  list?: string[]
+  /** Rendered with the shared feature-card grid. */
+  cards?: { title: string; description: string }[]
+  /** Rendered with the shared numbered-step grid. */
+  steps?: string[]
 }
 
 export type CaseStudyStep = {
@@ -21,26 +44,53 @@ export type CaseStudy = {
   status?: string
   summary: string
   valueStatement: string
-  challenge: string
   role: string[]
   responsibilities: string[]
   platform: string
   team?: string
-  process: CaseStudyStep[]
-  solution: string[]
-  solutionFeatures: { title: string; description: string }[]
-  technicalImplementation: string[]
-  constraints?: string[]
-  outcomes: string[]
+  /** Additional overview rows, shown only when supplied. */
+  client?: string
+  projectType?: string
+  audience?: string
+  /** Intro paragraph shown above the overview grid. */
+  overviewIntro?: string
   technologies: string[]
   images: ProjectImage[]
   liveUrl?: string
   repositoryUrl?: string
   color: string
-  visual: ProjectImage['visual']
+  /** Simplified illustration used when no real hero screenshot exists. */
+  visual?: ProjectImage['visual']
+  /** Real screenshot used in place of the simplified hero illustration. */
+  heroImage?: string
+  /** 720w variant of the hero screenshot for narrow viewports. */
+  heroImageSmall?: string
+  heroImageAlt?: string
+  heroImageWidth?: number
+  heroImageHeight?: number
+  /** Social-share image for this study; falls back to the site default. */
+  ogImage?: string
+  /** Custom narrative sections. When present they replace the default body sections. */
+  sections?: CaseStudySection[]
+  /** Default body sections — used when `sections` is not supplied. */
+  challenge?: string
+  process?: CaseStudyStep[]
+  solution?: string[]
+  solutionFeatures?: { title: string; description: string }[]
+  technicalImplementation?: string[]
+  constraints?: string[]
+  outcomes?: string[]
   seo: {
     title: string
     description: string
+    ogTitle?: string
+    ogDescription?: string
+  }
+  /** Optional closing call to action; falls back to the shared default. */
+  finalCta?: {
+    heading: string
+    highlight?: string
+    body: string
   }
 }
 
@@ -242,6 +292,214 @@ export const caseStudies: CaseStudy[] = [
     seo: {
       title: 'My Logo Mat Case Study — Sharayah Hefner',
       description: 'See how Sharayah Hefner approached the UX design and frontend engineering of My Logo Mat.',
+    },
+  },
+  {
+    slug: 'concrete-connections-nwa',
+    title: 'Concrete Connections NWA',
+    category: 'Client Website · UX/UI Design · Frontend Engineering',
+    status: 'Launched',
+    summary:
+      'An immersive lead-generation website for a specialty artificial-rockwork and themed-concrete contractor serving residential and commercial clients.',
+    valueStatement:
+      'Designing a digital experience where construction, craftsmanship, and environmental storytelling intersect.',
+    overviewIntro:
+      'Concrete Connections NWA creates artificial rockwork, pool grottos, waterfalls, themed environments, scenic walls, and custom concrete features for residential and commercial clients. I designed and developed a responsive website that communicates the company’s specialized capabilities through immersive visuals, clear service organization, market-specific messaging, project imagery, and conversion-focused quote paths.',
+    role: ['UX/UI Design', 'Visual Direction', 'Information Architecture', 'Frontend Development', 'Responsive Design', 'Technical SEO'],
+    responsibilities: [
+      'Established the visual direction and brand presentation for the website',
+      'Structured the information architecture around customer questions',
+      'Designed the service, market, and project-gallery experiences',
+      'Built the responsive frontend as reusable React components',
+      'Implemented gallery filtering and quote-focused calls to action',
+      'Set up page metadata, structured data, sitemap, and robots configuration',
+    ],
+    platform: 'Responsive Web',
+    client: 'Concrete Connections NWA',
+    projectType: 'Independent Client Website',
+    audience:
+      'Homeowners, pool builders, landscape professionals, architects, zoos, aquariums, museums, resorts, attractions, and commercial partners',
+    technologies: ['React', 'JavaScript', 'Responsive Design', 'Three.js', 'Technical SEO'],
+    sections: [
+      {
+        label: 'Project Overview',
+        heading: 'Turning specialized craftsmanship into a clear digital experience',
+        paragraphs: [
+          'Concrete Connections NWA works at the intersection of structural construction and environmental artistry. The website needed to communicate both sides of that work: the engineering required to create durable outdoor installations and the artistic process used to make sculpted concrete feel like natural stone.',
+          'The final experience presents the company as a specialized design-and-build partner rather than a general concrete contractor. It gives residential and commercial visitors clear ways to understand the services, explore relevant applications, review project imagery, and begin a quote conversation.',
+        ],
+      },
+      {
+        label: 'The Challenge',
+        heading: 'A highly visual service that is difficult to explain with words alone',
+        paragraphs: [
+          'Artificial rockwork is a specialized service that many potential customers do not immediately understand. The website needed to explain what the company builds, who it serves, how the work differs from ordinary concrete construction, and why the finished installations are both artistic and structurally dependable.',
+          'The experience also needed to serve very different audiences — from homeowners considering a pool grotto to organizations planning zoo habitats, resort environments, museum exhibits, or public attractions.',
+        ],
+        list: [
+          'Explain an uncommon and highly specialized service',
+          'Balance artistic presentation with technical credibility',
+          'Organize a wide range of services and markets',
+          'Make project imagery central to the experience',
+          'Support both residential and commercial lead generation',
+          'Create a distinct brand presence without feeling theatrical or unprofessional',
+        ],
+      },
+      {
+        label: 'Experience Goals',
+        heading: 'The experience needed to feel crafted, capable, and credible',
+        cards: [
+          { title: 'Clarity', description: 'Help visitors quickly understand what themed concrete and artificial rockwork can include.' },
+          { title: 'Visual impact', description: 'Use imagery and movement to reflect the scale and craftsmanship of the physical work.' },
+          { title: 'Trust', description: 'Communicate durability, weather resistance, drainage considerations, and design-to-installation capability.' },
+          { title: 'Discovery', description: 'Let different audiences recognize the services and market applications relevant to their project.' },
+          { title: 'Conversion', description: 'Maintain a clear path to requesting a quote without overwhelming visitors with premature form fields.' },
+        ],
+      },
+      {
+        label: 'Information Architecture',
+        heading: 'Organizing the experience around customer questions',
+        paragraphs: ['The homepage was structured around the questions a prospective customer is most likely to ask:'],
+        list: [
+          'What does the company build?',
+          'Can it handle my type of project?',
+          'Does the work look realistic?',
+          'Is it designed for outdoor exposure?',
+          'Can the team manage both design and installation?',
+          'How do I start a conversation about my project?',
+        ],
+        steps: [
+          'Brand and capability introduction',
+          'Core service categories',
+          'Craftsmanship imagery',
+          'Markets and project applications',
+          'Featured work',
+          'Quote-focused call to action',
+          'Contact and service information',
+        ],
+      },
+      {
+        label: 'Visual Direction',
+        heading: 'A visual system inspired by stone, shadow, and natural environments',
+        paragraphs: [
+          'The visual direction uses dark charcoal surfaces, restrained natural greens, stone-inspired textures, large environmental imagery, and clean typography. The goal was to create an experience that feels premium and immersive while keeping navigation and service information direct and readable.',
+        ],
+        list: [
+          'Dark, natural color palette',
+          'Large-scale project photography',
+          'Subtle depth and environmental motion',
+          'Clean service and market cards',
+          'Strong contrast between visual storytelling and conversion actions',
+          'Responsive layouts designed to preserve impact on smaller screens',
+        ],
+      },
+      {
+        label: 'Service Discovery',
+        heading: 'Making a complex service offering easier to scan',
+        paragraphs: [
+          'The service architecture breaks the company’s capabilities into recognizable project types, including pool grottos and waterfalls, rock veneers and retaining features, themed environments, caves and scenic walls, custom boulders, restoration work, and faux wood or stone finishes.',
+          'This approach helps visitors identify the closest match to their project without requiring them to understand industry terminology before contacting the company.',
+        ],
+      },
+      {
+        label: 'Serving Multiple Markets',
+        heading: 'One visual system for residential and commercial audiences',
+        paragraphs: [
+          'The site needed to support both private clients and professional project partners. Market-specific content helps pool builders, resorts, zoos, museums, theme parks, municipalities, restaurants, and homeowners recognize how the same core craft can be adapted to different environments.',
+          'The design keeps these applications connected under one brand while avoiding separate experiences that would fragment the website.',
+        ],
+      },
+      {
+        label: 'Frontend Implementation',
+        heading: 'Building the visual direction into a responsive production experience',
+        paragraphs: [
+          'I translated the visual direction into a responsive frontend experience with reusable sections, structured project content, responsive media treatments, accessible navigation, gallery interactions, and focused calls to action.',
+        ],
+        list: [
+          'Component-based React architecture',
+          'Responsive layouts across desktop, tablet, and mobile',
+          'Reusable service, market, and project-card components',
+          'Interactive gallery filtering by project category',
+          'Three.js-enhanced visual elements alongside CSS-driven motion',
+          'Semantic content structure with a single page-level heading',
+          'Descriptive image alternative text',
+          'Click-to-call and email actions',
+        ],
+      },
+      {
+        label: 'SEO & Discoverability',
+        heading: 'Supporting a specialized regional service with technical SEO',
+        paragraphs: [
+          'The site includes search-focused page metadata and structured information designed to help search engines understand the business, its service area, and its specialty services.',
+        ],
+        list: [
+          'Descriptive page title and meta description',
+          'Canonical homepage URL',
+          'Open Graph and Twitter sharing metadata',
+          'LocalBusiness structured data',
+          'FAQ structured data',
+          'Geographic and service-area information',
+          'XML sitemap',
+          'Robots configuration',
+          'Descriptive image alt text',
+        ],
+      },
+      {
+        label: 'Outcome',
+        heading: 'A distinctive digital foundation for a highly specialized business',
+        paragraphs: [
+          'The completed website gives Concrete Connections NWA a professional digital presence that reflects the creativity and technical skill behind its physical work. It transforms a broad and unfamiliar service offering into an organized experience that helps residential and commercial visitors understand the company’s capabilities, explore project possibilities, and begin a quote conversation.',
+        ],
+        list: [
+          'Created a complete visual direction for the client’s online presence',
+          'Organized specialized services into understandable categories',
+          'Connected residential and commercial audiences through shared project applications',
+          'Built a responsive frontend experience around visual storytelling',
+          'Established a clear quote and contact journey',
+          'Added the technical SEO foundation needed for future service and location content',
+        ],
+      },
+      {
+        label: 'Reflection',
+        heading: 'What this project demonstrates',
+        paragraphs: [
+          'This project demonstrates my ability to combine visual design, UX strategy, information architecture, and frontend engineering within a single client engagement. It required me to understand an uncommon physical service, establish a credible digital identity, organize content for multiple customer groups, and implement the final experience as a responsive production website.',
+        ],
+        cards: [
+          { title: 'Designing for understanding', description: 'Strong visuals still need clear information architecture and service language.' },
+          { title: 'Balancing emotion and utility', description: 'An immersive experience works best when navigation and conversion actions remain straightforward.' },
+          { title: 'Translating physical craft into digital form', description: 'The website needed to feel shaped and intentional without competing with the craftsmanship it was presenting.' },
+        ],
+      },
+    ],
+    images: [
+      { type: 'desktop', src: '/images/ccnwa-services.webp', srcSmall: '/images/ccnwa-services-720.webp', width: 1440, height: 981, alt: 'Services section showing project-type cards for pool grottos, rock veneers, themed environments, caves and scenic walls, custom boulders, repairs, and faux finishes', caption: 'Service categories that let visitors self-identify their project type', color: '#00ffc6' },
+      { type: 'desktop', src: '/images/ccnwa-markets.webp', srcSmall: '/images/ccnwa-markets-720.webp', width: 1440, height: 1053, alt: 'Markets We Serve section listing twelve market cards including pool builders, hotels and resorts, zoos and aquariums, museums, theme parks, and municipal parks', caption: 'Market applications connecting residential and commercial audiences', color: '#00ffc6' },
+      { type: 'desktop', src: '/images/ccnwa-gallery.webp', srcSmall: '/images/ccnwa-gallery-720.webp', width: 1440, height: 882, alt: 'Featured Projects gallery with category filter buttons for All, Commercial, Exhibits, and Scenic Walls above a grid of rockwork installation photographs', caption: 'Filterable project gallery built from real installation photography', color: '#00ffc6' },
+      { type: 'desktop', src: '/images/ccnwa-quote.webp', srcSmall: '/images/ccnwa-quote-720.webp', width: 1440, height: 270, alt: 'Closing call-to-action band reading “Bring your environment to life” with request-a-quote and call-now buttons', caption: 'Closing conversion band with quote and click-to-call actions', color: '#00ffc6' },
+      { type: 'mobile', src: '/images/ccnwa-mobile.webp', width: 720, height: 1558, alt: 'Mobile homepage with stacked hero heading, description, and full-width request-a-quote and view-gallery buttons', caption: 'Mobile homepage: stacked hierarchy with full-width actions', color: '#00ffc6' },
+      { type: 'mobile', src: '/images/ccnwa-mobile-nav.webp', width: 720, height: 1558, alt: 'Mobile navigation panel open, listing Services, Markets, Process, Gallery, FAQ, and Contact with a request-a-quote button', caption: 'Mobile navigation keeps the quote action within reach', color: '#00ffc6' },
+    ],
+    color: '#00ffc6',
+    heroImage: '/images/ccnwa-hero.webp',
+    heroImageSmall: '/images/ccnwa-hero-720.webp',
+    heroImageAlt: 'Concrete Connections NWA themed concrete contractor website homepage',
+    heroImageWidth: 1440,
+    heroImageHeight: 900,
+    ogImage: '/images/ccnwa-og.jpg',
+    liveUrl: 'https://concreteconnectionsnwa.com/',
+    seo: {
+      title: 'Concrete Connections NWA Case Study | Sharayah Hefner',
+      description:
+        'A UX/UI and frontend development case study for Concrete Connections NWA, an immersive lead-generation website created for a specialty artificial-rockwork and themed-concrete contractor.',
+      ogTitle: 'Concrete Connections NWA — UX/UI & Frontend Case Study',
+      ogDescription:
+        'See how Sharayah Hefner designed and developed an immersive, responsive website for a specialty artificial-rockwork and themed-concrete contractor.',
+    },
+    finalCta: {
+      heading: 'Need someone who can design the experience',
+      highlight: 'and build the frontend?',
+      body: 'I work across UX/UI design, visual systems, and frontend engineering to turn complex products and services into clear, polished digital experiences.',
     },
   },
   {

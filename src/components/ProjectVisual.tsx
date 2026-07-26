@@ -1,4 +1,4 @@
-type ProjectVisualType = 'cabana' | 'dashboard' | 'ecommerce' | 'barnes' | 'atlas'
+export type ProjectVisualType = 'cabana' | 'dashboard' | 'ecommerce' | 'barnes' | 'atlas'
 
 export default function ProjectVisual({ type, color }: { type: ProjectVisualType; color: string }) {
   return (

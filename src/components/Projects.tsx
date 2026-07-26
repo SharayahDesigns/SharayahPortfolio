@@ -1,13 +1,21 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
 import { caseStudies } from '../data/caseStudies'
 import { FlaskConical, ArrowRight, ExternalLink } from 'lucide-react'
-import ProjectVisual from './ProjectVisual'
+import ProjectVisual, { type ProjectVisualType } from './ProjectVisual'
 
 export default function Projects() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+  const featuredProjects = portfolioData.projects.filter((project) => project.featured)
+  const [activeSlug, setActiveSlug] = useState(featuredProjects[0]?.slug ?? portfolioData.projects[0]?.slug ?? '')
+  const activeProject = featuredProjects.find((project) => project.slug === activeSlug) ?? featuredProjects[0]
+  const activeStudy = activeProject
+    ? caseStudies.find((study) => study.title === activeProject.name || study.slug === activeProject.slug)
+    : null
+  const activeCaseStudySlug = activeStudy?.slug || activeProject?.slug
 
   const container = {
     hidden: {},
@@ -29,6 +37,129 @@ export default function Projects() {
             <span className="teal">and engineered</span>
           </motion.h2>
 
+          {activeProject && (
+            <motion.div className="project-showcase" variants={item}>
+              <div className="project-showcase-heading">
+                <p className="project-showcase-kicker">Hover-Driven Preview</p>
+                <p className="project-showcase-intro">
+                  A faster way to scan the work. The list stays text-first, and the preview responds immediately, similar to the editorial interaction pattern used on the reference site.
+                </p>
+              </div>
+
+              <div className="project-showcase-grid">
+                <div className="project-showcase-list" role="list" aria-label="Featured projects">
+                  {featuredProjects.map((project, index) => {
+                    const isActive = project.slug === activeProject.slug
+
+                    return (
+                      <button
+                        type="button"
+                        key={project.slug}
+                        className={`project-showcase-item${isActive ? ' is-active' : ''}`}
+                        onMouseEnter={() => setActiveSlug(project.slug)}
+                        onFocus={() => setActiveSlug(project.slug)}
+                        onClick={() => setActiveSlug(project.slug)}
+                        data-cursor="pointer"
+                        aria-pressed={isActive}
+                      >
+                        <span className="project-showcase-index">{String(index + 1).padStart(2, '0')}</span>
+                        <div className="project-showcase-copy">
+                          <span className="project-showcase-name">{project.name}</span>
+                          <span className="project-showcase-type">{project.type}</span>
+                        </div>
+                        <span className="project-showcase-arrow">
+                          <ArrowRight size={18} />
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <div className="project-showcase-preview">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeProject.slug}
+                      className="project-showcase-preview-card"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <div className="project-showcase-preview-visual">
+                        {activeProject.image ? (
+                          <div className="project-shot">
+                            <img
+                              src={activeProject.image}
+                              srcSet={activeProject.imageSmall && activeProject.imageWidth
+                                ? `${activeProject.imageSmall} 720w, ${activeProject.image} ${activeProject.imageWidth}w`
+                                : undefined}
+                              sizes={activeProject.imageSmall ? '(max-width: 900px) 100vw, 620px' : undefined}
+                              alt={activeProject.imageAlt || `${activeProject.name} website screenshot`}
+                              width={activeProject.imageWidth ?? undefined}
+                              height={activeProject.imageHeight ?? undefined}
+                              loading="lazy"
+                              decoding="async"
+                            />
+                          </div>
+                        ) : activeProject.visual ? (
+                          <ProjectVisual type={activeProject.visual as ProjectVisualType} color={activeProject.color} />
+                        ) : null}
+                      </div>
+
+                      <div className="project-showcase-preview-body">
+                        <p className="project-showcase-preview-label" style={{ color: activeProject.color }}>
+                          Active Selection
+                        </p>
+                        <h3>{activeProject.name}</h3>
+                        <p>{activeProject.summary}</p>
+
+                        <div className="project-showcase-preview-meta">
+                          <div>
+                            <span>Role</span>
+                            <strong>{activeProject.role}</strong>
+                          </div>
+                          <div>
+                            <span>Outcome</span>
+                            <strong>{activeProject.outcome}</strong>
+                          </div>
+                        </div>
+
+                        <div className="project-tags">
+                          {activeProject.technologies.map((technology) => (
+                            <span className="project-tag" key={technology}>{technology}</span>
+                          ))}
+                        </div>
+
+                        <div className="project-card-actions">
+                          <Link
+                            to={`/work/${activeCaseStudySlug}`}
+                            className="project-case-study-link"
+                            style={{ color: activeProject.color }}
+                            aria-label={`View ${activeProject.name} case study`}
+                          >
+                            View Case Study <ArrowRight size={14} />
+                          </Link>
+                          {activeProject.link && activeProject.linkLabel && (
+                            <a
+                              href={activeProject.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="project-live-link"
+                              style={{ color: activeProject.color }}
+                              aria-label={`Visit the live ${activeProject.name} site (opens in a new tab)`}
+                            >
+                              Live Site <ExternalLink size={14} />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           <motion.div className="projects-grid" variants={container}>
             {portfolioData.projects.map((p) => {
               const study = caseStudies.find((cs) => cs.title === p.name || cs.slug === p.slug)
@@ -43,7 +174,24 @@ export default function Projects() {
                   whileHover={{ y: -6, transition: { duration: 0.3 } }}
                 >
                   <div className="project-visual-wrap">
-                    <ProjectVisual type={p.visual as 'cabana' | 'dashboard' | 'ecommerce' | 'barnes' | 'atlas'} color={p.color} />
+                    {p.image ? (
+                      <div className="project-shot">
+                        <img
+                          src={p.image}
+                          srcSet={p.imageSmall && p.imageWidth
+                            ? `${p.imageSmall} 720w, ${p.image} ${p.imageWidth}w`
+                            : undefined}
+                          sizes={p.imageSmall ? '(max-width: 600px) 100vw, 520px' : undefined}
+                          alt={p.imageAlt || `${p.name} website screenshot`}
+                          width={p.imageWidth ?? undefined}
+                          height={p.imageHeight ?? undefined}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    ) : p.visual ? (
+                      <ProjectVisual type={p.visual as ProjectVisualType} color={p.color} />
+                    ) : null}
                   </div>
                   <div className="project-body">
                     <p className="project-type">{p.type}</p>
