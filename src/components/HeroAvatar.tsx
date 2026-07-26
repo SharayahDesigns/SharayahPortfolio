@@ -20,6 +20,9 @@ type StaticHeroModelProps = {
   }
 }
 
+/** World-space height every model is normalised to before its multiplier. */
+const HERO_MODEL_HEIGHT = 3.55
+
 const HERO_MODEL_PATH = '/models/codingChick.glb'
 const DOG_MODEL_PATH = '/models/Meshy_AI_Snowy_Shepherd_with_B_0725220024_texture.glb'
 
@@ -43,7 +46,7 @@ function StaticHeroModel({
     const size = new THREE.Vector3()
     box.getSize(size)
 
-    const normalized = size.y > 0 ? 2.95 / size.y : 1.35
+    const normalized = size.y > 0 ? HERO_MODEL_HEIGHT / size.y : 1.35
     return normalized * scaleMultiplier
   }, [modelScene, scaleMultiplier])
 
@@ -103,13 +106,13 @@ export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
         <Suspense fallback={<AvatarFallback />}>
           <StaticHeroModel
             path={HERO_MODEL_PATH}
-            targetPosition={[0, 0, 0]}
+            targetPosition={[0, 0.2, 0]}
             baseRotation={[-0.04, 0.14, 0]}
             reducedMotion={reducedMotion}
           />
           <StaticHeroModel
             path={DOG_MODEL_PATH}
-            targetPosition={[.98, -.80, .40]}
+            targetPosition={[1.02, -0.58, 0.4]}
             baseRotation={[0, -0.08, 0]}
             reducedMotion={reducedMotion}
             scaleMultiplier={0.6}
