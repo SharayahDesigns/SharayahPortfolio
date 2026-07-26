@@ -615,6 +615,11 @@
    heading instead of a padding's height below it. */
 .about-section {
   padding-top: 40px;
+  /* The dive scales the phone to ~22x, so its box extends thousands of pixels
+     past this section and would paint over — and swallow clicks on — every
+     section below it. `clip` contains that without creating a scroll
+     container, so the sticky stage inside still pins to the viewport. */
+  overflow: clip;
 }
 
 /* One grid for the whole section so the portrait can pin across it */
