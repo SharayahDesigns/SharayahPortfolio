@@ -292,6 +292,13 @@ export const portfolioData = {
     },
   ],
 
+  skillsFigure: {
+    src: '/images/MyToolBox.webp',
+    alt: 'Illustrated avatar of Sharayah Hefner presenting her toolkit with open hands',
+    width: 699,
+    height: 1402,
+  },
+
   skillGroups: [
     {
       label: 'Frontend Engineering',

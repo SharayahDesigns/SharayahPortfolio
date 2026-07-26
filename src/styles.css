@@ -1911,39 +1911,182 @@
   margin-top: 7px;
 }
 
-/* ===== SKILLS ===== */
-.skills-grid {
+/* ===== SKILLS / TOOLBOX ===== */
+/* Three tracks: a stack of boxes, the figure, another stack. The figure column
+   is `auto` so it takes exactly the image's width and the two stacks split
+   what is left evenly. */
+.toolbox {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr auto 1fr;
+  column-gap: clamp(20px, 3.4vw, 52px);
+  align-items: center;
 }
-.skill-group {
-  padding: 28px;
+.toolbox-col {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* ---- Figure ---- */
+.toolbox-figure {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Centred, not bottom-aligned: an open box can make a column far taller than
+     the figure, and `end` sank her to the foot of the section. */
+  align-self: center;
+  width: clamp(168px, 17.5vw, 258px);
+}
+.toolbox-figure img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 26px 42px rgba(0, 0, 0, 0.55));
+}
+.toolbox-glow {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  width: 150%;
+  aspect-ratio: 1;
+  margin-left: -75%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 198, 0.11) 0%, rgba(0, 255, 198, 0) 62%);
+  pointer-events: none;
+}
+/* Grounds the cutout so it does not read as pasted on. */
+.toolbox-stand {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 30px;
+  width: 76%;
+  height: 22px;
+  margin-left: -38%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0) 72%);
+  pointer-events: none;
+}
+.toolbox-hint {
+  position: relative;
+  z-index: 3;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--teal);
+  opacity: 0.85;
+  transition: opacity 0.4s var(--transition), transform 0.4s var(--transition);
+}
+/* Retires itself once the interaction has been discovered. */
+.toolbox-hint.is-hidden {
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+}
+
+/* ---- Boxes ---- */
+.skill-box {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--transition), background var(--transition);
 }
-.skill-group-label {
+.skill-box:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+}
+.skill-box.is-open {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+}
+
+.skill-box-lid {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  background: none;
+  border: 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+/* The seam the lid opens along — lights up once the box is open. */
+.skill-box.is-open .skill-box-lid {
+  border-bottom: 1px solid var(--border-accent);
+  box-shadow: 0 1px 0 rgba(0, 255, 198, 0.12);
+}
+
+.skill-box-label {
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-mono);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--teal);
-  margin-bottom: 20px;
 }
+.skill-box-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.skill-box-toggle {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  transition: transform var(--transition), color var(--transition), border-color var(--transition);
+}
+.skill-box-lid:hover .skill-box-toggle {
+  color: var(--teal);
+  border-color: var(--border-accent);
+}
+/* Plus becomes a minus — the open box has one obvious way back. */
+.skill-box.is-open .skill-box-toggle {
+  transform: rotate(135deg);
+  color: var(--teal);
+  border-color: var(--border-accent);
+}
+
+.skill-box-panel {
+  overflow: hidden;
+}
+.skill-box-panel-inner {
+  padding: 16px 18px 18px;
+}
+
 .skill-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 .skill-chip {
-  font-size: 13px;
-  padding: 7px 14px;
+  font-size: 12.5px;
+  padding: 6px 12px;
   background: rgba(255,255,255,0.02);
   border: 1px solid var(--border);
   border-radius: 100px;
   color: var(--text-secondary);
   transition: all var(--transition);
+}
+.skill-chip:hover {
+  background: rgba(0, 255, 198, 0.1);
+  border-color: rgba(0, 255, 198, 0.4);
+  color: var(--teal);
 }
 .skill-chip--muted {
   font-size: 12px;
@@ -1963,6 +2106,26 @@
   letter-spacing: 0.1em;
   color: var(--text-muted);
   margin-bottom: 16px;
+}
+
+/* Below this the side stacks get too narrow to hold a label plus a count, so
+   the figure moves above a single full-width stack. */
+@media (max-width: 900px) {
+  .toolbox {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+    justify-items: stretch;
+  }
+  .toolbox-figure {
+    order: -1;
+    align-self: center;
+    /* The figure has an explicit width, so `justify-items: stretch` on the grid
+       leaves it parked at the column start rather than centring it. */
+    justify-self: center;
+    width: clamp(170px, 46vw, 250px);
+    margin-bottom: 4px;
+  }
+  .toolbox-col { gap: 12px; }
 }
 
 /* ===== EDUCATION ===== */
