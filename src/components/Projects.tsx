@@ -1,6 +1,11 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
+import { useEffect, useRef, useState } from 'react'
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
 import { caseStudies } from '../data/caseStudies'
@@ -8,7 +13,15 @@ import { FlaskConical, ArrowRight, ExternalLink } from 'lucide-react'
 import ProjectVisual, { type ProjectVisualType } from './ProjectVisual'
 
 export default function Projects() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+  const transitionRef = useRef<HTMLDivElement>(null)
+  const projectRef = useRef<HTMLElement>(null)
+  const [continuationHeight, setContinuationHeight] = useState(0)
+  const { scrollYProgress } = useScroll({
+    target: transitionRef,
+    offset: ['start start', 'start -100vh'],
+  })
+  const reducedMotion = useReducedMotion() ?? false
+  const slideX = useTransform(scrollYProgress, [0, 1], ['100vw', '0vw'])
   const featuredProjects = portfolioData.projects.filter((project) => project.featured)
   const [activeSlug, setActiveSlug] = useState(featuredProjects[0]?.slug ?? portfolioData.projects[0]?.slug ?? '')
   const activeProject = featuredProjects.find((project) => project.slug === activeSlug) ?? featuredProjects[0]
@@ -17,19 +30,63 @@ export default function Projects() {
     : null
   const activeCaseStudySlug = activeStudy?.slug || activeProject?.slug
 
+  useEffect(() => {
+    const project = projectRef.current
+    if (!project) return
+
+    const updateContinuationHeight = () => {
+      setContinuationHeight(Math.max(0, project.offsetHeight - window.innerHeight))
+    }
+
+    updateContinuationHeight()
+    const observer = new ResizeObserver(updateContinuationHeight)
+    observer.observe(project)
+    window.addEventListener('resize', updateContinuationHeight)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateContinuationHeight)
+    }
+  }, [])
+
   const container = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.12 } },
+    show: {
+      transition: {
+        staggerChildren: reducedMotion ? 0 : 0.1,
+      },
+    },
   }
   const item = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        duration: reducedMotion ? 0 : 0.45,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
   }
 
   return (
-    <section className="section projects-section" id="projects" ref={ref}>
-      <div className="container">
-        <motion.div variants={container} initial="hidden" animate={inView ? 'show' : 'hidden'}>
+    <div className="projects-transition-shell" ref={transitionRef}>
+      <div
+        className="projects-horizontal-track"
+        style={{ height: reducedMotion ? '100vh' : '200vh' }}
+      >
+        <div className="projects-sticky-viewport">
+          <motion.section
+            ref={projectRef}
+            className="section projects-section"
+            id="projects"
+            style={{ x: reducedMotion ? 0 : slideX }}
+          >
+            <div className="container">
+              <motion.div
+                variants={container}
+                initial={false}
+                animate="show"
+              >
           <motion.p className="section-label" variants={item}>Selected Work</motion.p>
           <motion.h2 className="section-title" variants={item}>
             Products I've designed{' '}
@@ -264,8 +321,16 @@ export default function Projects() {
               ))}
             </motion.div>
           </motion.div>
-        </motion.div>
+              </motion.div>
+            </div>
+          </motion.section>
+        </div>
       </div>
-    </section>
+      <div
+        className="projects-continuation-spacer"
+        style={{ height: continuationHeight }}
+        aria-hidden="true"
+      />
+    </div>
   )
 }

@@ -1037,10 +1037,33 @@
 }
 
 /* ===== PROJECTS ===== */
+.about-projects-stack {
+  position: relative;
+  isolation: isolate;
+}
+.about-sticky-layer {
+  position: sticky;
+  top: var(--about-sticky-top, 0px);
+  z-index: 1;
+}
+.projects-transition-shell {
+  position: relative;
+  z-index: 2;
+}
+.projects-horizontal-track {
+  position: relative;
+}
+.projects-sticky-viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: visible;
+}
 .projects-section {
   position: relative;
-  z-index: 3;
   background: var(--bg-secondary);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: -32px 0 90px rgba(0, 0, 0, 0.42);
 }
 .projects-grid {
   display: grid;

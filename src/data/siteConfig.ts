@@ -21,5 +21,5 @@ export const navItems: NavItem[] = [
   { label: 'Résumé', href: '/resume', route: true },
 ]
 
-export const resumePdfPath = '/Sharayah_Hefner_Resume.pdf'
-export const resumePdfFilename = 'Sharayah_Hefner_Resume.pdf'
+export const resumePdfPath = '/Sharayah_Hefner_Frontend_UX_Engineer_Resume.pdf'
+export const resumePdfFilename = 'Sharayah_Hefner_Frontend_UX_Engineer_Resume.pdf'

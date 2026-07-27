@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
-import About from './components/About'
-import Projects from './components/Projects'
+import AboutProjectsStack from './components/AboutProjectsStack'
 import Experience from './components/Experience'
 import Skills from './components/Skills'
 import Education from './components/Education'
@@ -63,8 +62,7 @@ function HomePage() {
       <main className="home-main">
         <Hero />
         <div className="home-content-stack">
-          <About />
-          <Projects />
+          <AboutProjectsStack />
           <Experience />
           <Skills />
           <Education />
