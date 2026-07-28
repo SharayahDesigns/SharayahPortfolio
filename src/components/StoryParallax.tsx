@@ -24,10 +24,10 @@ const LAG = {
 } as const
 
 const MOBILE_LAG = {
-  sky: 0.78,
-  copy: 0.74,
-  range: 0.28,
-  figure: 0.16,
+  sky: 0.14,
+  copy: 0.08,
+  range: 0.12,
+  figure: 0.05,
 } as const
 
 export default function StoryParallax() {
@@ -69,18 +69,18 @@ export default function StoryParallax() {
   // makes direct layer mapping look jittery. Spring the progress there and
   // soften the lag so the scene still moves, just without the shake.
   const smoothedProgress = useSpring(scrollYProgress, isMobile
-    ? { stiffness: 90, damping: 26, mass: 0.34 }
+    ? { stiffness: 52, damping: 24, mass: 0.6 }
     : { stiffness: 220, damping: 34, mass: 0.2 })
   const progress = isMobile ? smoothedProgress : scrollYProgress
   const lag = isMobile ? MOBILE_LAG : LAG
 
-  const skyY = useTransform(progress, (v) => v * lag.sky * stageH)
-  const copyY = useTransform(progress, (v) => v * lag.copy * stageH)
-  const rangeY = useTransform(progress, (v) => v * lag.range * stageH)
-  const figureY = useTransform(progress, (v) => v * lag.figure * stageH)
+  const skyY = useTransform(progress, (v) => v * lag.sky * (isMobile ? 220 : stageH))
+  const copyY = useTransform(progress, (v) => v * lag.copy * (isMobile ? 180 : stageH))
+  const rangeY = useTransform(progress, (v) => v * lag.range * (isMobile ? 160 : stageH))
+  const figureY = useTransform(progress, (v) => v * lag.figure * (isMobile ? 120 : stageH))
   // Trails just behind the peaks. Without it the type survives the overtake as
   // stray slivers in the gaps between summits.
-  const copyOpacity = useTransform(progress, isMobile ? [0.46, 0.66] : [0.4, 0.58], [1, 0])
+  const copyOpacity = useTransform(progress, isMobile ? [0.62, 0.9] : [0.4, 0.58], [1, isMobile ? 0.24 : 0])
 
   return (
     <section className="story" id="story" aria-labelledby="story-heading">

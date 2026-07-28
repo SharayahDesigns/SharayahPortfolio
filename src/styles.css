@@ -761,8 +761,10 @@
     transform: translateX(-18px);
   }
   .hero-tilt-button {
-    left: calc(50% - 126px);
-    bottom: -18px;
+    left: auto;
+    right: -8px;
+    top: 18px;
+    bottom: auto;
     transform: none;
   }
   .hero-tilt-button:hover {
