@@ -4,6 +4,10 @@ import { useLocation } from 'react-router-dom'
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID?.trim()
 const GA_DEBUG_MODE = import.meta.env.VITE_GA_DEBUG_MODE === 'true'
 const GA_DEBUG_STORAGE_KEY = 'ga_debug_mode'
+const PAGE_TITLE_BY_PATH: Record<string, string> = {
+  '/': 'Sharayah Hefner — Frontend UX Engineer & Design Engineer',
+  '/resume': 'Résumé — Sharayah Hefner',
+}
 
 declare global {
   interface Window {
@@ -14,6 +18,10 @@ declare global {
 
 function hasAnalytics() {
   return Boolean(GA_MEASUREMENT_ID)
+}
+
+function getTrackedPageTitle(pathname: string) {
+  return PAGE_TITLE_BY_PATH[pathname] || document.title
 }
 
 function isDebugModeEnabled() {
@@ -73,17 +81,17 @@ export function AnalyticsRouterTracker() {
     if (!hasAnalytics() || !window.gtag) return
 
     const debugMode = isDebugModeEnabled()
-    const frame = window.requestAnimationFrame(() => {
+    const timeout = window.setTimeout(() => {
       window.gtag?.('event', 'page_view', {
-        page_title: document.title,
+        page_title: getTrackedPageTitle(location.pathname),
         page_location: window.location.href,
         page_path: `${location.pathname}${location.search}`,
         debug_mode: debugMode,
       })
-    })
+    }, 0)
 
     return () => {
-      window.cancelAnimationFrame(frame)
+      window.clearTimeout(timeout)
     }
   }, [location.pathname, location.search])
 
