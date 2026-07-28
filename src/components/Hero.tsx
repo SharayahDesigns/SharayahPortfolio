@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import ParticleField from './ParticleField'
 import { portfolioData } from '../data/portfolio'
@@ -7,9 +8,49 @@ import { Github, Linkedin, Mail, ArrowDown, FileText } from 'lucide-react'
 
 const HeroAvatar = lazy(() => import('./HeroAvatar'))
 
+const HEADLINE_WORDS = portfolioData.name.split(' ')
+const HERO_TITLE = portfolioData.title
+/** Per-character cadence — fast enough not to stall, slow enough to read. */
+const TYPE_MS = 26
+
 export default function Hero() {
   const [reducedMotion, setReducedMotion] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
+
+  // The local state above starts false and only resolves after mount, which is
+  // deliberate for the 3D avatar. The text animations need the value on the
+  // first render instead, or the typewriter starts and then restarts.
+  const prefersReduced = useReducedMotion() ?? false
+
+  // Typed out by advancing a character count, so the string updates outside
+  // React's render loop rather than re-rendering the hero ~70 times.
+  const typedCount = useMotionValue(0)
+  const typedText = useTransform(typedCount, (v) => HERO_TITLE.slice(0, Math.round(v)))
+
+  useEffect(() => {
+    if (prefersReduced) {
+      typedCount.set(HERO_TITLE.length)
+      return
+    }
+    typedCount.set(0)
+    let i = 0
+    let tick: ReturnType<typeof setInterval>
+    // Stepped per character rather than interpolated over a duration. The 3D
+    // avatar chunk initialises right about here and blocks the main thread; a
+    // time-based tween would catch up after that stall by jumping straight to
+    // the full string. Stepping just resumes where it left off.
+    const start = setTimeout(() => {
+      tick = setInterval(() => {
+        i += 1
+        typedCount.set(i)
+        if (i >= HERO_TITLE.length) clearInterval(tick)
+      }, TYPE_MS)
+    }, 1050)
+    return () => {
+      clearTimeout(start)
+      clearInterval(tick)
+    }
+  }, [prefersReduced, typedCount])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -47,6 +88,25 @@ export default function Hero() {
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
   }
 
+  // The headline drops in a word at a time and overshoots on landing.
+  const headline: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.09, delayChildren: 0.12 } },
+  }
+  const headlineWord: Variants = prefersReduced
+    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
+    : {
+        hidden: { opacity: 0, y: 48, scale: 0.94 },
+        show: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          // Underdamped on purpose — damping this low is what produces the
+          // settle-and-bounce rather than a flat glide.
+          transition: { type: 'spring', stiffness: 400, damping: 11, mass: 0.9 },
+        },
+      }
+
   return (
     <section className="hero" id="hero" ref={heroRef}>
       {!reducedMotion && <ParticleField />}
@@ -63,12 +123,22 @@ export default function Hero() {
             Available for Frontend UX & Design Engineering Opportunities
           </motion.p>
 
-          <motion.h1 className="hero-headline" variants={item}>
-            Sharayah Hefner
+          <motion.h1 className="hero-headline" variants={headline} aria-label={portfolioData.name}>
+            {HEADLINE_WORDS.map((word) => (
+              <motion.span className="hero-headline-word" key={word} variants={headlineWord} aria-hidden="true">
+                {word}
+              </motion.span>
+            ))}
           </motion.h1>
 
-          <motion.p className="hero-title" variants={item}>
-            Frontend UX Engineer · Design Engineer · E-Commerce Front-End Developer
+          {/* The ghost copy reserves the final wrapped height so the summary and
+              everything under it never shifts while the line types itself. */}
+          <motion.p className="hero-title" variants={item} aria-label={HERO_TITLE}>
+            <span className="hero-title-ghost" aria-hidden="true">{HERO_TITLE}</span>
+            <span className="hero-title-typed" aria-hidden="true">
+              <motion.span>{typedText}</motion.span>
+              <span className="hero-caret" />
+            </span>
           </motion.p>
 
           <motion.p className="hero-summary" variants={item}>

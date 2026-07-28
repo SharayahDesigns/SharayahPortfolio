@@ -3,15 +3,21 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
-import { TechMark } from './TechMarks'
+import { TechMark, techBrandTint } from './TechMarks'
 import { ArrowRight, Code2, MapPin, PenTool, Quote, Rocket, Send, Users } from 'lucide-react'
 
 const statIcons: Record<string, React.ReactNode> = {
   code: <Code2 size={18} />,
+  pen: <PenTool size={18} />,
   rocket: <Rocket size={18} />,
   users: <Users size={18} />,
   pin: <MapPin size={18} />,
 }
+
+/* Only the right edge animates. The other three sides sit slightly outside the
+   box so descenders and the underline are never clipped by the wipe. */
+const WIPE_CLOSED = 'inset(-18% 100% -30% -4%)'
+const WIPE_OPEN = 'inset(-18% 0% -30% -4%)'
 
 const stepIcons: Record<string, React.ReactNode> = {
   users: <Users size={18} />,
@@ -22,7 +28,12 @@ const stepIcons: Record<string, React.ReactNode> = {
 
 export default function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
+  // Its own observer: the section is several screens tall, so its 10% trigger
+  // fires long before the script line is actually on screen — the writing
+  // would have finished before anyone could see it.
+  const [scriptRef, scriptInView] = useInView({ triggerOnce: true, threshold: 0.9 })
   const reducedMotion = useReducedMotion() ?? false
+  const writing = !reducedMotion && scriptInView
   const { about } = portfolioData
 
   const container = {
@@ -62,15 +73,44 @@ export default function About() {
               ))}
             </motion.dl>
 
-            <motion.p className="about-script" variants={item}>
-              {about.script}
+            {/* Written out by hand: each line is wiped in left to right, then
+                the underline draws itself. The sentence lives on aria-label so
+                the split lines stay one phrase to a screen reader. */}
+            <motion.p
+              className="about-script"
+              variants={item}
+              ref={scriptRef}
+              aria-label={about.script}
+            >
+              <span className="about-script-lines" aria-hidden="true">
+                {about.scriptLines.map((line, i) => (
+                  <motion.span
+                    className="about-script-line"
+                    key={line}
+                    initial={reducedMotion ? false : { clipPath: WIPE_CLOSED }}
+                    animate={writing ? { clipPath: WIPE_OPEN } : undefined}
+                    transition={{
+                      duration: 0.72,
+                      delay: 0.35 + i * 0.78,
+                      // Soft on both ends: a hand starts and finishes a line
+                      // slower than it moves through the middle of it.
+                      ease: [0.45, 0, 0.3, 1],
+                    }}
+                  >
+                    {line}
+                  </motion.span>
+                ))}
+              </span>
               <svg className="about-script-underline" viewBox="0 0 320 14" aria-hidden="true" focusable="false">
-                <path
+                <motion.path
                   d="M3 9.5C58 4.2 128 2.5 196 3.6c42 .7 80 2.6 121 5.9"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2.5"
                   strokeLinecap="round"
+                  initial={reducedMotion ? false : { pathLength: 0 }}
+                  animate={writing ? { pathLength: 1 } : undefined}
+                  transition={{ duration: 0.55, delay: 1.98, ease: [0.4, 0, 0.4, 1] }}
                 />
               </svg>
             </motion.p>
@@ -90,7 +130,13 @@ export default function About() {
                   <ul className="about-tech-grid">
                     {about.tech.map((tech) => (
                       <li key={tech.name}>
-                        <span className="about-tech-tile" title={tech.name}>
+                        {/* --brand-tint drives the hover wash, so each tile
+                            lights up in its own colour, not a shared teal. */}
+                        <span
+                          className="about-tech-tile"
+                          title={tech.name}
+                          style={{ '--brand-tint': techBrandTint[tech.mark] } as React.CSSProperties}
+                        >
                           <TechMark mark={tech.mark} />
                           <span className="sr-only">{tech.name}</span>
                         </span>

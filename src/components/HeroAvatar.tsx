@@ -2,6 +2,7 @@ import { Suspense, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Center, Html, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { useDeviceTilt, type Tilt } from '../hooks/useDeviceTilt'
 
 type HeroAvatarProps = {
   reducedMotion: boolean
@@ -13,11 +14,23 @@ type StaticHeroModelProps = {
   baseRotation: [number, number, number]
   reducedMotion: boolean
   scaleMultiplier?: number
+  /** Phone tilt, already normalised to the same -1..1 shape as `state.pointer`. */
+  tilt?: React.MutableRefObject<Tilt>
+  /** Depth multiplier — the models drift by different amounts so they separate. */
+  parallax?: number
   entrance?: {
     fromX: number
     delay: number
     duration: number
   }
+}
+
+/** World units of drift at full tilt. Small: this should read as weight, not slide. */
+const SWAY_X = 0.2
+const SWAY_Y = 0.13
+
+function clampUnit(value: number) {
+  return Math.max(-1, Math.min(1, value))
 }
 
 /** World-space height every model is normalised to before its multiplier. */
@@ -36,6 +49,8 @@ function StaticHeroModel({
   baseRotation,
   reducedMotion,
   scaleMultiplier = 1,
+  tilt,
+  parallax = 1,
   entrance,
 }: StaticHeroModelProps) {
   const group = useRef<THREE.Group>(null)
@@ -63,12 +78,25 @@ function StaticHeroModel({
     const eased = reducedMotion ? 1 : easeOutCubic(progress)
     const startX = entrance ? entrance.fromX : targetPosition[0]
 
-    group.current.position.x = THREE.MathUtils.lerp(startX, targetPosition[0], eased)
-    group.current.position.y = targetPosition[1]
+    // Tilt is additive rather than a separate mode: it sits at zero on anything
+    // without a gyroscope, so a mouse behaves exactly as it did before.
+    const tiltX = tilt?.current.x ?? 0
+    const tiltY = tilt?.current.y ?? 0
+    const inputX = reducedMotion ? 0 : clampUnit(state.pointer.x + tiltX)
+    const inputY = reducedMotion ? 0 : clampUnit(state.pointer.y + tiltY)
+
+    // Only the sensor translates the models. Tilting the phone should feel like
+    // tipping a box — they slide toward whichever edge is lowest — while a mouse
+    // keeps its lighter rotation-only response.
+    const swayX = reducedMotion ? 0 : tiltX * SWAY_X * parallax
+    const swayY = reducedMotion ? 0 : -tiltY * SWAY_Y * parallax
+
+    group.current.position.x = THREE.MathUtils.lerp(startX, targetPosition[0], eased) + swayX
+    group.current.position.y = targetPosition[1] + swayY
     group.current.position.z = targetPosition[2]
 
-    const targetRotX = reducedMotion ? baseRotation[0] : THREE.MathUtils.lerp(group.current.rotation.x, baseRotation[0] + state.pointer.y * 0.08, 0.06)
-    const pointerRotY = reducedMotion ? baseRotation[1] : baseRotation[1] + state.pointer.x * 0.2
+    const targetRotX = reducedMotion ? baseRotation[0] : THREE.MathUtils.lerp(group.current.rotation.x, baseRotation[0] + inputY * 0.08, 0.06)
+    const pointerRotY = reducedMotion ? baseRotation[1] : baseRotation[1] + inputX * 0.2
     const entranceRotY = entrance && !reducedMotion
       ? THREE.MathUtils.lerp(baseRotation[1] + 0.45, pointerRotY, eased)
       : pointerRotY
@@ -96,6 +124,8 @@ function AvatarFallback() {
 }
 
 export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
+  const tilt = useDeviceTilt(!reducedMotion)
+
   return (
     <div className="hero-avatar-canvas">
       <Canvas camera={{ position: [0, 0.45, 11.2], fov: 27 }} dpr={[1, 1.75]}>
@@ -109,6 +139,7 @@ export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
             targetPosition={[0, 0.2, 0]}
             baseRotation={[-0.04, 0.14, 0]}
             reducedMotion={reducedMotion}
+            tilt={tilt}
           />
           <StaticHeroModel
             path={DOG_MODEL_PATH}
@@ -116,6 +147,9 @@ export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
             baseRotation={[0, -0.08, 0]}
             reducedMotion={reducedMotion}
             scaleMultiplier={0.6}
+            tilt={tilt}
+            /* nearer the camera, so it drifts further and the pair separates */
+            parallax={1.5}
           />
         </Suspense>
       </Canvas>

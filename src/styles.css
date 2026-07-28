@@ -316,12 +316,47 @@
   color: var(--text-primary);
 }
 
+.hero-headline-word {
+  /* inline-block so the spring's y/scale actually apply — transforms are a
+     no-op on a plain inline box. */
+  display: inline-block;
+  margin-right: 0.26em;
+}
+.hero-headline-word:last-child { margin-right: 0; }
+
 .hero-title {
+  position: relative;
   font-family: var(--font-mono);
   font-size: clamp(14px, 1.8vw, 17px);
   color: var(--teal);
   margin-bottom: 24px;
   font-weight: 400;
+}
+/* Holds the full line's box open; the typed copy floats over it. */
+.hero-title-ghost { visibility: hidden; }
+.hero-title-typed {
+  position: absolute;
+  inset: 0;
+}
+
+/* Block caret, the way a terminal draws one. */
+.hero-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.08em;
+  vertical-align: text-bottom;
+  background: var(--teal);
+  box-shadow: 0 0 10px rgba(0, 255, 198, 0.55);
+  /* step-end, not a fade — a CRT cursor snaps between states. */
+  animation: hero-caret-blink 1.06s step-end infinite;
+}
+@keyframes hero-caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-caret { display: none; }
 }
 
 .hero-summary {
@@ -601,33 +636,59 @@
     border-top-right-radius: 28px;
   }
 
-  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
-  .hero-graphic { min-height: 700px; order: -1; padding: 20px; }
-  .avatar-frame { width: min(100%, 340px); height: 620px; }
-  .hero-avatar-canvas { inset: -45px -50px -95px -50px; }
+  /* Single column, and the text items are hoisted out of .hero-content so the
+     avatar can sit between the title and the summary rather than above the
+     whole block. Row gap is 0 because each element carries its own margin. */
+  .hero-inner { grid-template-columns: 1fr; row-gap: 0; }
+  .hero-content { display: contents; }
+
+  .hero-label { order: 1; }
+  .hero-headline { order: 2; }
+  .hero-title { order: 3; }
+  .hero-graphic { order: 4; }
+  .hero-summary { order: 5; }
+  .hero-stats { order: 6; }
+  .hero-actions { order: 7; }
+  .hero-meta-row { order: 8; }
+
+  .hero-graphic {
+    min-height: 0;
+    padding: 0;
+    margin: 4px 0 40px;
+  }
+  .avatar-frame { width: min(100%, 300px); height: 420px; }
+  /* Wider than it is tall, relatively speaking: the camera's fov is vertical,
+     so a narrow canvas shows less world width and clipped the dog off the
+     right edge. */
+  .hero-avatar-canvas {
+    inset: -30px -46px -62px -46px;
+    /* The pair's centroid sits right of origin (the dog is at x=1.02), so the
+       canvas is nudged left to centre the composition on the screen. */
+    transform: translateX(-18px);
+  }
   .hero-stats { max-width: none; }
   .hero-stat-card { padding: 12px 14px; }
 }
 
 /* ===== ABOUT ===== */
-/* The section's leading space lives on the intro column, not the section, so
-   the portrait's sticky track starts higher and the phone rests level with the
-   heading instead of a padding's height below it. */
+/* The section's leading space lives on the intro column, not the section, so the
+   portrait sits level with the heading instead of a padding's height below it. */
 .about-section {
-  padding-top: 40px;
+  padding-top: 0;
 }
 
-/* One grid for the whole section so the portrait can pin across it */
 .about-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  /* explicit rows so the portrait can span them: intro / panels */
+  /* intro + portrait / panels */
   grid-template-rows: auto auto;
   column-gap: 56px;
   align-items: start;
 }
-.about-intro { grid-column: 1; grid-row: 1; padding-top: 110px; }
-.about-portrait { grid-column: 2; grid-row: 1 / span 2; align-self: stretch; position: relative; z-index: 0; }
+/* 110px of its own + the 40px the section used to carry */
+.about-intro { grid-column: 1; grid-row: 1; padding-top: 150px; }
+/* Row 1 only, so the portrait rests above the panels and scrolls with them. */
+.about-portrait { grid-column: 2; grid-row: 1; align-self: start; position: relative; z-index: 0; }
 
 .about-heading {
   font-family: var(--font-display);
@@ -695,6 +756,14 @@
   max-width: 340px;
   padding-bottom: 14px;
 }
+/* Block lines rather than a wrapped paragraph: each is wiped independently. */
+.about-script-lines {
+  display: block;
+}
+.about-script-line {
+  display: block;
+  will-change: clip-path;
+}
 .about-script-underline {
   position: absolute;
   left: 12%;
@@ -707,22 +776,18 @@
 }
 
 /* Portrait */
-/* Documented sticky-track stage: full viewport height with the phone centred,
-   so the pinned position is identical to the resting position. */
 .about-portrait-stage {
   --about-phone-h: min(600px, 68vh);
-  /* Fixed offset from the top, NOT centred — centring is viewport-relative, so
-     on a tall screen it drops the phone far below the heading. This keeps the
-     phone level with the heading at any viewport height, resting or pinned. */
+  /* Offset from the top of the column, matched to the intro's padding so the
+     phone starts level with the heading. Not viewport-relative — the stage is
+     static, so the phone holds its place in the layout and scrolls with it. */
   --about-phone-top: 145px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: var(--about-phone-top);
+  /* 42px of tail for the tech card, which hangs past the phone */
+  padding: var(--about-phone-top) 0 42px;
 }
 .about-portrait-rig {
   position: relative;
@@ -823,7 +888,8 @@
 }
 .about-tech-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* 5 across: ten marks split evenly instead of 4 + 4 + a ragged 2. */
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
   justify-items: center;
   list-style: none;
@@ -840,9 +906,13 @@
   color: var(--text-primary);
   transition: color var(--transition), background var(--transition), transform var(--transition);
 }
+/* No colour change on hover — the marks carry their own brand colours now, and
+   recolouring them would undo the point. Only the tint and lift respond. */
 .about-tech-tile:hover {
-  color: var(--teal);
-  background: var(--teal-dim);
+  /* Longhand, not the `background` shorthand: a shorthand carrying a var()
+     becomes a pending-substitution value, which reports as the initial value
+     and makes the tint impossible to assert on. */
+  background-color: var(--brand-tint, rgba(255, 255, 255, 0.08));
   transform: translateY(-2px);
 }
 
@@ -1008,14 +1078,14 @@
 @media (max-width: 1100px) {
   .about-grid { grid-template-columns: 1fr; row-gap: 56px; }
   .about-intro, .about-portrait, .about-panels { grid-column: 1; }
-  .about-portrait { grid-row: 2 / span 2; justify-self: center; width: 100%; max-width: 460px; }
+  .about-portrait { grid-row: 2; justify-self: center; width: 100%; max-width: 460px; }
   .about-panels { grid-row: 3; }
   .about-panels { grid-template-columns: 1fr; }
   .approach-intro { padding-top: 0; }
 }
 @media (max-width: 900px) {
-  .about-section { padding-top: 40px; }
-  .about-intro { padding-top: 80px; }
+  /* 80px of its own + the 40px the section used to carry */
+  .about-intro { padding-top: 120px; }
   .about-portrait-stage { --about-phone-h: min(520px, 62vh); --about-phone-top: 40px; }
   .about-panel { padding: 32px 24px; }
   .approach-head { grid-template-columns: 1fr; gap: 20px; margin-bottom: 36px; }
@@ -1023,17 +1093,56 @@
   .approach-steps::before { display: none; }
 }
 @media (max-width: 600px) {
+  /* 40px of its own + the 40px the section used to carry. 120px of runway is a
+     seventh of a phone screen spent before the first word. */
+  .about-intro { padding-top: 80px; }
+
   .about-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 0; }
+  .about-stat { padding: 0 14px; }
   .about-stat:nth-child(odd) { padding-left: 0; border-left: 0; }
   .about-script { max-width: none; }
+
+  /* The tech card gives up its overlap and stacks under the phone. The rig is a
+     fixed-size row, so a static card becomes a second flex item and the two end
+     up fighting over ~250px — it has to become a column that sizes to content. */
+  .about-portrait-stage {
+    --about-phone-h: min(440px, 50vh);
+    padding-bottom: 0;
+  }
+  .about-portrait-rig {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+  }
   .about-tech {
     position: static;
     width: 100%;
-    margin-top: 16px;
+    margin-top: 22px;
     backdrop-filter: none;
   }
-  .about-portrait { padding-bottom: 0; }
+  /* Anchored 78px past the rig's right edge — off the screen at this width */
+  .about-portrait-dots { display: none; }
+  .about-portrait-glow { right: -8%; }
+
+  /* Fluid tiles instead of fixed 46px ones: five of those plus gaps need 254px,
+     and a 320px phone only offers ~236px inside the card. Stretch, not centre —
+     the li has to fill its column or the tile's width has nothing to resolve
+     against and collapses to the width of the icon. */
+  .about-tech-grid { gap: 6px; justify-items: stretch; }
+  .about-tech-tile {
+    width: 100%;
+    max-width: 46px;
+    height: auto;
+    aspect-ratio: 1;
+    margin-inline: auto;
+    border-radius: 10px;
+  }
+
+  .about-panels { margin-top: 44px; padding-top: 28px; }
+  .about-panel { padding: 26px 20px; }
   .approach-steps { grid-template-columns: 1fr; gap: 28px; }
+  .about-note-cta { margin-top: 28px; }
 }
 
 /* ===== PROJECTS ===== */
@@ -1049,6 +1158,9 @@
 .projects-transition-shell {
   position: relative;
   z-index: 2;
+  /* overlaps the tail of the pinned About panel — see AboutProjectsStack */
+  margin-top: calc(var(--projects-overlap, 0px) * -1);
+  pointer-events: none;
 }
 .projects-horizontal-track {
   position: relative;
@@ -1061,238 +1173,154 @@
 }
 .projects-section {
   position: relative;
+  /* the shell is click-through while it sits over About; the panel itself is not */
+  pointer-events: auto;
   background: var(--bg-secondary);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: -32px 0 90px rgba(0, 0, 0, 0.42);
 }
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-  gap: 28px;
-}
-@media (max-width: 600px) {
-  .projects-grid { grid-template-columns: 1fr; }
+  /* 3-up on desktop, 2-up on tablet, 1-up on phones — no explicit breakpoints */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
 }
 
-@media (max-width: 980px) {
-  .project-showcase-heading,
-  .project-showcase-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .project-showcase-preview {
-    position: static;
-  }
-}
-
-@media (max-width: 720px) {
-  .project-showcase-item {
-    grid-template-columns: 40px minmax(0, 1fr);
-  }
-
-  .project-showcase-arrow {
-    display: none;
-  }
-}
-
+/* ===== Project cards =====
+   Compact by design: the card's whole job is to earn the click. Summary, role
+   and outcome live on the case-study page, where there is room for them. */
 .project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: border-color var(--transition), box-shadow var(--transition);
-  display: flex;
-  flex-direction: column;
 }
 .project-card:hover {
   border-color: var(--border-accent);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
 }
-.project-card--link {
-  cursor: pointer;
-}
-.project-card--link:hover {
+.project-card:focus-within {
   border-color: var(--teal-dim);
 }
 
-.project-showcase {
-  margin-bottom: 56px;
-}
-
-.project-showcase-heading {
-  display: grid;
-  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
-  gap: 24px;
-  align-items: end;
-  margin-bottom: 24px;
-}
-
-.project-showcase-kicker {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.project-showcase-intro {
-  max-width: 720px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-.project-showcase-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
-  gap: 28px;
-  align-items: start;
-}
-
-.project-showcase-list {
-  border-top: 1px solid var(--border);
-}
-
-.project-showcase-item {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) 28px;
-  gap: 18px;
-  align-items: center;
-  padding: 22px 0;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-primary);
-  text-align: left;
-  transition: transform var(--transition), color var(--transition), opacity var(--transition);
-}
-
-.project-showcase-item:hover,
-.project-showcase-item:focus-visible,
-.project-showcase-item.is-active {
-  transform: translateX(8px);
-}
-
-.project-showcase-item:not(.is-active) {
-  opacity: 0.72;
-}
-
-.project-showcase-item.is-active {
-  opacity: 1;
-}
-
-.project-showcase-index {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.project-showcase-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.project-showcase-name {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 4.5vw, 56px);
-  line-height: 0.92;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
-}
-
-.project-showcase-type {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.project-showcase-arrow {
-  display: inline-flex;
-  justify-content: flex-end;
-  color: var(--teal);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity var(--transition), transform var(--transition);
-}
-
-.project-showcase-item:hover .project-showcase-arrow,
-.project-showcase-item:focus-visible .project-showcase-arrow,
-.project-showcase-item.is-active .project-showcase-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.project-showcase-preview {
-  position: sticky;
-  top: 110px;
-}
-
-.project-showcase-preview-card {
-  background: rgba(8, 8, 13, 0.92);
-  border: 1px solid var(--border);
-  border-radius: 28px;
+/* Fixed ratio so every card in the row lines up regardless of screenshot size */
+.project-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.project-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* anchored to the top — a site screenshot reads from its header down */
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.project-card:hover .project-card-media img {
+  transform: scale(1.03);
+}
+/* the generated mockups render their own chrome, so just let them fill the box */
+.project-card-media .project-visual {
+  height: 100%;
+  border: 0;
+  border-radius: 0;
 }
 
-.project-showcase-preview-visual {
-  padding: 20px 20px 0;
-}
-
-.project-showcase-preview-body {
+.project-card-body {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 24px;
+  gap: 10px;
+  padding: 18px 20px 20px;
+  flex: 1;
 }
-
-.project-showcase-preview-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.project-showcase-preview-body h3 {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 3vw, 40px);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-}
-
-.project-showcase-preview-body p {
-  color: var(--text-secondary);
-}
-
-.project-showcase-preview-meta {
-  display: grid;
-  gap: 14px;
-}
-
-.project-showcase-preview-meta div {
-  display: grid;
-  gap: 6px;
-}
-
-.project-showcase-preview-meta span {
+.project-card-type {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
-
-.project-showcase-preview-meta strong {
-  font-size: 14px;
-  line-height: 1.6;
+.project-card-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
   color: var(--text-primary);
-  font-weight: 500;
+}
+.project-card-name svg {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform var(--transition), color var(--transition);
+}
+.project-card:hover .project-card-name svg {
+  color: var(--teal);
+  transform: translate(2px, -2px);
+}
+.project-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+/* stretches the case-study link over the entire card — one target, valid markup */
+.project-card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.project-card-link:focus-visible {
+  outline: none;
+}
+.project-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.project-tag--more {
+  color: var(--text-muted);
+  opacity: 0.7;
 }
 
-.project-visual-wrap {
-  padding: 24px 24px 0;
-  overflow: hidden;
+/* Sits above the stretched link so the live site stays separately reachable */
+.project-card-live {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(10, 10, 18, 0.72);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity var(--transition), border-color var(--transition);
+}
+.project-card:hover .project-card-live,
+.project-card-live:focus-visible {
+  opacity: 1;
+}
+.project-card-live:hover {
+  border-color: currentColor;
+}
+@media (hover: none) {
+  /* no hover to reveal it on touch, so keep it visible */
+  .project-card-live { opacity: 1; }
 }
 
 /* Real project screenshots */
@@ -1307,9 +1335,6 @@
   display: block;
   width: 100%;
   height: auto;
-}
-.project-card:hover .project-shot {
-  border-color: var(--border-accent);
 }
 
 /* Project visual mockups */
@@ -1700,58 +1725,6 @@
   opacity: 0.6;
 }
 
-/* Project body */
-.project-body {
-  padding: 24px 28px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-}
-.project-type {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.project-name {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.2;
-}
-.project-summary {
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
-.project-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.project-meta-row {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.project-meta-label {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-}
-.project-meta-value {
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -1766,25 +1739,6 @@
   border-radius: 6px;
   color: var(--text-muted);
 }
-.project-link-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  border: 1px solid currentColor;
-  border-radius: 100px;
-  align-self: flex-start;
-  transition: all var(--transition);
-}
-.project-card--link:hover .project-link-badge {
-  box-shadow: 0 0 16px currentColor;
-}
-
 /* Experiments */
 .experiments {
   margin-top: 64px;
@@ -1808,15 +1762,40 @@
 }
 .experiment-card {
   display: flex;
-  gap: 16px;
+  flex-direction: column;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
+  /* padding moved to the body so the media can run edge to edge */
+  overflow: hidden;
   transition: border-color var(--transition);
 }
 .experiment-card:hover {
   border-color: var(--border-accent);
+}
+/* Same framing as the project cards: 16/10, cropped from the top. */
+.experiment-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.experiment-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.experiment-card:hover .experiment-card-media img {
+  transform: scale(1.03);
+}
+.experiment-card-body {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
 }
 .experiment-dot {
   width: 10px;
@@ -3742,9 +3721,4 @@ a.resume-contact-item:hover { color: var(--teal); }
   .not-found-actions .btn {
     width: 100%;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  /* relative, not static — the tech card is positioned against this box */
-  .about-portrait-stage { position: relative; height: auto; padding: 0 0 42px; }
 }
