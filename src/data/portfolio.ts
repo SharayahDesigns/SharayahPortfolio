@@ -1,6 +1,6 @@
 export const portfolioData = {
   name: 'Sharayah Hefner',
-  title: 'Frontend UX Engineer · Design Engineer · E-Commerce Front-End Developer',
+  title: 'Frontend UX Engineer · Design Engineer · E-Commerce Frontend Developer',
   tagline: 'Creative Engineer',
   email: 'SharayahDesigns@gmail.com',
   linkedin: 'https://linkedin.com/in/SharayahHefner',
@@ -11,7 +11,7 @@ export const portfolioData = {
     'I’m Sharayah Hefner, a product-focused frontend engineer with 4+ years of production development experience and 15+ years in visual design and animation. I combine thoughtful UX with reliable React, Next.js, and e-commerce engineering to turn complex workflows into clear, polished experiences.',
 
   stats: [
-    { number: '5+', label: 'E-Commerce Brands' },
+    { number: '10+', label: 'E-Commerce Brands' },
     { number: '850K+', label: 'Annual Site Visits Supported' },
     { number: '389+', label: 'Amazon Marketing Assets' },
   ],
@@ -257,7 +257,7 @@ export const portfolioData = {
 
   experience: [
     {
-      title: 'Front-End UX Engineer / E-Commerce Front-End Developer',
+      title: 'Frontend UX Engineer / E-Commerce Frontend Developer',
       company: 'Red7 Systems',
       period: 'July 2023 - Present',
       color: '#00ffc6',
@@ -265,14 +265,14 @@ export const portfolioData = {
         'Designed and developed frontend UX/UI experiences across e-commerce, SaaS, and marketing websites, owning work from wireframes and visual direction through frontend implementation.',
         'Built and maintained customer-facing websites using React, Next.js, Shopify Hydrogen, WordPress, PHP, JavaScript, HTML, and CSS.',
         'Launched 1 Shopify Hydrogen storefront and 3 React/Next.js applications supporting direct-to-consumer and B2B brands.',
-        'Supported digital experiences across 5+ e-commerce brands, 100+ product offerings, and approximately 850,000+ annual website visits.',
+        'Supported digital experiences across 10+ e-commerce brands, 100+ product offerings, and approximately 850,000+ annual website visits.',
         'Designed and produced 389+ Amazon listing assets including infographics, comparison graphics, lifestyle imagery, sizing diagrams, and product marketing visuals.',
         'Used AI-assisted workflows to accelerate UX/UI ideation, wireframe planning, frontend problem-solving, content refinement, and QA checklist creation.',
         'Collaborated with leadership, developers, marketing, and operations in a 5-person cross-functional team to deliver web experiences from concept through launch.',
       ],
     },
     {
-      title: 'UX/UI Front-End Developer',
+      title: 'UX/UI Frontend Developer',
       company: 'Monnit Software',
       period: '2022 - 2023',
       color: '#4dc9ff',
