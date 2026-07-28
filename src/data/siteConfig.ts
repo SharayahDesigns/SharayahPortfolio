@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'Sharayah Hefner',
-  origin: 'https://sharayahdesigner.com',
+  origin: 'https://sharayahdesigns.com',
   email: 'SharayahDesigns@gmail.com',
   title: 'Frontend UX Engineer & Design Engineer',
 }

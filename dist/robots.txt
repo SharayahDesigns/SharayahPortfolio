@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sharayahdesigner.com/sitemap.xml
+Sitemap: https://sharayahdesigns.com/sitemap.xml

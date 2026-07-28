@@ -64,7 +64,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Sharayah Hefner. All rights reserved.</p>
-          <a href="https://sharayahdesigner.com/" className="footer-top">
+          <a href="https://sharayahdesigns.com/" className="footer-top">
             {siteConfig.name} <ArrowUp size={14} />
           </a>
         </div>
