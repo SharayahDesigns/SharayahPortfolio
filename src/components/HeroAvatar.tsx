@@ -7,6 +7,8 @@ import { useDeviceTilt, type Tilt } from '../hooks/useDeviceTilt'
 
 type HeroAvatarProps = {
   reducedMotion: boolean
+  /** Phones load one merged, decimated model instead of the two full-fat ones. */
+  mobile?: boolean
   onReady?: () => void
 }
 
@@ -38,8 +40,23 @@ function clampUnit(value: number) {
 /** World-space height every model is normalised to before its multiplier. */
 const HERO_MODEL_HEIGHT = 3.55
 
+/**
+ * Downward nudge under <Center>, in *world* units.
+ *
+ * <Center>'s position is measured in the model's own units, which sit inside
+ * this component's normalising scale — and the models are authored at wildly
+ * different units (the merged mobile pair is ~47x smaller than the desktop
+ * pair, 0.04 vs 1.9). So the value has to be divided by that scale, or the
+ * same nudge that reads as a hair on one model throws another clean out of
+ * frame.
+ */
+const MODEL_DROP = -0.19
+
 const HERO_MODEL_PATH = '/models/codingChick.glb'
 const DOG_MODEL_PATH = '/models/Meshy_AI_Snowy_Shepherd_with_B_0725220024_texture.glb'
+/** Both avatars baked into a single mesh with one texture set: one request, one
+    draw call, roughly half the bytes of the desktop pair. */
+const MOBILE_MODEL_PATH = '/models/Hero-Avatars-mobile.glb'
 
 function easeOutCubic(value: number) {
   return 1 - Math.pow(1 - value, 3)
@@ -110,7 +127,7 @@ function StaticHeroModel({
 
   return (
     <group ref={group} position={targetPosition} rotation={baseRotation} scale={scale}>
-      <Center position={[0, -0.1, 0]}>
+      <Center position={[0, MODEL_DROP / scale, 0]}>
         <primitive object={modelScene} />
       </Center>
     </group>
@@ -133,7 +150,7 @@ function ReadySignal({ onReady }: { onReady?: () => void }) {
   return null
 }
 
-export default function HeroAvatar({ reducedMotion, onReady }: HeroAvatarProps) {
+export default function HeroAvatar({ reducedMotion, mobile = false, onReady }: HeroAvatarProps) {
   const {
     tilt,
     permission,
@@ -143,29 +160,49 @@ export default function HeroAvatar({ reducedMotion, onReady }: HeroAvatarProps) 
 
   return (
     <div className="hero-avatar-canvas">
-      <Canvas camera={{ position: [0, 0.45, 11.2], fov: 27 }} dpr={[1, 1.75]}>
+      <Canvas
+        camera={{ position: [0, 0.45, 11.2], fov: 27 }}
+        dpr={[1, 1.25]}
+        frameloop={reducedMotion ? 'demand' : 'always'}
+      >
         <ambientLight intensity={1.9} />
         <directionalLight position={[4, 6, 5]} intensity={2.6} color="#fff6e8" />
         <directionalLight position={[-3, 2, 4]} intensity={1.1} color="#86d8ff" />
         <spotLight position={[0, 5, 3]} intensity={1.4} angle={0.38} penumbra={0.9} color="#c7fff1" />
         <Suspense fallback={<AvatarFallback />}>
-          <StaticHeroModel
-            path={HERO_MODEL_PATH}
-            targetPosition={[0, 0.2, 0]}
-            baseRotation={[-0.04, 0.14, 0]}
-            reducedMotion={reducedMotion}
-            tilt={tilt}
-          />
-          <StaticHeroModel
-            path={DOG_MODEL_PATH}
-            targetPosition={[1.02, -0.58, 0.4]}
-            baseRotation={[0, -0.08, 0]}
-            reducedMotion={reducedMotion}
-            scaleMultiplier={0.6}
-            tilt={tilt}
-            /* nearer the camera, so it drifts further and the pair separates */
-            parallax={1.5}
-          />
+          {mobile ? (
+            /* The pair is already posed relative to each other inside this file,
+               so there is nothing to place or parallax — height normalisation is
+               measured across both of them, hence the smaller multiplier. */
+            <StaticHeroModel
+              path={MOBILE_MODEL_PATH}
+              targetPosition={[0, 0.05, 0]}
+              baseRotation={[-0.04, 0.08, 0]}
+              reducedMotion={reducedMotion}
+              scaleMultiplier={0.94}
+              tilt={tilt}
+            />
+          ) : (
+            <>
+              <StaticHeroModel
+                path={HERO_MODEL_PATH}
+                targetPosition={[0, 0.2, 0]}
+                baseRotation={[-0.04, 0.14, 0]}
+                reducedMotion={reducedMotion}
+                tilt={tilt}
+              />
+              <StaticHeroModel
+                path={DOG_MODEL_PATH}
+                targetPosition={[1.02, -0.58, 0.4]}
+                baseRotation={[0, -0.08, 0]}
+                reducedMotion={reducedMotion}
+                scaleMultiplier={0.6}
+                tilt={tilt}
+                /* nearer the camera, so it drifts further and the pair separates */
+                parallax={1.5}
+              />
+            </>
+          )}
           <ReadySignal onReady={onReady} />
         </Suspense>
       </Canvas>
@@ -185,6 +222,3 @@ export default function HeroAvatar({ reducedMotion, onReady }: HeroAvatarProps) 
     </div>
   )
 }
-
-useGLTF.preload(HERO_MODEL_PATH)
-useGLTF.preload(DOG_MODEL_PATH)

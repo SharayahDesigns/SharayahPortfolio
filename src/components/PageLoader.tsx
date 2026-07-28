@@ -3,12 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const LOADER_TEXT = 'Loading frontend experience'
 const TYPE_MS = 42
+const EXIT_DELAY_MS = 220
 
 type PageLoaderProps = {
   visible: boolean
+  onComplete?: () => void
 }
 
-export default function PageLoader({ visible }: PageLoaderProps) {
+export default function PageLoader({ visible, onComplete }: PageLoaderProps) {
   const [typedCount, setTypedCount] = useState(0)
 
   useEffect(() => {
@@ -21,11 +23,14 @@ export default function PageLoader({ visible }: PageLoaderProps) {
       setTypedCount(index)
       if (index >= LOADER_TEXT.length) {
         window.clearInterval(timer)
+        window.setTimeout(() => {
+          onComplete?.()
+        }, EXIT_DELAY_MS)
       }
     }, TYPE_MS)
 
     return () => window.clearInterval(timer)
-  }, [visible])
+  }, [visible, onComplete])
 
   return (
     <AnimatePresence>

@@ -277,10 +277,14 @@ export const portfolioData = {
       period: '2022 — 2023',
       color: '#4dc9ff',
       bullets: [
-        'Generated $65,000 in client revenue through custom software design and implementation.',
-        'Redesigned software onboarding, homepage, and setup experiences using research, testing, and data-driven decisions.',
-        'Created high-fidelity mockups, user flows, prototypes, and front-end experiences.',
-        'Built software interfaces using HTML, CSS, and JavaScript, while producing multimedia content and user-centered software experiences.',
+        'Generated $65,000 in client revenue by designing and implementing custom software solutions.',
+        'Led the end-to-end redesign of the company’s software platform, from UX research and usability testing through wireframes, stakeholder presentation, and production implementation.',
+        'Evaluated existing onboarding, navigation, homepage, and product-setup experiences to identify usability issues and improvement opportunities.',
+        'Created user flows, wireframes, high-fidelity interface designs, and interactive concepts using Adobe InDesign.',
+        'Presented the proposed platform redesign to stakeholders, communicating research findings, design decisions, and recommended improvements.',
+        'Translated approved designs into responsive, production-ready software interfaces using JavaScript, C#, HTML, and CSS.',
+        'Created an instructional animation showing users how to install the Progressive Web App (PWA) directly from a browser instead of through an app store.',
+        'Produced multimedia and instructional content that simplified software onboarding and helped users understand key product features.',
       ],
     },
     {

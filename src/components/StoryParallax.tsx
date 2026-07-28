@@ -1,21 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { portfolioData } from '../data/portfolio'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
-/**
- * Lag parallax, same mechanism as mountain.learnframer.site: every layer
- * translates *down* by `lag × scrolled`, so a layer's apparent speed is
- * `1 - lag`. Lag 1 holds a layer still in the viewport; lag 0 lets it scroll
- * away with the page.
- *
- * The headline lags most, so it hangs in place while the range and the figure
- * climb past and swallow it. Because the range paints above the copy
- * (z-index 3 vs 2), the peaks occlude the type rather than sliding under it —
- * that overtake is the whole effect.
- *
- * Relative climb against the headline, per pixel scrolled:
- *   range  0.92 - 0.35 = 0.57    figure  0.92 - 0.20 = 0.72
- */
 const LAG = {
   sky: 0.95,
   copy: 0.92,
@@ -23,18 +10,11 @@ const LAG = {
   figure: 0.2,
 } as const
 
-const MOBILE_LAG = {
-  sky: 0.14,
-  copy: 0.08,
-  range: 0.12,
-  figure: 0.05,
-} as const
-
 export default function StoryParallax() {
   const stageRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion() ?? false
   const [stageH, setStageH] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 900px)')
 
   const { story } = portfolioData
 
@@ -49,14 +29,6 @@ export default function StoryParallax() {
     return () => ro.disconnect()
   }, [])
 
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 900px)')
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
   // 0 as the section's top reaches the viewport top, 1 as its bottom does — so
   // progress spans exactly one stage-height of scroll and the layers sit at
   // their base composition while the section is still rising into view.
@@ -65,22 +37,16 @@ export default function StoryParallax() {
     offset: ['start start', 'end start'],
   })
 
-  // Mobile browsers tend to deliver scroll updates in coarse bursts, which
-  // makes direct layer mapping look jittery. Spring the progress there and
-  // soften the lag so the scene still moves, just without the shake.
-  const smoothedProgress = useSpring(scrollYProgress, isMobile
-    ? { stiffness: 52, damping: 24, mass: 0.6 }
-    : { stiffness: 220, damping: 34, mass: 0.2 })
-  const progress = isMobile ? smoothedProgress : scrollYProgress
-  const lag = isMobile ? MOBILE_LAG : LAG
+  const progress = scrollYProgress
+  const travel = stageH || (isMobile ? window.innerHeight : 0)
 
-  const skyY = useTransform(progress, (v) => v * lag.sky * (isMobile ? 220 : stageH))
-  const copyY = useTransform(progress, (v) => v * lag.copy * (isMobile ? 180 : stageH))
-  const rangeY = useTransform(progress, (v) => v * lag.range * (isMobile ? 160 : stageH))
-  const figureY = useTransform(progress, (v) => v * lag.figure * (isMobile ? 120 : stageH))
+  const skyY = useTransform(progress, (v) => v * LAG.sky * travel)
+  const copyY = useTransform(progress, (v) => v * LAG.copy * travel)
+  const rangeY = useTransform(progress, (v) => v * LAG.range * travel)
+  const figureY = useTransform(progress, (v) => v * LAG.figure * travel)
   // Trails just behind the peaks. Without it the type survives the overtake as
   // stray slivers in the gaps between summits.
-  const copyOpacity = useTransform(progress, isMobile ? [0.62, 0.9] : [0.4, 0.58], [1, isMobile ? 0.24 : 0])
+  const copyOpacity = useTransform(progress, [0.4, 0.58], [1, 0])
 
   return (
     <section className="story" id="story" aria-labelledby="story-heading">

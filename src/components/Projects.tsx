@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
 import {
   motion,
   useReducedMotion,
-  useScroll,
-  useTransform,
 } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
@@ -19,35 +16,13 @@ function primaryDiscipline(type: string) {
 
 const MAX_TAGS = 3
 
-export default function Projects() {
-  const transitionRef = useRef<HTMLDivElement>(null)
-  const projectRef = useRef<HTMLElement>(null)
-  const [continuationHeight, setContinuationHeight] = useState(0)
-  const { scrollYProgress } = useScroll({
-    target: transitionRef,
-    offset: ['start start', 'start -100vh'],
-  })
+type ProjectsProps = {
+  id?: string
+  showIntro?: boolean
+}
+
+export default function Projects({ id = 'projects', showIntro = true }: ProjectsProps) {
   const reducedMotion = useReducedMotion() ?? false
-  const slideX = useTransform(scrollYProgress, [0, 1], ['100vw', '0vw'])
-
-  useEffect(() => {
-    const project = projectRef.current
-    if (!project) return
-
-    const updateContinuationHeight = () => {
-      setContinuationHeight(Math.max(0, project.offsetHeight - window.innerHeight))
-    }
-
-    updateContinuationHeight()
-    const observer = new ResizeObserver(updateContinuationHeight)
-    observer.observe(project)
-    window.addEventListener('resize', updateContinuationHeight)
-
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('resize', updateContinuationHeight)
-    }
-  }, [])
 
   const container = {
     hidden: {},
@@ -69,30 +44,27 @@ export default function Projects() {
   }
 
   return (
-    <div className="projects-transition-shell" ref={transitionRef}>
-      <div
-        className="projects-horizontal-track"
-        style={{ height: reducedMotion ? '100vh' : '200vh' }}
-      >
-        <div className="projects-sticky-viewport">
-          <motion.section
-            ref={projectRef}
-            className="section projects-section"
-            id="projects"
-            style={{ x: reducedMotion ? 0 : slideX }}
-          >
-            <div className="container">
-              <motion.div
-                variants={container}
-                initial={false}
-                animate="show"
-              >
-                <motion.p className="section-label" variants={item}>Selected Work</motion.p>
-                <motion.h2 className="section-title" variants={item}>
-                  Products I've designed{' '}
-                  <br />
-                  <span className="teal">and engineered</span>
-                </motion.h2>
+    <motion.section
+      className="section projects-section"
+      id={id}
+    >
+      <div className="container">
+        <motion.div
+          className="projects-content"
+          variants={container}
+          initial={false}
+          animate="show"
+        >
+                {showIntro && (
+                  <>
+                    <motion.p className="section-label" variants={item}>Selected Work</motion.p>
+                    <motion.h2 className="section-title" variants={item}>
+                      Products I've designed{' '}
+                      <br />
+                      <span className="teal">and engineered</span>
+                    </motion.h2>
+                  </>
+                )}
 
                 <motion.div className="projects-grid" variants={container}>
                   {portfolioData.projects.map((p) => {
@@ -211,16 +183,8 @@ export default function Projects() {
                     ))}
                   </motion.div>
                 </motion.div>
-              </motion.div>
-            </div>
-          </motion.section>
-        </div>
+        </motion.div>
       </div>
-      <div
-        className="projects-continuation-spacer"
-        style={{ height: continuationHeight }}
-        aria-hidden="true"
-      />
-    </div>
+    </motion.section>
   )
 }

@@ -1,19 +1,12 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
-import AboutProjectsStack from './components/AboutProjectsStack'
-import Experience from './components/Experience'
-import Skills from './components/Skills'
-import Education from './components/Education'
-import StoryParallax from './components/StoryParallax'
-import Contact from './components/Contact'
 import Footer from './components/Footer'
+import BackToTopButton from './components/BackToTopButton'
 import ScrollProgress from './components/ScrollProgress'
 import ScrollToTop from './components/ScrollToTop'
-import CaseStudyPage from './components/CaseStudyPage'
-import ResumePage from './components/ResumePage'
 import NotFoundPage from './components/NotFoundPage'
 import PageLoader from './components/PageLoader'
 import { AnalyticsRouterTracker } from './lib/analytics'
@@ -21,13 +14,41 @@ import SEO from './components/SEO'
 import { upsertJsonLd, removeJsonLd } from './components/SEO'
 import { siteConfig, resumePdfPath } from './data/siteConfig'
 import { portfolioData } from './data/portfolio'
+import { useMediaQuery } from './hooks/useMediaQuery'
 
-const MIN_LOADER_MS = 1800
+const AboutProjectsStack = lazy(() => import('./components/AboutProjectsStack'))
+const Experience = lazy(() => import('./components/Experience'))
+const Skills = lazy(() => import('./components/Skills'))
+const Education = lazy(() => import('./components/Education'))
+const StoryParallax = lazy(() => import('./components/StoryParallax'))
+const Contact = lazy(() => import('./components/Contact'))
+const CaseStudyPage = lazy(() => import('./components/CaseStudyPage'))
+const ResumePage = lazy(() => import('./components/ResumePage'))
+
+type IdleWindow = Window & {
+  cancelIdleCallback?: (id: number) => void
+  requestIdleCallback?: (
+    callback: IdleRequestCallback,
+    options?: IdleRequestOptions,
+  ) => number
+}
+
+let hasShownIntroLoaderInAppSession = false
+
+function BelowFoldFallback() {
+  return <div className="below-fold-fallback" aria-hidden="true" />
+}
+
+function shouldShowIntroLoader() {
+  return !hasShownIntroLoaderInAppSession
+}
 
 function HomePage() {
-  const [heroReady, setHeroReady] = useState(false)
-  const [fontsReady, setFontsReady] = useState(false)
-  const [minDelayElapsed, setMinDelayElapsed] = useState(false)
+  const isMobileViewport = useMediaQuery('(max-width: 900px)')
+  const isCoarsePointer = useMediaQuery('(pointer: coarse)')
+  const deferHeavyContent = isMobileViewport || isCoarsePointer
+  const [showBelowFoldContent, setShowBelowFoldContent] = useState(!deferHeavyContent)
+  const [showIntroLoader, setShowIntroLoader] = useState(() => shouldShowIntroLoader())
 
   useEffect(() => {
     upsertJsonLd('page-jsonld', {
@@ -60,34 +81,46 @@ function HomePage() {
   }, [])
 
   useEffect(() => {
-    let cancelled = false
-
-    document.fonts.ready
-      .catch(() => undefined)
-      .finally(() => {
-        if (!cancelled) setFontsReady(true)
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
+    if (!showIntroLoader) return
+    hasShownIntroLoaderInAppSession = true
+  }, [showIntroLoader])
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setMinDelayElapsed(true)
-    }, MIN_LOADER_MS)
+    if (!deferHeavyContent) {
+      setShowBelowFoldContent(true)
+      return
+    }
+
+    const idleWindow = window as IdleWindow
+    let timeoutId = 0
+    let idleId: number | undefined
+
+    const reveal = () => setShowBelowFoldContent(true)
+
+    if (typeof idleWindow.requestIdleCallback === 'function') {
+      idleId = idleWindow.requestIdleCallback(reveal, { timeout: 1200 })
+    } else {
+      timeoutId = window.setTimeout(reveal, 700)
+    }
 
     return () => {
-      window.clearTimeout(timer)
+      if (idleId != null && typeof idleWindow.cancelIdleCallback === 'function') {
+        idleWindow.cancelIdleCallback(idleId)
+      }
+      if (timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
     }
-  }, [])
-
-  const isReady = heroReady && fontsReady && minDelayElapsed
+  }, [deferHeavyContent])
 
   return (
     <>
-      <PageLoader visible={!isReady} />
+      <PageLoader
+        visible={showIntroLoader}
+        onComplete={() => {
+          setShowIntroLoader(false)
+        }}
+      />
       <SEO
         title={`${siteConfig.name} — ${siteConfig.title}`}
         description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
@@ -98,16 +131,23 @@ function HomePage() {
       />
       <Nav />
       <main className="home-main">
-        <Hero onReady={() => setHeroReady(true)} />
+        <Hero />
         <div className="home-content-stack">
-          <AboutProjectsStack />
-          <Experience />
-          <Skills />
-          <Education />
-          <StoryParallax />
-          <Contact />
+          {showBelowFoldContent ? (
+            <Suspense fallback={<BelowFoldFallback />}>
+              <AboutProjectsStack />
+              <Experience />
+              <Skills />
+              <Education />
+              <StoryParallax />
+              <Contact />
+            </Suspense>
+          ) : (
+            <BelowFoldFallback />
+          )}
         </div>
       </main>
+      <BackToTopButton />
       <Footer />
     </>
   )
@@ -118,8 +158,11 @@ function CaseStudyLayout() {
     <>
       <Nav />
       <main>
-        <CaseStudyPage />
+        <Suspense fallback={null}>
+          <CaseStudyPage />
+        </Suspense>
       </main>
+      <BackToTopButton />
       <Footer />
     </>
   )
@@ -166,8 +209,11 @@ function ResumeLayout() {
     <>
       <Nav />
       <main>
-        <ResumePage />
+        <Suspense fallback={null}>
+          <ResumePage />
+        </Suspense>
       </main>
+      <BackToTopButton />
       <Footer />
     </>
   )
@@ -182,11 +228,13 @@ function NotFoundLayout() {
 }
 
 export default function App() {
+  const showCustomCursor = useMediaQuery('(hover: hover) and (pointer: fine)')
+
   return (
     <BrowserRouter>
       <AnalyticsRouterTracker />
       <ScrollToTop />
-      <CustomCursor />
+      {showCustomCursor ? <CustomCursor /> : null}
       <ScrollProgress />
       <Routes>
         <Route path="/" element={<HomePage />} />

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import ParticleField from './ParticleField'
 import { portfolioData } from '../data/portfolio'
 import { Github, Linkedin, Mail, ArrowDown, FileText } from 'lucide-react'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const HeroAvatar = lazy(() => import('./HeroAvatar'))
 
@@ -20,6 +21,9 @@ type HeroProps = {
 export default function Hero({ onReady }: HeroProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
+  const isMobileViewport = useMediaQuery('(max-width: 900px)')
+  const isCoarsePointer = useMediaQuery('(pointer: coarse)')
+  const useMobileHero = isMobileViewport || isCoarsePointer
 
   // The local state above starts false and only resolves after mount, which is
   // deliberate for the 3D avatar. The text animations need the value on the
@@ -113,7 +117,7 @@ export default function Hero({ onReady }: HeroProps) {
 
   return (
     <section className="hero" id="hero" ref={heroRef}>
-      {!reducedMotion && <ParticleField />}
+      {!reducedMotion && !useMobileHero && <ParticleField />}
 
       <div className="hero-noise" />
 
@@ -200,12 +204,14 @@ export default function Hero({ onReady }: HeroProps) {
             <div className="avatar-ring avatar-ring--2" />
             <div className="hero-avatar-shell">
               <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
-                <HeroAvatar reducedMotion={reducedMotion} onReady={onReady} />
+                {/* Same scene either way — mobile just swaps in the merged,
+                    decimated model instead of the two full-resolution ones. */}
+                <HeroAvatar reducedMotion={reducedMotion} mobile={useMobileHero} onReady={onReady} />
               </Suspense>
             </div>
             <div className="avatar-badge">
               <span className="avatar-badge-dot" />
-              Open to Work
+              {useMobileHero ? 'Available for Hire' : 'Open to Work'}
             </div>
           </div>
         </motion.div>
