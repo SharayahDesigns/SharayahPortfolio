@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { portfolioData } from '../data/portfolio'
 
 /**
@@ -23,10 +23,18 @@ const LAG = {
   figure: 0.2,
 } as const
 
+const MOBILE_LAG = {
+  sky: 0.78,
+  copy: 0.74,
+  range: 0.28,
+  figure: 0.16,
+} as const
+
 export default function StoryParallax() {
   const stageRef = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion() ?? false
   const [stageH, setStageH] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
   const { story } = portfolioData
 
@@ -41,6 +49,14 @@ export default function StoryParallax() {
     return () => ro.disconnect()
   }, [])
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 900px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
   // 0 as the section's top reaches the viewport top, 1 as its bottom does — so
   // progress spans exactly one stage-height of scroll and the layers sit at
   // their base composition while the section is still rising into view.
@@ -49,13 +65,22 @@ export default function StoryParallax() {
     offset: ['start start', 'end start'],
   })
 
-  const skyY = useTransform(scrollYProgress, (v) => v * LAG.sky * stageH)
-  const copyY = useTransform(scrollYProgress, (v) => v * LAG.copy * stageH)
-  const rangeY = useTransform(scrollYProgress, (v) => v * LAG.range * stageH)
-  const figureY = useTransform(scrollYProgress, (v) => v * LAG.figure * stageH)
+  // Mobile browsers tend to deliver scroll updates in coarse bursts, which
+  // makes direct layer mapping look jittery. Spring the progress there and
+  // soften the lag so the scene still moves, just without the shake.
+  const smoothedProgress = useSpring(scrollYProgress, isMobile
+    ? { stiffness: 90, damping: 26, mass: 0.34 }
+    : { stiffness: 220, damping: 34, mass: 0.2 })
+  const progress = isMobile ? smoothedProgress : scrollYProgress
+  const lag = isMobile ? MOBILE_LAG : LAG
+
+  const skyY = useTransform(progress, (v) => v * lag.sky * stageH)
+  const copyY = useTransform(progress, (v) => v * lag.copy * stageH)
+  const rangeY = useTransform(progress, (v) => v * lag.range * stageH)
+  const figureY = useTransform(progress, (v) => v * lag.figure * stageH)
   // Trails just behind the peaks. Without it the type survives the overtake as
   // stray slivers in the gaps between summits.
-  const copyOpacity = useTransform(scrollYProgress, [0.4, 0.58], [1, 0])
+  const copyOpacity = useTransform(progress, isMobile ? [0.46, 0.66] : [0.4, 0.58], [1, 0])
 
   return (
     <section className="story" id="story" aria-labelledby="story-heading">

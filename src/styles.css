@@ -760,6 +760,14 @@
        canvas is nudged left to centre the composition on the screen. */
     transform: translateX(-18px);
   }
+  .hero-tilt-button {
+    left: calc(50% - 126px);
+    bottom: -18px;
+    transform: none;
+  }
+  .hero-tilt-button:hover {
+    transform: translateY(-2px);
+  }
   .hero-stats { max-width: none; }
   .hero-stat-card { padding: 12px 14px; }
 }
@@ -842,10 +850,11 @@
 .about-script {
   position: relative;
   display: inline-block;
-  font-family: var(--font-script);
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(30px, 3.4vw, 42px);
   line-height: 1.15;
+  letter-spacing: -0.03em;
   color: var(--teal);
   max-width: 340px;
   padding-bottom: 14px;
