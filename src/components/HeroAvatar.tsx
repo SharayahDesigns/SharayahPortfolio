@@ -1,6 +1,7 @@
 import { Suspense, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Center, Html, useGLTF } from '@react-three/drei'
+import { Smartphone } from 'lucide-react'
 import * as THREE from 'three'
 import { useDeviceTilt, type Tilt } from '../hooks/useDeviceTilt'
 
@@ -124,7 +125,12 @@ function AvatarFallback() {
 }
 
 export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
-  const tilt = useDeviceTilt(!reducedMotion)
+  const {
+    tilt,
+    permission,
+    requestPermission,
+    canRequestPermission,
+  } = useDeviceTilt(!reducedMotion)
 
   return (
     <div className="hero-avatar-canvas">
@@ -153,6 +159,18 @@ export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
           />
         </Suspense>
       </Canvas>
+      {canRequestPermission && permission !== 'granted' && (
+        <button
+          type="button"
+          className="hero-tilt-button"
+          onClick={() => {
+            void requestPermission()
+          }}
+        >
+          <Smartphone size={14} />
+          {permission === 'denied' ? 'Tilt Access Blocked' : 'Enable Tilt Motion'}
+        </button>
+      )}
     </div>
   )
 }

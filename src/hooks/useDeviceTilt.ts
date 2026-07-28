@@ -1,6 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export type Tilt = { x: number; y: number }
+export type DeviceTiltPermission = 'idle' | 'granted' | 'denied' | 'unsupported'
+export type DeviceTiltResult = {
+  tilt: React.MutableRefObject<Tilt>
+  permission: DeviceTiltPermission
+  requestPermission: () => Promise<void>
+  canRequestPermission: boolean
+}
 
 /** Degrees of tilt that map to the full -1..1 range. */
 const RANGE_DEG = 26
@@ -26,16 +33,50 @@ function clamp(v: number) {
  * Android and desktop Chrome need no permission but do require a secure
  * context, so this is inert on plain http (localhost excepted).
  */
-export function useDeviceTilt(enabled: boolean) {
+export function useDeviceTilt(enabled: boolean): DeviceTiltResult {
   const tilt = useRef<Tilt>({ x: 0, y: 0 })
+  const [permission, setPermission] = useState<DeviceTiltPermission>('idle')
+  const [canRequestPermission, setCanRequestPermission] = useState(false)
+
+  const requestPermission = useCallback(async () => {
+    if (!enabled || typeof window === 'undefined') return
+    if (!('DeviceOrientationEvent' in window)) {
+      setPermission('unsupported')
+      return
+    }
+
+    const request = (
+      window.DeviceOrientationEvent as unknown as {
+        requestPermission?: () => Promise<PermissionState>
+      }
+    ).requestPermission
+
+    if (typeof request !== 'function') {
+      setPermission('granted')
+      return
+    }
+
+    try {
+      const result = await request()
+      setPermission(result === 'granted' ? 'granted' : 'denied')
+    } catch {
+      setPermission('denied')
+    }
+  }, [enabled])
 
   useEffect(() => {
     if (!enabled || typeof window === 'undefined') return
-    if (!('DeviceOrientationEvent' in window)) return
+    if (!('DeviceOrientationEvent' in window)) {
+      setPermission('unsupported')
+      return
+    }
 
     // Only where there is a real accelerometer behind a touch screen. A desktop
     // that reports orientation would otherwise fight the pointer parallax.
-    if (!window.matchMedia('(pointer: coarse)').matches) return
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+      setPermission('unsupported')
+      return
+    }
 
     let baseline: { beta: number; gamma: number } | null = null
     let detach: (() => void) | undefined
@@ -64,34 +105,26 @@ export function useDeviceTilt(enabled: boolean) {
       detach = () => window.removeEventListener('deviceorientation', onOrientation)
     }
 
-    const requestPermission = (
+    const request = (
       window.DeviceOrientationEvent as unknown as {
         requestPermission?: () => Promise<PermissionState>
       }
     ).requestPermission
 
-    if (typeof requestPermission === 'function') {
-      // iOS: the prompt is only allowed to open from inside a gesture handler,
-      // so this waits for the first tap anywhere rather than asking on load.
-      const ask = () => {
-        requestPermission()
-          .then((result) => {
-            if (result === 'granted') attach()
-          })
-          .catch(() => {
-            /* declined or unavailable — tilt simply stays off */
-          })
+    if (typeof request === 'function') {
+      setCanRequestPermission(true)
+      if (permission !== 'granted') {
+        return () => detach?.()
       }
-      window.addEventListener('pointerdown', ask, { once: true })
-      return () => {
-        window.removeEventListener('pointerdown', ask)
-        detach?.()
-      }
+      attach()
+      return () => detach?.()
     }
 
+    setCanRequestPermission(false)
+    setPermission('granted')
     attach()
     return () => detach?.()
-  }, [enabled])
+  }, [enabled, permission])
 
-  return tilt
+  return { tilt, permission, requestPermission, canRequestPermission }
 }

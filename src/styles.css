@@ -553,6 +553,40 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+
+.hero-tilt-button {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid rgba(0,255,198,0.35);
+  border-radius: 999px;
+  background: rgba(8, 8, 12, 0.82);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+  transition: transform var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.hero-tilt-button:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.hero-tilt-button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
 .avatar-badge {
   position: absolute;
   bottom: -18px;
