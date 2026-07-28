@@ -1688,6 +1688,13 @@
   .work-image-typed {
     font-size: clamp(5px, 1vw, 9px);
   }
+  .work-projects-transition__preview-copy {
+    place-content: center;
+    padding-top: 22vh;
+  }
+  .work-projects-transition__preview-ring {
+    top: calc(50% + 11vh);
+  }
   .projects-section {
     background: linear-gradient(180deg, rgba(10, 10, 18, 0.82), rgba(13, 13, 20, 0.94) 14%, var(--bg-secondary) 40%);
     box-shadow:
