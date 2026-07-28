@@ -75,14 +75,14 @@ routes.forEach(writeRouteHtml)
 const notFoundHtml = template.replace(
   /<!-- SEO_HEAD_START -->[\s\S]*?<!-- SEO_HEAD_END -->/,
   `<!-- SEO_HEAD_START -->
-    <title>Page Not Found — ${site.name}</title>
+    <title>Page Not Found - ${site.name}</title>
     <meta name="description" content="The page you were looking for could not be found." />
     <meta name="author" content="${site.name}" />
     <meta name="robots" content="noindex, follow" />
     <link rel="canonical" href="${site.origin}/404" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Page Not Found — ${site.name}" />
+    <meta property="og:title" content="Page Not Found - ${site.name}" />
     <meta property="og:description" content="The page you were looking for could not be found." />
     <meta property="og:image" content="${site.origin}${site.socialImage}" />
     <meta property="og:image:alt" content="${site.socialImageAlt}" />
@@ -91,7 +91,7 @@ const notFoundHtml = template.replace(
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Page Not Found — ${site.name}" />
+    <meta name="twitter:title" content="Page Not Found - ${site.name}" />
     <meta name="twitter:description" content="The page you were looking for could not be found." />
     <meta name="twitter:image" content="${site.origin}${site.socialImage}" />
     <meta name="twitter:image:alt" content="${site.socialImageAlt}" />

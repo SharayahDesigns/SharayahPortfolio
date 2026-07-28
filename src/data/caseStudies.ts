@@ -72,7 +72,7 @@ export type CaseStudy = {
   ogImage?: string
   /** Custom narrative sections. When present they replace the default body sections. */
   sections?: CaseStudySection[]
-  /** Default body sections — used when `sections` is not supplied. */
+  /** Default body sections, used when `sections` is not supplied. */
   challenge?: string
   process?: CaseStudyStep[]
   solution?: string[]
@@ -147,7 +147,7 @@ export const caseStudies: CaseStudy[] = [
     images: [
       { type: 'desktop', src: '/images/cabana.webp', width: 1563, height: 841,
         alt: 'Cabana Filters storefront homepage showing the hero section and product navigation',
-        caption: 'Cabana Filters storefront — guided product discovery', color: '#00ffc6' },
+        caption: 'Cabana Filters storefront, guided product discovery', color: '#00ffc6' },
     ],
     color: '#00ffc6',
     heroImage: '/images/cabana.webp',
@@ -156,7 +156,7 @@ export const caseStudies: CaseStudy[] = [
     heroImageHeight: 841,
     liveUrl: 'https://cabanafilters.com/',
     seo: {
-      title: 'Cabana Filters Case Study — Sharayah Hefner',
+      title: 'Cabana Filters Case Study - Sharayah Hefner',
       description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Cabana Filters.',
     },
   },
@@ -194,7 +194,7 @@ export const caseStudies: CaseStudy[] = [
       'Added purposeful motion to guide attention between states and confirm actions, replacing the static interface with one that feels responsive and alive.',
     ],
     solutionFeatures: [
-      { title: 'Consistent Layout System', description: 'Every dashboard view now follows the same spacing, navigation, and component patterns — reducing cognitive load.' },
+      { title: 'Consistent Layout System', description: 'Every dashboard view now follows the same spacing, navigation, and component patterns, reducing cognitive load.' },
       { title: 'Clearer Workflow Hierarchy', description: 'The most important actions and information are immediately visible, with secondary controls revealed contextually.' },
       { title: 'Purposeful Animation', description: 'Framer Motion transitions guide users between states and confirm interactions without being decorative noise.' },
     ],
@@ -214,7 +214,7 @@ export const caseStudies: CaseStudy[] = [
     images: [
       { type: 'dashboard', src: '/images/studioPlayerUXUI.webp', width: 1280, height: 939,
         alt: 'StudioPlayer dashboard, media library and screen-manager views shown across three displays',
-        caption: 'StudioPlayer — dashboard, media library and screen manager', color: '#4dc9ff' },
+        caption: 'StudioPlayer, dashboard, media library and screen manager', color: '#4dc9ff' },
     ],
     color: '#4dc9ff',
     heroImage: '/images/studioPlayerUXUI.webp',
@@ -223,7 +223,7 @@ export const caseStudies: CaseStudy[] = [
     heroImageHeight: 939,
     liveUrl: 'https://studioplayer.com/',
     seo: {
-      title: 'StudioPlayer Case Study — Sharayah Hefner',
+      title: 'StudioPlayer Case Study - Sharayah Hefner',
       description: 'See how Sharayah Hefner approached the UX design and frontend engineering of StudioPlayer.',
     },
   },
@@ -237,7 +237,7 @@ export const caseStudies: CaseStudy[] = [
     valueStatement:
       'Owned the frontend of a multi-step e-commerce experience where customers customize products, upload artwork, and complete checkout reliably. Separate from the established React platform, a Shopify Hydrogen storefront initiative is underway.',
     challenge:
-      'Customers needed to customize branded products, manage artwork, receive accurate estimates, maintain cart sessions and complete a reliable checkout across a complex multi-step experience. The workflow involved product configuration, visual proofing, payment processing, address validation and bot protection — all of which had to work together seamlessly.',
+      'Customers needed to customize branded products, manage artwork, receive accurate estimates, maintain cart sessions and complete a reliable checkout across a complex multi-step experience. The workflow involved product configuration, visual proofing, payment processing, address validation and bot protection, and all of it had to work together seamlessly.',
     role: ['Frontend UX Engineering', 'React Development', 'E-Commerce Integration', 'Checkout Experience', 'Third-Party Integrations', 'Production Support'],
     responsibilities: [
       'Built and maintained React customer-facing interfaces',
@@ -261,7 +261,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     solution: [
       'Built a multi-step customization and checkout flow that handles product configuration, live artwork preview, and payment in one connected experience.',
-      'Integrated third-party services — Zakeke for customization, PayPal for payments, Google Places for addresses, and Cloudflare for bot protection — into a cohesive frontend workflow.',
+      'Integrated third-party services, including Zakeke for customization, PayPal for payments, Google Places for addresses, and Cloudflare for bot protection, into a cohesive frontend workflow.',
     ],
     solutionFeatures: [
       { title: 'Product Customization', description: 'Zakeke integration gives customers a live preview of their branded product before purchase.' },
@@ -296,7 +296,7 @@ export const caseStudies: CaseStudy[] = [
     images: [
       { type: 'storefront', src: '/images/logomat.webp', width: 1548, height: 902,
         alt: 'My Logo Mat storefront showing the custom mat product experience',
-        caption: 'My Logo Mat — Shopify Hydrogen storefront', color: '#00ffc6' },
+        caption: 'My Logo Mat, Shopify Hydrogen storefront', color: '#00ffc6' },
     ],
     color: '#00ffc6',
     heroImage: '/images/logomat.webp',
@@ -305,7 +305,7 @@ export const caseStudies: CaseStudy[] = [
     heroImageHeight: 902,
     liveUrl: 'https://mylogomat.com/',
     seo: {
-      title: 'My Logo Mat Case Study — Sharayah Hefner',
+      title: 'My Logo Mat Case Study - Sharayah Hefner',
       description: 'See how Sharayah Hefner approached the UX design and frontend engineering of My Logo Mat.',
     },
   },
@@ -349,7 +349,7 @@ export const caseStudies: CaseStudy[] = [
         heading: 'A highly visual service that is difficult to explain with words alone',
         paragraphs: [
           'Artificial rockwork is a specialized service that many potential customers do not immediately understand. The website needed to explain what the company builds, who it serves, how the work differs from ordinary concrete construction, and why the finished installations are both artistic and structurally dependable.',
-          'The experience also needed to serve very different audiences — from homeowners considering a pool grotto to organizations planning zoo habitats, resort environments, museum exhibits, or public attractions.',
+          'The experience also needed to serve very different audiences, from homeowners considering a pool grotto to organizations planning zoo habitats, resort environments, museum exhibits, or public attractions.',
         ],
         list: [
           'Explain an uncommon and highly specialized service',
@@ -507,7 +507,7 @@ export const caseStudies: CaseStudy[] = [
       title: 'Concrete Connections NWA Case Study | Sharayah Hefner',
       description:
         'A UX/UI and frontend development case study for Concrete Connections NWA, an immersive lead-generation website created for a specialty artificial-rockwork and themed-concrete contractor.',
-      ogTitle: 'Concrete Connections NWA — UX/UI & Frontend Case Study',
+      ogTitle: 'Concrete Connections NWA - UX/UI & Frontend Case Study',
       ogDescription:
         'See how Sharayah Hefner designed and developed an immersive, responsive website for a specialty artificial-rockwork and themed-concrete contractor.',
     },
@@ -539,22 +539,22 @@ export const caseStudies: CaseStudy[] = [
     ],
     platform: 'Web · Next.js · Supabase',
     process: [
-      { title: 'Understand', description: 'Defined the customer journey from landing through size comparison, pricing, and booking — identifying the decisions a dumpster-rental customer needs to make.' },
+      { title: 'Understand', description: 'Defined the customer journey from landing through size comparison, pricing, and booking, identifying the decisions a dumpster-rental customer needs to make.' },
       { title: 'Simplify', description: 'Structured the site around a clear comparison and pricing flow, removing unnecessary steps between interest and booking.' },
-      { title: 'Design', description: 'Created the complete visual system — layout, typography, color, and components — for a professional, trustworthy hauling brand.' },
+      { title: 'Design', description: 'Created the complete visual system of layout, typography, color, and components for a professional, trustworthy hauling brand.' },
       { title: 'Build', description: 'Built the full frontend in Next.js with a Supabase backend, including responsive pages, pricing interface, and booking flow.' },
       { title: 'Validate', description: 'Tested responsive layouts, booking flow, and the admin dashboard to ensure the customer and business sides both work correctly.' },
       { title: 'Ship', description: 'Deployed to production on Vercel with the live site now serving customers. Admin and notification systems are in continued development.' },
     ],
     solution: [
-      'Built a responsive dumpster-rental website with size comparison, clear pricing, and a booking flow — giving customers a self-service path from research to starting a booking.',
+      'Built a responsive dumpster-rental website with size comparison, clear pricing, and a booking flow, giving customers a self-service path from research to starting a booking.',
       'Planned a custom admin dashboard for inventory management and customer notifications to support business operations behind the customer-facing site.',
     ],
     solutionFeatures: [
       { title: 'Size Comparison', description: 'Customers can compare dumpster sizes visually and understand which option fits their project.' },
       { title: 'Clear Pricing', description: 'Pricing is displayed clearly so customers understand costs before committing to a booking.' },
-      { title: 'Booking Flow', description: 'Customers can begin the booking process directly through the website — online booking is being tested.' },
-      { title: 'Admin Dashboard', description: 'A planned admin interface for inventory management and customer notifications — in active development.' },
+      { title: 'Booking Flow', description: 'Customers can begin the booking process directly through the website; online booking is being tested.' },
+      { title: 'Admin Dashboard', description: 'A planned admin interface for inventory management and customer notifications, now in active development.' },
     ],
     technicalImplementation: [
       'Built the full frontend in Next.js with a Supabase backend',
@@ -579,7 +579,7 @@ export const caseStudies: CaseStudy[] = [
     images: [
       { type: 'desktop', src: '/images/bhanddisposal.webp', width: 1641, height: 844,
         alt: 'Barnes Hauling & Disposal homepage with the dumpster-rental hero section',
-        caption: 'Barnes Hauling & Disposal — dumpster rental homepage', color: '#00d97e' },
+        caption: 'Barnes Hauling & Disposal, dumpster rental homepage', color: '#00d97e' },
     ],
     color: '#00d97e',
     heroImage: '/images/bhanddisposal.webp',
@@ -588,7 +588,7 @@ export const caseStudies: CaseStudy[] = [
     heroImageHeight: 844,
     liveUrl: 'https://barnes-hauling.vercel.app/',
     seo: {
-      title: 'Barnes Hauling & Disposal Case Study — Sharayah Hefner',
+      title: 'Barnes Hauling & Disposal Case Study - Sharayah Hefner',
       description: 'See how Sharayah Hefner approached the product design and frontend engineering of Barnes Hauling & Disposal.',
     },
   },
@@ -600,9 +600,9 @@ export const caseStudies: CaseStudy[] = [
     summary:
       'A mobile geography-learning game combining exploration, competitive progression, country collections and an atlas-inspired visual identity.',
     valueStatement:
-      'Designed a geography-learning game that makes exploration feel collectible, competitive and visually rich — built around an atlas-inspired identity.',
+      'Designed a geography-learning game that makes exploration feel collectible, competitive, and visually rich, built around an atlas-inspired identity.',
     challenge:
-      'Traditional geography-learning apps can feel repetitive and academic. Atlas League is designed to make learning feel collectible, competitive and exploratory — turning country knowledge into a game you want to keep playing.',
+      'Traditional geography-learning apps can feel repetitive and academic. Atlas League is designed to make learning feel collectible, competitive, and exploratory, turning country knowledge into a game you want to keep playing.',
     role: ['Product Strategy', 'UX/UI Design', 'Game-System Design', 'Mobile Interface Development', 'Branding', 'Visual Systems'],
     responsibilities: [
       'Created the product concept and brand direction',
@@ -615,22 +615,22 @@ export const caseStudies: CaseStudy[] = [
     ],
     platform: 'Mobile · React',
     process: [
-      { title: 'Understand', description: 'Researched what makes learning games engaging — progression, collection, competition — and how geography content could be structured around those mechanics.' },
+      { title: 'Understand', description: 'Researched what makes learning games engaging, including progression, collection, and competition, and how geography content could be structured around those mechanics.' },
       { title: 'Simplify', description: 'Focused the core loop on Explore (discover countries), Collect (earn country cards and stamps), and Compete (league rankings) to keep the experience focused.' },
-      { title: 'Design', description: 'Created the full visual identity around an atlas-inspired aesthetic — maps, stamps, passports, and a warm gold-and-teal palette that evokes exploration.' },
+      { title: 'Design', description: 'Created the full visual identity around an atlas-inspired aesthetic, with maps, stamps, passports, and a warm gold-and-teal palette that evokes exploration.' },
       { title: 'Build', description: 'Developing the mobile interface in React with Supabase for data, building the navigation, game screens, and progression UI.' },
       { title: 'Validate', description: 'Iterating on game flow and visual design to ensure the progression feels rewarding and the interface stays intuitive on mobile.' },
-      { title: 'Ship', description: 'Currently in development — social systems, payments, and competitive features are planned but not yet launched.' },
+      { title: 'Ship', description: 'Currently in development; social systems, payments, and competitive features are planned but not yet launched.' },
     ],
     solution: [
       'Designed a game system built on three pillars: Explore to discover countries, Collect to build your atlas, and Compete to climb league rankings.',
-      'Created a full atlas-inspired visual identity — country cards, passport stamps, museum collections — that makes learning feel like treasure hunting.',
+      'Created a full atlas-inspired visual identity with country cards, passport stamps, and museum collections that makes learning feel like treasure hunting.',
     ],
     solutionFeatures: [
       { title: 'Explore Mode', description: 'Players discover countries through interactive exploration, unlocking new regions and challenges as they progress.' },
-      { title: 'Country Collections', description: 'Country cards and passport stamps give players a tangible sense of collection and progress — like filling a real atlas.' },
+      { title: 'Country Collections', description: 'Country cards and passport stamps give players a tangible sense of collection and progress, like filling a real atlas.' },
       { title: 'League Progression', description: 'Competitive league tiers motivate players to keep improving their geography knowledge and climb the rankings.' },
-      { title: 'Atlas-Inspired Branding', description: 'The entire visual system — color, typography, iconography — is built around the aesthetic of vintage maps and exploration.' },
+      { title: 'Atlas-Inspired Branding', description: 'The entire visual system, from color to typography to iconography, is built around the aesthetic of vintage maps and exploration.' },
     ],
     technicalImplementation: [
       'Developing the mobile interface in React',
@@ -640,7 +640,7 @@ export const caseStudies: CaseStudy[] = [
       'Creating the full visual identity and component system around the atlas theme',
     ],
     constraints: [
-      'Atlas League is currently in development — not yet launched or in production use',
+      'Atlas League is currently in development and not yet launched or in production use',
       'Social and competitive systems, payments, and production infrastructure are planned features, not completed functionality',
     ],
     outcomes: [
@@ -653,7 +653,7 @@ export const caseStudies: CaseStudy[] = [
     images: [
       { type: 'mobile', src: '/images/AtlasMobileview.webp', width: 1254, height: 1254,
         alt: 'Atlas League mobile screens showing the globe explorer, onboarding, sign-in, country card and daily expedition',
-        caption: 'Atlas League — globe exploration, collection and progression screens', color: '#ffb84d' },
+        caption: 'Atlas League, globe exploration, collection and progression screens', color: '#ffb84d' },
     ],
     color: '#ffb84d',
     heroImage: '/images/AtlasMobileview.webp',
@@ -661,7 +661,7 @@ export const caseStudies: CaseStudy[] = [
     heroImageWidth: 1254,
     heroImageHeight: 1254,
     seo: {
-      title: 'Atlas League Case Study — Sharayah Hefner',
+      title: 'Atlas League Case Study - Sharayah Hefner',
       description: 'See how Sharayah Hefner approached the product design and frontend engineering of Atlas League.',
     },
   },

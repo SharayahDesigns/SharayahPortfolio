@@ -11,7 +11,7 @@ const HeroAvatar = lazy(() => import('./HeroAvatar'))
 
 const HEADLINE_WORDS = portfolioData.name.split(' ')
 const HERO_TITLE = portfolioData.title
-/** Per-character cadence — fast enough not to stall, slow enough to read. */
+/** Per-character cadence: fast enough not to stall, slow enough to read. */
 const TYPE_MS = 26
 
 type HeroProps = {
@@ -109,7 +109,7 @@ export default function Hero({ onReady }: HeroProps) {
           opacity: 1,
           y: 0,
           scale: 1,
-          // Underdamped on purpose — damping this low is what produces the
+          // Underdamped on purpose; damping this low is what produces the
           // settle-and-bounce rather than a flat glide.
           transition: { type: 'spring', stiffness: 400, damping: 11, mass: 0.9 },
         },
@@ -192,7 +192,7 @@ export default function Hero({ onReady }: HeroProps) {
 
         <motion.div
           className="hero-graphic"
-          // Fade only — a scale transform here would be measured by the R3F
+          // Fade only; a scale transform here would be measured by the R3F
           // canvas mid-animation and lock it to the wrong size until the first
           // scroll re-measures it.
           initial={{ opacity: 0 }}
@@ -204,7 +204,7 @@ export default function Hero({ onReady }: HeroProps) {
             <div className="avatar-ring avatar-ring--2" />
             <div className="hero-avatar-shell">
               <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
-                {/* Same scene either way — mobile just swaps in the merged,
+                {/* Same scene either way; mobile just swaps in the merged,
                     decimated model instead of the two full-resolution ones. */}
                 <HeroAvatar reducedMotion={reducedMotion} mobile={useMobileHero} onReady={onReady} />
               </Suspense>

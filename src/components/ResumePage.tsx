@@ -32,7 +32,7 @@ export default function ResumePage() {
   return (
     <>
       <SEO
-        title="Résumé — Sharayah Hefner"
+        title="Resume - Sharayah Hefner"
         description="Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer. View experience, skills, education, and certifications, or download the PDF."
         path="/resume"
       />

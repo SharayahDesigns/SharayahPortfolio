@@ -118,7 +118,7 @@ export default function Contact() {
               <h3 className="contact-cta-heading">Let's build something polished.</h3>
               <p className="contact-cta-body">
                 Whether you need a design system, an e-commerce experience, or a full
-                frontend build — I'd love to hear about it. The fastest way to reach me
+                frontend build, I'd love to hear about it. The fastest way to reach me
                 is by email.
               </p>
               <a

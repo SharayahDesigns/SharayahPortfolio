@@ -36,7 +36,7 @@
 html {
   scroll-behavior: smooth;
   /* `clip` contains horizontal overflow without turning the element into a
-     scroll container — `hidden` would, which breaks the sticky hero.
+     scroll container; `hidden` would, which breaks the sticky hero.
      The `hidden` line is the fallback for browsers without `clip`. */
   overflow-x: hidden;
   overflow-x: clip;

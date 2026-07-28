@@ -57,7 +57,7 @@ export default function Nav() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        <Link to="/" className="nav-logo" aria-label="Sharayah Hefner — Home">
+        <Link to="/" className="nav-logo" aria-label="Sharayah Hefner - Home">
           <span className="nav-logo-bracket">&lt;</span>SH<span className="nav-logo-bracket">/&gt;</span>
         </Link>
 

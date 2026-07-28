@@ -18,7 +18,7 @@ export default function StoryParallax() {
 
   const { story } = portfolioData
 
-  // Drift amounts are a share of the stage height, so they need it in px —
+  // Drift amounts are a share of the stage height, so they need it in px;
   // Motion's percentage `y` resolves against the *element*, and each layer is
   // a different size.
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function StoryParallax() {
     return () => ro.disconnect()
   }, [])
 
-  // 0 as the section's top reaches the viewport top, 1 as its bottom does — so
+  // 0 as the section's top reaches the viewport top, 1 as its bottom does, so
   // progress spans exactly one stage-height of scroll and the layers sit at
   // their base composition while the section is still rising into view.
   const { scrollYProgress } = useScroll({
@@ -68,7 +68,7 @@ export default function StoryParallax() {
         </motion.div>
 
         {/* Hands the bright sky off to the dark section above it. Glued to the
-            stage, not to a layer — it marks the section boundary. */}
+            stage, not to a layer; it marks the section boundary. */}
         <div className="story-daybreak" aria-hidden="true" />
 
         {/* ---- Layer 2: the line. Nearly pinned, and painted *under* the range

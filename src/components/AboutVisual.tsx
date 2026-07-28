@@ -7,7 +7,7 @@ import type { MotionValue } from 'framer-motion'
  * One form, four states. Each trait card in the About section maps to a shape
  * and an accent colour; hovering or focusing a card morphs the object. The
  * solid half and the wireframe half are the same geometry rendered twice and
- * clipped against opposite planes — design on one side, structure on the other.
+ * clipped against opposite planes, with design on one side and structure on the other.
  */
 
 export type AboutVisualProps = {

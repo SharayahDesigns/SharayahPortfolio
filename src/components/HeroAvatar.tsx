@@ -20,7 +20,7 @@ type StaticHeroModelProps = {
   scaleMultiplier?: number
   /** Phone tilt, already normalised to the same -1..1 shape as `state.pointer`. */
   tilt?: React.MutableRefObject<Tilt>
-  /** Depth multiplier — the models drift by different amounts so they separate. */
+  /** Depth multiplier; the models drift by different amounts so they separate. */
   parallax?: number
   entrance?: {
     fromX: number
@@ -44,7 +44,7 @@ const HERO_MODEL_HEIGHT = 3.55
  * Downward nudge under <Center>, in *world* units.
  *
  * <Center>'s position is measured in the model's own units, which sit inside
- * this component's normalising scale — and the models are authored at wildly
+ * this component's normalising scale, and the models are authored at wildly
  * different units (the merged mobile pair is ~47x smaller than the desktop
  * pair, 0.04 vs 1.9). So the value has to be divided by that scale, or the
  * same nudge that reads as a hair on one model throws another clean out of
@@ -105,7 +105,7 @@ function StaticHeroModel({
     const inputY = reducedMotion ? 0 : clampUnit(state.pointer.y + tiltY)
 
     // Only the sensor translates the models. Tilting the phone should feel like
-    // tipping a box — they slide toward whichever edge is lowest — while a mouse
+    // tipping a box, they slide toward whichever edge is lowest, while a mouse
     // keeps its lighter rotation-only response.
     const swayX = reducedMotion ? 0 : tiltX * SWAY_X * parallax
     const swayY = reducedMotion ? 0 : -tiltY * SWAY_Y * parallax
@@ -172,7 +172,7 @@ export default function HeroAvatar({ reducedMotion, mobile = false, onReady }: H
         <Suspense fallback={<AvatarFallback />}>
           {mobile ? (
             /* The pair is already posed relative to each other inside this file,
-               so there is nothing to place or parallax — height normalisation is
+               so there is nothing to place or parallax; height normalisation is
                measured across both of them, hence the smaller multiplier. */
             <StaticHeroModel
               path={MOBILE_MODEL_PATH}

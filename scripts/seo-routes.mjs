@@ -10,7 +10,7 @@ export const site = {
 export const routes = [
   {
     path: '/',
-    title: 'Sharayah Hefner — Frontend UX Engineer & Design Engineer',
+    title: 'Sharayah Hefner - Frontend UX Engineer & Design Engineer',
     description: 'Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences.',
     type: 'website',
     image: '/images/shareImage.png',
@@ -45,7 +45,7 @@ export const routes = [
   },
   {
     path: '/resume',
-    title: 'Résumé — Sharayah Hefner',
+    title: 'Resume - Sharayah Hefner',
     description: 'Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer. View experience, skills, education, and certifications, or download the PDF.',
     type: 'profile',
     image: '/images/shareImage.png',
@@ -80,7 +80,7 @@ export const routes = [
   },
   {
     path: '/work/cabana-filters',
-    title: 'Cabana Filters Case Study — Sharayah Hefner',
+    title: 'Cabana Filters Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Cabana Filters.',
     type: 'article',
     image: '/images/cabana.webp',
@@ -99,7 +99,7 @@ export const routes = [
   },
   {
     path: '/work/studioplayer',
-    title: 'StudioPlayer Case Study — Sharayah Hefner',
+    title: 'StudioPlayer Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX design and frontend engineering of StudioPlayer.',
     type: 'article',
     image: '/images/studioPlayerUXUI.webp',
@@ -118,7 +118,7 @@ export const routes = [
   },
   {
     path: '/work/my-logo-mat',
-    title: 'My Logo Mat Case Study — Sharayah Hefner',
+    title: 'My Logo Mat Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX design and frontend engineering of My Logo Mat.',
     type: 'article',
     image: '/images/logomat.webp',
@@ -137,7 +137,7 @@ export const routes = [
   },
   {
     path: '/work/concrete-connections-nwa',
-    title: 'Concrete Connections NWA Case Study — Sharayah Hefner',
+    title: 'Concrete Connections NWA Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Concrete Connections NWA.',
     type: 'article',
     image: '/images/shareImage.png',
@@ -156,7 +156,7 @@ export const routes = [
   },
   {
     path: '/work/barnes-hauling',
-    title: 'Barnes Hauling & Disposal Case Study — Sharayah Hefner',
+    title: 'Barnes Hauling & Disposal Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the product design and frontend engineering of Barnes Hauling & Disposal.',
     type: 'article',
     image: '/images/bhanddisposal.webp',
@@ -175,7 +175,7 @@ export const routes = [
   },
   {
     path: '/work/atlas-league',
-    title: 'Atlas League Case Study — Sharayah Hefner',
+    title: 'Atlas League Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the product design and frontend engineering of Atlas League.',
     type: 'article',
     image: '/images/shareImage.png',

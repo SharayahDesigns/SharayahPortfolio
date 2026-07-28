@@ -7,7 +7,7 @@ export default function NotFoundPage() {
   return (
     <>
       <SEO
-        title="404 — Page Not Found | Sharayah Hefner"
+        title="404 - Page Not Found | Sharayah Hefner"
         description="The page you were looking for could not be found."
         path="/404"
         noindex
@@ -21,7 +21,7 @@ export default function NotFoundPage() {
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="not-found-label">Error</p>
-          <h1 className="not-found-title">404 — Page Not Found</h1>
+          <h1 className="not-found-title">404 - Page Not Found</h1>
           <p className="not-found-body">
             The page you were looking for could not be found. It may have been moved,
             renamed, or never existed.

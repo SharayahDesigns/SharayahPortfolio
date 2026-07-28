@@ -32,7 +32,7 @@ export default function Footer() {
       <div className="container footer-inner">
         <div className="footer-main">
           <div className="footer-brand">
-            <Link to="/" className="nav-logo" aria-label="Sharayah Hefner — Home">
+            <Link to="/" className="nav-logo" aria-label="Sharayah Hefner - Home">
               <span className="nav-logo-bracket">&lt;</span>SH<span className="nav-logo-bracket">/&gt;</span>
             </Link>
             <p className="footer-tagline">

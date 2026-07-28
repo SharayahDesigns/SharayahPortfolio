@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
 import Projects from './Projects'
 
-const WORK_IMAGE_TEXT = "Sharayah's Awesome\nProjects!"
-const WORK_IMAGE_LABEL = "Sharayah's Awesome Projects!"
+const WORK_IMAGE_TEXT = "const title =\n  \"Sharayah's Awesome Projects\";\nrender(title);"
+const WORK_IMAGE_LABEL = "JavaScript snippet showing Sharayah's Awesome Projects"
 const TYPE_MS = 38
 
 export default function WorkProjectsTransition() {
@@ -11,6 +12,7 @@ export default function WorkProjectsTransition() {
   const typedCount = useMotionValue(0)
   const typedText = useTransform(typedCount, (v) => WORK_IMAGE_TEXT.slice(0, Math.round(v)))
   const transitionRef = useRef<HTMLElement | null>(null)
+  const [shellRef, shellInView] = useInView({ triggerOnce: true, threshold: 0.55 })
   const { scrollYProgress } = useScroll({
     target: transitionRef,
     offset: ['start end', 'end start'],
@@ -40,6 +42,11 @@ export default function WorkProjectsTransition() {
       return
     }
 
+    if (!shellInView) {
+      typedCount.set(0)
+      return
+    }
+
     typedCount.set(0)
     let i = 0
     let tick = 0
@@ -57,7 +64,7 @@ export default function WorkProjectsTransition() {
       window.clearTimeout(start)
       window.clearInterval(tick)
     }
-  }, [prefersReduced, typedCount])
+  }, [prefersReduced, shellInView, typedCount])
 
   if (prefersReduced) {
     return (
@@ -98,7 +105,7 @@ export default function WorkProjectsTransition() {
               style={{ scale: sceneScale, y: sceneY, opacity: sceneOpacity }}
             >
               <div className="container">
-                <div className="work-image-shell">
+                <div className="work-image-shell" ref={shellRef}>
                   <div className="work-image-stage">
                     <p className="work-image-typed" aria-label={WORK_IMAGE_LABEL}>
                       <span className="work-image-typed-ghost" aria-hidden="true">{WORK_IMAGE_TEXT}</span>

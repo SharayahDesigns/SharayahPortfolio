@@ -350,7 +350,7 @@
 }
 
 .hero-headline-word {
-  /* inline-block so the spring's y/scale actually apply — transforms are a
+  /* inline-block so the spring's y/scale actually apply; transforms are a
      no-op on a plain inline box. */
   display: inline-block;
   margin-right: 0.26em;
@@ -443,7 +443,7 @@
   vertical-align: text-bottom;
   background: var(--teal);
   box-shadow: 0 0 10px rgba(0, 255, 198, 0.55);
-  /* step-end, not a fade — a CRT cursor snaps between states. */
+  /* step-end, not a fade; a CRT cursor snaps between states. */
   animation: hero-caret-blink 1.06s step-end infinite;
 }
 @keyframes hero-caret-blink {
@@ -816,7 +816,7 @@
   }
   /* Wider than it is tall, relatively speaking: the camera's fov is vertical,
      so a narrow canvas shows less world width and clipped the dog off the
-     right edge. No horizontal nudge here — the mobile model carries both
+     right edge. No horizontal nudge here; the mobile model carries both
      avatars in one mesh, so <Center> already centres the composition. */
   .hero-avatar-canvas {
     inset: -30px -46px -62px -46px;
@@ -950,7 +950,7 @@
 .about-portrait-stage {
   --about-phone-h: min(600px, 68vh);
   /* Offset from the top of the column, matched to the intro's padding so the
-     phone starts level with the heading. Not viewport-relative — the stage is
+     phone starts level with the heading. Not viewport-relative; the stage is
      static, so the phone holds its place in the layout and scrolls with it. */
   --about-phone-top: 145px;
   position: relative;
@@ -968,7 +968,7 @@
   height: var(--about-phone-h);
 }
 /* The artwork is a full device mockup, so it floats rather than sitting in a
-   cropped photo card — the phone supplies its own frame. */
+   cropped photo card; the phone supplies its own frame. */
 .about-portrait-frame {
   position: relative;
   z-index: 1;
@@ -1077,7 +1077,7 @@
   color: var(--text-primary);
   transition: color var(--transition), background var(--transition), transform var(--transition);
 }
-/* No colour change on hover — the marks carry their own brand colours now, and
+/* No colour change on hover; the marks carry their own brand colours now, and
    recolouring them would undo the point. Only the tint and lift respond. */
 .about-tech-tile:hover {
   /* Longhand, not the `background` shorthand: a shorthand carrying a var()
@@ -1275,7 +1275,7 @@
 
   /* The tech card gives up its overlap and stacks under the phone. The rig is a
      fixed-size row, so a static card becomes a second flex item and the two end
-     up fighting over ~250px — it has to become a column that sizes to content. */
+     up fighting over ~250px; it has to become a column that sizes to content. */
   .about-portrait-stage {
     --about-phone-h: min(440px, 50vh);
     padding-bottom: 0;
@@ -1292,12 +1292,12 @@
     margin-top: 22px;
     backdrop-filter: none;
   }
-  /* Anchored 78px past the rig's right edge — off the screen at this width */
+  /* Anchored 78px past the rig's right edge, off the screen at this width */
   .about-portrait-dots { display: none; }
   .about-portrait-glow { right: -8%; }
 
   /* Fluid tiles instead of fixed 46px ones: five of those plus gaps need 254px,
-     and a 320px phone only offers ~236px inside the card. Stretch, not centre —
+     and a 320px phone only offers ~236px inside the card. Stretch, not centre;
      the li has to fill its column or the tile's width has nothing to resolve
      against and collapses to the width of the icon. */
   .about-tech-grid { gap: 6px; justify-items: stretch; }
@@ -1523,7 +1523,7 @@
 }
 .projects-grid {
   display: grid;
-  /* 3-up on desktop, 2-up on tablet, 1-up on phones — no explicit breakpoints */
+  /* 3-up on desktop, 2-up on tablet, 1-up on phones, no explicit breakpoints */
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
 }
@@ -1561,7 +1561,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  /* anchored to the top — a site screenshot reads from its header down */
+  /* anchored to the top; a site screenshot reads from its header down */
   object-fit: cover;
   object-position: top center;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1613,7 +1613,7 @@
   color: inherit;
   text-decoration: none;
 }
-/* stretches the case-study link over the entire card — one target, valid markup */
+/* stretches the case-study link over the entire card; one target, valid markup */
 .project-card-link::after {
   content: '';
   position: absolute;
@@ -2394,7 +2394,7 @@
   font: inherit;
   cursor: pointer;
 }
-/* The seam the lid opens along — lights up once the box is open. */
+/* The seam the lid opens along lights up once the box is open. */
 .skill-box.is-open .skill-box-lid {
   border-bottom: 1px solid var(--border-accent);
   box-shadow: 0 1px 0 rgba(0, 255, 198, 0.12);
@@ -2430,7 +2430,7 @@
   color: var(--teal);
   border-color: var(--border-accent);
 }
-/* Plus becomes a minus — the open box has one obvious way back. */
+/* Plus becomes a minus; the open box has one obvious way back. */
 .skill-box.is-open .skill-box-toggle {
   transform: rotate(135deg);
   color: var(--teal);
@@ -2633,7 +2633,7 @@
    Four stacked layers, painted back to front:
      1 sky        2 copy        3 range (peaks)        4 figure
    Motion owns `transform` on each of those, so nothing here may use
-   `transform` for layout — positioning is done with insets only. */
+   `transform` for layout; positioning is done with insets only. */
 .story {
   position: relative;
   z-index: 1;
@@ -2666,7 +2666,7 @@
   object-position: center 55%;
 }
 
-/* Hands the bright sky off to the dark section above. Glued to the stage — it
+/* Hands the bright sky off to the dark section above. Glued to the stage, it
    belongs to the section edge, not to any parallax layer. */
 .story-daybreak {
   position: absolute;
@@ -2702,7 +2702,7 @@
   top: -22%;
   width: min(1100px, 130%);
   height: 150%;
-  /* max(), not min() — these are negatives, so max() is the smaller magnitude
+  /* max(), not min(); these are negatives, so max() is the smaller magnitude
      and matches half of the min() width above. */
   margin-left: max(-550px, -65%);
   border-radius: 50%;
@@ -2816,7 +2816,7 @@
   .story-figure img { width: 148vw; max-width: none; }
 }
 
-/* No drift, so the extra scroll runway buys nothing — shrink the stage back
+/* No drift, so the extra scroll runway buys nothing; shrink the stage back
    inside the viewport and let the base composition stand on its own. */
 @media (prefers-reduced-motion: reduce) {
   .story-stage { height: clamp(560px, 88vh, 860px); }
@@ -3386,7 +3386,7 @@ a.contact-channel:hover .contact-channel-arrow {
   position: relative;
 }
 .cs-constraints-list li::before {
-  content: '—';
+  content: '-';
   position: absolute;
   left: 0;
   color: var(--gold);
@@ -3685,7 +3685,7 @@ a.contact-channel:hover .contact-channel-arrow {
 .resume-page { min-height: 100vh; }
 
 .resume-header {
-  padding: 60px 0 80px;
+  padding: 112px 0 80px;
   position: relative;
   overflow: hidden;
 }
@@ -4018,7 +4018,7 @@ a.resume-contact-item:hover { color: var(--teal); }
 }
 
 @media (max-width: 768px) {
-  .resume-header { padding: 40px 0 60px; }
+  .resume-header { padding: 92px 0 60px; }
   .resume-section { padding: 36px 0; }
   .resume-header-contact { gap: 14px; }
 }

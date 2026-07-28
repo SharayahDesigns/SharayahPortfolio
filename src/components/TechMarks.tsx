@@ -1,7 +1,7 @@
 /**
  * Brand marks for the "Tech I work with" grid, in each brand's own colours.
  *
- * Everything is drawn with explicit fills rather than `currentColor` — the
+ * Everything is drawn with explicit fills rather than `currentColor`; the
  * whole point is that the tiles no longer inherit the text colour. The two
  * brands whose marks are black (Vercel, GitHub) and the one that is black or
  * white (Next.js) are rendered white, since the grid sits on a dark surface.
@@ -75,7 +75,7 @@ function FigmaMark() {
   )
 }
 
-/** The Octocat, filled white — GitHub's own #181717 would vanish here. */
+/** The Octocat, filled white, because GitHub's own #181717 would vanish here. */
 function GithubMark() {
   return (
     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">

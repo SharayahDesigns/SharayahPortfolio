@@ -23,7 +23,7 @@ export const portfolioData = {
       { lead: 'Engineering', accent: 'solutions.' },
     ],
     lede:
-      'I’m a Frontend UX Engineer and Design Engineer based in Herriman, Utah. I bridge the gap between design thinking and production engineering to build digital products that are not just functional—but meaningful.',
+      'I’m a Frontend UX Engineer and Design Engineer based in Herriman, Utah. I bridge the gap between design thinking and production engineering to build digital products that are not just functional, but meaningful.',
     script: 'I care about details, users, and outcomes.',
     // Split explicitly: the write-on wipes one line at a time, and a single
     // wrapped block would reveal both lines together, column by column.
@@ -79,7 +79,7 @@ export const portfolioData = {
     headingLead: 'Designing is',
     headingAccent: 'Storytelling',
     body:
-      'Every interface is a narrative — where someone starts, what they need, and how they get there. I design the arc before I write the code.',
+      'Every interface is a narrative: where someone starts, what they need, and how they get there. I design the arc before I write the code.',
     sky: {
       src: '/images/sky.webp',
       width: 1448,
@@ -233,7 +233,7 @@ export const portfolioData = {
       name: 'Jukebox',
       type: 'Video Management Platform',
       summary:
-        'Social media sharing app using Java, YouTube API, React, and Firebase — allowing users to build personal playlists.',
+        'Social media sharing app using Java, YouTube API, React, and Firebase, allowing users to build personal playlists.',
       technologies: ['React', 'Firebase', 'YouTube API', 'Java'],
       color: '#00ffc6',
       image: '/images/jukeboxUXUI.webp',
@@ -259,7 +259,7 @@ export const portfolioData = {
     {
       title: 'Front-End UX Engineer / E-Commerce Front-End Developer',
       company: 'Red7 Systems',
-      period: 'July 2023 — Present',
+      period: 'July 2023 - Present',
       color: '#00ffc6',
       bullets: [
         'Designed and developed frontend UX/UI experiences across e-commerce, SaaS, and marketing websites, owning work from wireframes and visual direction through frontend implementation.',
@@ -274,7 +274,7 @@ export const portfolioData = {
     {
       title: 'UX/UI Front-End Developer',
       company: 'Monnit Software',
-      period: '2022 — 2023',
+      period: '2022 - 2023',
       color: '#4dc9ff',
       bullets: [
         'Generated $65,000 in client revenue by designing and implementing custom software solutions.',
@@ -290,7 +290,7 @@ export const portfolioData = {
     {
       title: 'UX/UI Designer',
       company: 'Eufaula Properties',
-      period: '2018 — 2019',
+      period: '2018 - 2019',
       color: '#ffb84d',
       bullets: [
         'Designed website experiences and generated leads through marketing initiatives.',
@@ -300,7 +300,7 @@ export const portfolioData = {
     {
       title: 'Themed Environment Artist / Project Lead',
       company: 'Cemrock Landscapes',
-      period: '2015 — 2020',
+      period: '2015 - 2020',
       color: '#00d97e',
       bullets: [
         'Translated drawings, client concepts, and technical requirements into immersive three-dimensional environments.',
@@ -345,9 +345,9 @@ export const portfolioData = {
 
   education: [
     {
-      degree: 'B.S. — Graphic Design & Animation',
+      degree: 'B.S. - Graphic Design & Animation',
       institution: 'Southern New Hampshire University',
-      period: '2018 — 2020',
+      period: '2018 - 2020',
     },
     {
       degree: 'Full Stack Development Certification',
@@ -363,10 +363,10 @@ export const portfolioData = {
 
   featuredCertifications: [
     { name: 'Full Stack Development Certification', source: 'DevPoint Labs', year: '2022' },
-    { name: 'UX Design: 1 Overview', source: 'LinkedIn Learning', year: '—' },
+    { name: 'UX Design: 1 Overview', source: 'LinkedIn Learning', year: '' },
     { name: 'Adobe Photoshop Professional', source: 'LinkedIn Learning', year: '2024' },
     { name: 'Adobe Illustrator Professional', source: 'LinkedIn Learning', year: '2024' },
-    { name: 'Shopify Hydrogen Training', source: 'Shopify', year: '—' },
+    { name: 'Shopify Hydrogen Training', source: 'Shopify', year: '' },
   ],
 
   allCertifications: [
@@ -379,7 +379,7 @@ export const portfolioData = {
     { name: 'NASM Certified Personal Trainer', year: '2012', source: 'National Association Sports Medicine' },
     { name: 'EMT', year: '2007', source: 'Red Rocks Community College' },
     { name: 'FireFighter 1', year: '2007', source: 'Red Rocks Community College' },
-    { name: 'First Aid and CPR Basic', year: '2012', source: '—' },
+    { name: 'First Aid and CPR Basic', year: '2012', source: '' },
     { name: 'SoloLearn PHP Certificate', year: '2023', source: 'SoloLearn' },
     { name: 'SoloLearn Game Dev with JavaScript', year: '2023', source: 'SoloLearn' },
     { name: 'Adobe Photoshop Professional', year: '2024', source: 'LinkedIn Learning' },

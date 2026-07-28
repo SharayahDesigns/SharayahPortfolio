@@ -54,7 +54,7 @@ function HomePage() {
     upsertJsonLd('page-jsonld', {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
-      name: `${siteConfig.name} — ${siteConfig.title}`,
+      name: `${siteConfig.name} - ${siteConfig.title}`,
       description: 'Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences.',
       url: `${siteConfig.origin}/`,
       mainEntity: {
@@ -122,7 +122,7 @@ function HomePage() {
         }}
       />
       <SEO
-        title={`${siteConfig.name} — ${siteConfig.title}`}
+        title={`${siteConfig.name} - ${siteConfig.title}`}
         description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
         path="/"
         image="/images/shareImage.png"

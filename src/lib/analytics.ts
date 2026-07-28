@@ -5,8 +5,8 @@ const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID?.trim()
 const GA_DEBUG_MODE = import.meta.env.VITE_GA_DEBUG_MODE === 'true'
 const GA_DEBUG_STORAGE_KEY = 'ga_debug_mode'
 const PAGE_TITLE_BY_PATH: Record<string, string> = {
-  '/': 'Sharayah Hefner — Frontend UX Engineer & Design Engineer',
-  '/resume': 'Résumé — Sharayah Hefner',
+  '/': 'Sharayah Hefner - Frontend UX Engineer & Design Engineer',
+  '/resume': 'Resume - Sharayah Hefner',
 }
 
 declare global {

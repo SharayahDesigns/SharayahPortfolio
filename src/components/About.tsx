@@ -45,7 +45,7 @@ function renderScriptLine(line: string, lineIndex: number, writing: boolean, red
 export default function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
   // Its own observer: the section is several screens tall, so its 10% trigger
-  // fires long before the script line is actually on screen — the writing
+  // fires long before the script line is actually on screen, so the writing
   // would have finished before anyone could see it.
   const [scriptRef, scriptInView] = useInView({ triggerOnce: true, threshold: 0.9 })
   const reducedMotion = useReducedMotion() ?? false
@@ -120,7 +120,7 @@ export default function About() {
             </motion.p>
           </div>
 
-          {/* ===== Portrait column — pins alongside the copy ===== */}
+          {/* ===== Portrait column, pinned alongside the copy ===== */}
           <div className="about-portrait">
             <motion.div className="about-portrait-stage" variants={item}>
               {/* everything anchors to the phone box, not the full-height stage */}

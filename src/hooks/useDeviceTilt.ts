@@ -28,7 +28,7 @@ function clamp(v: number) {
  * far more expensive than the effect it drives.
  *
  * iOS 13+ gates the sensor behind `requestPermission()`, which only resolves
- * when called from a user gesture — so on those devices the tilt stays at zero
+ * when called from a user gesture, so on those devices the tilt stays at zero
  * until the visitor's first tap, and stays at zero for good if they decline.
  * Android and desktop Chrome need no permission but do require a secure
  * context, so this is inert on plain http (localhost excepted).
