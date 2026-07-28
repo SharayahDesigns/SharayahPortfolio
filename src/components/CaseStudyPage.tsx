@@ -7,6 +7,7 @@ import { siteConfig } from '../data/siteConfig'
 import SEO from './SEO'
 import { upsertJsonLd, removeJsonLd } from './SEO'
 import ProjectVisual from './ProjectVisual'
+import { trackCaseStudyView, trackContactClick, trackExternalLinkClick, trackProjectClick } from '../lib/analytics'
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink, Github,
   CheckCircle2, AlertCircle, Lightbulb, Wrench, Target, Layers, Rocket,
@@ -47,6 +48,11 @@ export default function CaseStudyPage() {
       keywords: study.technologies.join(', '),
     })
     return () => removeJsonLd('page-jsonld')
+  }, [study])
+
+  useEffect(() => {
+    if (!study) return
+    trackCaseStudyView(study.slug, study.title)
   }, [study])
 
   if (!study) {
@@ -131,6 +137,9 @@ export default function CaseStudyPage() {
                     rel="noopener noreferrer"
                     className="btn btn-primary"
                     aria-label={`Visit the live ${study.title} site (opens in a new tab)`}
+                    onClick={() => {
+                      trackExternalLinkClick(`${study.title} live site`, study.liveUrl!, 'case_study_hero')
+                    }}
                   >
                     <ExternalLink size={16} /> View Live Site
                   </a>
@@ -142,11 +151,20 @@ export default function CaseStudyPage() {
                     rel="noopener noreferrer"
                     className="btn btn-ghost"
                     aria-label={`Visit the ${study.title} repository (opens in a new tab)`}
+                    onClick={() => {
+                      trackExternalLinkClick(`${study.title} repository`, study.repositoryUrl!, 'case_study_hero')
+                    }}
                   >
                     <Github size={16} /> Visit Repository
                   </a>
                 )}
-                <Link to="/#contact" className="btn btn-ghost">
+                <Link
+                  to="/#contact"
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    trackContactClick('cta', 'case_study_hero')
+                  }}
+                >
                   Let's Talk
                 </Link>
               </div>
@@ -424,14 +442,26 @@ export default function CaseStudyPage() {
             </Link>
 
             <div className="cs-nav-arrows">
-              <Link to={`/work/${prev.slug}`} className="cs-nav-arrow cs-nav-arrow--prev">
+              <Link
+                to={`/work/${prev.slug}`}
+                className="cs-nav-arrow cs-nav-arrow--prev"
+                onClick={() => {
+                  trackProjectClick(prev.title, `/work/${prev.slug}`)
+                }}
+              >
                 <ArrowLeft size={16} />
                 <div>
                   <span className="cs-nav-arrow-label">Previous</span>
                   <span className="cs-nav-arrow-title">{prev.title}</span>
                 </div>
               </Link>
-              <Link to={`/work/${next.slug}`} className="cs-nav-arrow cs-nav-arrow--next">
+              <Link
+                to={`/work/${next.slug}`}
+                className="cs-nav-arrow cs-nav-arrow--next"
+                onClick={() => {
+                  trackProjectClick(next.title, `/work/${next.slug}`)
+                }}
+              >
                 <div>
                   <span className="cs-nav-arrow-label">Next</span>
                   <span className="cs-nav-arrow-title">{next.title}</span>
@@ -453,10 +483,22 @@ export default function CaseStudyPage() {
                 </h3>
                 <p className="cs-contact-body">{study.finalCta.body}</p>
                 <div className="cs-contact-actions">
-                  <Link to="/#contact" className="btn btn-primary">
+                  <Link
+                    to="/#contact"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      trackContactClick('cta', 'case_study_footer')
+                    }}
+                  >
                     Let's Talk
                   </Link>
-                  <Link to={`/work/${next.slug}`} className="btn btn-ghost">
+                  <Link
+                    to={`/work/${next.slug}`}
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      trackProjectClick(next.title, `/work/${next.slug}`)
+                    }}
+                  >
                     View Next Project <ArrowRight size={16} />
                   </Link>
                   <Link to="/#projects" className="btn btn-ghost">
@@ -475,7 +517,13 @@ export default function CaseStudyPage() {
                   I'm currently open to Frontend UX Engineer, Design Engineer, and
                   product-focused frontend opportunities. Let's talk about what you're building.
                 </p>
-                <a href={`mailto:${portfolioData.email}`} className="btn btn-primary">
+                <a
+                  href={`mailto:${portfolioData.email}`}
+                  className="btn btn-primary"
+                  onClick={() => {
+                    trackContactClick('email', 'case_study_footer')
+                  }}
+                >
                   Start a Conversation
                 </a>
               </>

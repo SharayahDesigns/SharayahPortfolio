@@ -111,4 +111,43 @@ export function trackResumeDownload() {
   })
 }
 
+type AnalyticsParams = Record<string, string | number | boolean | undefined>
+
+function trackEvent(eventName: string, params: AnalyticsParams) {
+  if (!hasAnalytics() || !window.gtag) return
+  window.gtag('event', eventName, {
+    ...params,
+    debug_mode: isDebugModeEnabled(),
+  })
+}
+
+export function trackProjectClick(projectName: string, destinationPath: string) {
+  trackEvent('project_click', {
+    project_name: projectName,
+    destination_path: destinationPath,
+  })
+}
+
+export function trackCaseStudyView(slug: string, title: string) {
+  trackEvent('case_study_view', {
+    case_study_slug: slug,
+    case_study_title: title,
+  })
+}
+
+export function trackExternalLinkClick(label: string, url: string, location: string) {
+  trackEvent('external_link_click', {
+    link_label: label,
+    link_url: url,
+    link_location: location,
+  })
+}
+
+export function trackContactClick(method: string, location: string) {
+  trackEvent('contact_click', {
+    contact_method: method,
+    contact_location: location,
+  })
+}
+
 export { GA_MEASUREMENT_ID }

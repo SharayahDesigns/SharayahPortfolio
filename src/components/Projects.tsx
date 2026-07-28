@@ -10,6 +10,7 @@ import { portfolioData } from '../data/portfolio'
 import { caseStudies } from '../data/caseStudies'
 import { FlaskConical, ArrowUpRight, ExternalLink } from 'lucide-react'
 import ProjectVisual, { type ProjectVisualType } from './ProjectVisual'
+import { trackExternalLinkClick, trackProjectClick } from '../lib/analytics'
 
 /** `type` is a '·'-joined discipline list; a card only has room for the headline one. */
 function primaryDiscipline(type: string) {
@@ -134,6 +135,9 @@ export default function Projects() {
                               to={`/work/${caseStudySlug}`}
                               className="project-card-link"
                               data-cursor="pointer"
+                              onClick={() => {
+                                trackProjectClick(p.name, `/work/${caseStudySlug}`)
+                              }}
                             >
                               {p.name}
                             </Link>
@@ -158,6 +162,9 @@ export default function Projects() {
                             style={{ color: p.color }}
                             aria-label={`Visit the live ${p.name} site (opens in a new tab)`}
                             data-cursor="pointer"
+                            onClick={() => {
+                              trackExternalLinkClick(`${p.name} live site`, p.link!, 'projects_grid')
+                            }}
                           >
                             <ExternalLink size={14} aria-hidden="true" />
                           </a>

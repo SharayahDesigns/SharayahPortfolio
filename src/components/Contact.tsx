@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { portfolioData } from '../data/portfolio'
 import { Github, Linkedin, Mail, MapPin, ArrowUpRight } from 'lucide-react'
+import { trackContactClick, trackExternalLinkClick } from '../lib/analytics'
 
 export default function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 })
@@ -34,7 +35,13 @@ export default function Contact() {
               </p>
 
               <div className="contact-channels">
-                <a href={`mailto:${portfolioData.email}`} className="contact-channel">
+                <a
+                  href={`mailto:${portfolioData.email}`}
+                  className="contact-channel"
+                  onClick={() => {
+                    trackContactClick('email', 'contact_channel')
+                  }}
+                >
                   <Mail size={20} className="teal" />
                   <div>
                     <span className="contact-channel-label">Email</span>
@@ -42,7 +49,16 @@ export default function Contact() {
                   </div>
                   <ArrowUpRight size={16} className="contact-channel-arrow" />
                 </a>
-                <a href={portfolioData.linkedin} target="_blank" rel="noopener noreferrer" className="contact-channel">
+                <a
+                  href={portfolioData.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-channel"
+                  onClick={() => {
+                    trackExternalLinkClick('linkedin', portfolioData.linkedin, 'contact_channel')
+                    trackContactClick('linkedin', 'contact_channel')
+                  }}
+                >
                   <Linkedin size={20} className="teal" />
                   <div>
                     <span className="contact-channel-label">LinkedIn</span>
@@ -50,7 +66,15 @@ export default function Contact() {
                   </div>
                   <ArrowUpRight size={16} className="contact-channel-arrow" />
                 </a>
-                <a href={portfolioData.github} target="_blank" rel="noopener noreferrer" className="contact-channel">
+                <a
+                  href={portfolioData.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-channel"
+                  onClick={() => {
+                    trackExternalLinkClick('github', portfolioData.github, 'contact_channel')
+                  }}
+                >
                   <Github size={20} className="teal" />
                   <div>
                     <span className="contact-channel-label">GitHub</span>
@@ -76,7 +100,13 @@ export default function Contact() {
                 </div>
               </div>
 
-              <a href={`mailto:${portfolioData.email}?subject=Frontend%20UX%20Opportunity`} className="btn btn-primary contact-email-cta">
+              <a
+                href={`mailto:${portfolioData.email}?subject=Frontend%20UX%20Opportunity`}
+                className="btn btn-primary contact-email-cta"
+                onClick={() => {
+                  trackContactClick('email', 'contact_cta')
+                }}
+              >
                 <Mail size={18} />
                 Start a Conversation
               </a>
@@ -91,17 +121,49 @@ export default function Contact() {
                 frontend build — I'd love to hear about it. The fastest way to reach me
                 is by email.
               </p>
-              <a href={`mailto:${portfolioData.email}`} className="contact-cta-email">
+              <a
+                href={`mailto:${portfolioData.email}`}
+                className="contact-cta-email"
+                onClick={() => {
+                  trackContactClick('email', 'contact_panel')
+                }}
+              >
                 {portfolioData.email}
               </a>
               <div className="contact-socials">
-                <a href={portfolioData.github} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="GitHub profile">
+                <a
+                  href={portfolioData.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  aria-label="GitHub profile"
+                  onClick={() => {
+                    trackExternalLinkClick('github', portfolioData.github, 'contact_social')
+                  }}
+                >
                   <Github size={18} />
                 </a>
-                <a href={portfolioData.linkedin} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn profile">
+                <a
+                  href={portfolioData.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  aria-label="LinkedIn profile"
+                  onClick={() => {
+                    trackExternalLinkClick('linkedin', portfolioData.linkedin, 'contact_social')
+                    trackContactClick('linkedin', 'contact_social')
+                  }}
+                >
                   <Linkedin size={18} />
                 </a>
-                <a href={`mailto:${portfolioData.email}`} className="social-link" aria-label="Send email">
+                <a
+                  href={`mailto:${portfolioData.email}`}
+                  className="social-link"
+                  aria-label="Send email"
+                  onClick={() => {
+                    trackContactClick('email', 'contact_social')
+                  }}
+                >
                   <Mail size={18} />
                 </a>
               </div>
