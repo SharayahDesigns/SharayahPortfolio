@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react'
 import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -11,6 +11,7 @@ const HeroAvatar = lazy(() => import('./HeroAvatar'))
 
 const HEADLINE_WORDS = portfolioData.name.split(' ')
 const HERO_TITLE = portfolioData.title
+const HERO_FALLBACK_IMAGE = '/images/fallbackimagehero.webp'
 /** Per-character cadence: fast enough not to stall, slow enough to read. */
 const TYPE_MS = 26
 
@@ -18,8 +19,69 @@ type HeroProps = {
   onReady?: () => void
 }
 
+type HeroAvatarBoundaryProps = {
+  children: ReactNode
+  fallback: ReactNode
+}
+
+type HeroAvatarBoundaryState = {
+  hasError: boolean
+}
+
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement('canvas')
+
+    return Boolean(
+      canvas.getContext('webgl2') ||
+      canvas.getContext('webgl') ||
+      canvas.getContext('experimental-webgl'),
+    )
+  } catch {
+    return false
+  }
+}
+
+class HeroAvatarBoundary extends Component<HeroAvatarBoundaryProps, HeroAvatarBoundaryState> {
+  state: HeroAvatarBoundaryState = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error('Hero avatar failed to render', error)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback
+    }
+
+    return this.props.children
+  }
+}
+
+function StaticHeroImage({ onReady }: HeroProps) {
+  useEffect(() => {
+    onReady?.()
+  }, [onReady])
+
+  return (
+    <div className="hero-static-visual">
+      <img
+        src={HERO_FALLBACK_IMAGE}
+        alt="Sharayah Hefner beside her white shepherd, Onyx, shown as a static hero portrait"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+  )
+}
+
 export default function Hero({ onReady }: HeroProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [canUseWebGL, setCanUseWebGL] = useState(() => supportsWebGL())
   const heroRef = useRef<HTMLElement>(null)
   const isMobileViewport = useMediaQuery('(max-width: 900px)')
   const isCoarsePointer = useMediaQuery('(pointer: coarse)')
@@ -63,6 +125,10 @@ export default function Hero({ onReady }: HeroProps) {
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     setReducedMotion(mq.matches)
+  }, [])
+
+  useEffect(() => {
+    setCanUseWebGL(supportsWebGL())
   }, [])
 
   // The hero sticks so the content below scrolls up over it. When the hero is
@@ -203,11 +269,17 @@ export default function Hero({ onReady }: HeroProps) {
             <div className="avatar-ring avatar-ring--1" />
             <div className="avatar-ring avatar-ring--2" />
             <div className="hero-avatar-shell">
-              <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
-                {/* Same scene either way; mobile just swaps in the merged,
-                    decimated model instead of the two full-resolution ones. */}
-                <HeroAvatar reducedMotion={reducedMotion} mobile={useMobileHero} onReady={onReady} />
-              </Suspense>
+              {canUseWebGL ? (
+                <HeroAvatarBoundary fallback={<StaticHeroImage onReady={onReady} />}>
+                  <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
+                    {/* Same scene either way; mobile just swaps in the merged,
+                        decimated model instead of the two full-resolution ones. */}
+                    <HeroAvatar reducedMotion={reducedMotion} mobile={useMobileHero} onReady={onReady} />
+                  </Suspense>
+                </HeroAvatarBoundary>
+              ) : (
+                <StaticHeroImage onReady={onReady} />
+              )}
             </div>
             <div className="avatar-badge">
               <span className="avatar-badge-dot" />
