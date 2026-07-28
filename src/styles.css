@@ -324,6 +324,68 @@
 }
 .hero-headline-word:last-child { margin-right: 0; }
 
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(0,255,198,0.12), transparent 28%),
+    linear-gradient(180deg, rgba(5, 14, 14, 0.98), rgba(4, 8, 10, 0.995));
+  overflow: hidden;
+}
+
+.page-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at center, black 32%, transparent 88%);
+  pointer-events: none;
+}
+
+.page-loader__inner {
+  position: relative;
+  z-index: 1;
+  width: min(680px, 100%);
+  padding: 26px 28px;
+  border: 1px solid rgba(0,255,198,0.2);
+  border-radius: 24px;
+  background: rgba(5, 10, 12, 0.7);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(0,255,198,0.05);
+  backdrop-filter: blur(18px);
+}
+
+.page-loader__line {
+  display: flex;
+  align-items: center;
+  gap: 0.38em;
+  min-height: 1.4em;
+  color: var(--teal);
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 2vw, 24px);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 20px rgba(0,255,198,0.18);
+}
+
+.page-loader__prompt {
+  color: rgba(0,255,198,0.7);
+}
+
+.page-loader__caret {
+  display: inline-block;
+  width: 0.58em;
+  height: 1.08em;
+  background: var(--teal);
+  box-shadow: 0 0 12px rgba(0,255,198,0.45);
+  animation: hero-caret-blink 1.06s step-end infinite;
+}
+
 .hero-title {
   position: relative;
   font-family: var(--font-mono);
@@ -557,21 +619,19 @@
 .hero-tilt-button {
   position: absolute;
   left: 50%;
-  bottom: 26px;
+  bottom: -26px;
   transform: translateX(-50%);
   z-index: 8;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   border: 1px solid rgba(0,255,198,0.35);
   border-radius: 999px;
   background: rgba(8, 8, 12, 0.82);
   color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   backdrop-filter: blur(14px);
   box-shadow: 0 10px 30px rgba(0,0,0,0.28);
   transition: transform var(--transition), border-color var(--transition), color var(--transition);

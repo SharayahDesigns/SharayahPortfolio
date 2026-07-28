@@ -13,7 +13,11 @@ const HERO_TITLE = portfolioData.title
 /** Per-character cadence — fast enough not to stall, slow enough to read. */
 const TYPE_MS = 26
 
-export default function Hero() {
+type HeroProps = {
+  onReady?: () => void
+}
+
+export default function Hero({ onReady }: HeroProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
 
@@ -196,7 +200,7 @@ export default function Hero() {
             <div className="avatar-ring avatar-ring--2" />
             <div className="hero-avatar-shell">
               <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
-                <HeroAvatar reducedMotion={reducedMotion} />
+                <HeroAvatar reducedMotion={reducedMotion} onReady={onReady} />
               </Suspense>
             </div>
             <div className="avatar-badge">

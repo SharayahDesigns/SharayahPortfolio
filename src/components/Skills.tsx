@@ -51,7 +51,7 @@ export default function Skills() {
     <section className="section skills-section" id="skills" ref={ref}>
       <div className="container">
         <motion.div variants={container} initial="hidden" animate={inView ? 'show' : 'hidden'}>
-          <motion.p className="section-label" variants={item}>Expertise</motion.p>
+          <motion.p className="section-label" variants={item}>My Toolbox</motion.p>
           <motion.h2 className="section-title" variants={item}>
             A toolkit built for{' '}
             <br />

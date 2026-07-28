@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CustomCursor from './components/CustomCursor'
 import Nav from './components/Nav'
@@ -15,13 +15,19 @@ import ScrollToTop from './components/ScrollToTop'
 import CaseStudyPage from './components/CaseStudyPage'
 import ResumePage from './components/ResumePage'
 import NotFoundPage from './components/NotFoundPage'
+import PageLoader from './components/PageLoader'
 import SEO from './components/SEO'
 import { upsertJsonLd, removeJsonLd } from './components/SEO'
-import { siteConfig, navItems, resumePdfPath } from './data/siteConfig'
+import { siteConfig, resumePdfPath } from './data/siteConfig'
 import { portfolioData } from './data/portfolio'
-import { caseStudies } from './data/caseStudies'
+
+const MIN_LOADER_MS = 1800
 
 function HomePage() {
+  const [heroReady, setHeroReady] = useState(false)
+  const [fontsReady, setFontsReady] = useState(false)
+  const [minDelayElapsed, setMinDelayElapsed] = useState(false)
+
   useEffect(() => {
     upsertJsonLd('page-jsonld', {
       '@context': 'https://schema.org',
@@ -52,8 +58,35 @@ function HomePage() {
     return () => removeJsonLd('page-jsonld')
   }, [])
 
+  useEffect(() => {
+    let cancelled = false
+
+    document.fonts.ready
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setFontsReady(true)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setMinDelayElapsed(true)
+    }, MIN_LOADER_MS)
+
+    return () => {
+      window.clearTimeout(timer)
+    }
+  }, [])
+
+  const isReady = heroReady && fontsReady && minDelayElapsed
+
   return (
     <>
+      <PageLoader visible={!isReady} />
       <SEO
         title={`${siteConfig.name} — ${siteConfig.title}`}
         description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
@@ -64,7 +97,7 @@ function HomePage() {
       />
       <Nav />
       <main className="home-main">
-        <Hero />
+        <Hero onReady={() => setHeroReady(true)} />
         <div className="home-content-stack">
           <AboutProjectsStack />
           <Experience />

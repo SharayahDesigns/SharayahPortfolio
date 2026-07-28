@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Center, Html, useGLTF } from '@react-three/drei'
 import { Smartphone } from 'lucide-react'
@@ -7,6 +7,7 @@ import { useDeviceTilt, type Tilt } from '../hooks/useDeviceTilt'
 
 type HeroAvatarProps = {
   reducedMotion: boolean
+  onReady?: () => void
 }
 
 type StaticHeroModelProps = {
@@ -124,7 +125,15 @@ function AvatarFallback() {
   )
 }
 
-export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
+function ReadySignal({ onReady }: { onReady?: () => void }) {
+  useEffect(() => {
+    onReady?.()
+  }, [onReady])
+
+  return null
+}
+
+export default function HeroAvatar({ reducedMotion, onReady }: HeroAvatarProps) {
   const {
     tilt,
     permission,
@@ -157,18 +166,20 @@ export default function HeroAvatar({ reducedMotion }: HeroAvatarProps) {
             /* nearer the camera, so it drifts further and the pair separates */
             parallax={1.5}
           />
+          <ReadySignal onReady={onReady} />
         </Suspense>
       </Canvas>
       {canRequestPermission && permission !== 'granted' && (
         <button
           type="button"
           className="hero-tilt-button"
+          aria-label={permission === 'denied' ? 'Tilt access blocked' : 'Enable tilt motion'}
+          title={permission === 'denied' ? 'Tilt access blocked' : 'Enable tilt motion'}
           onClick={() => {
             void requestPermission()
           }}
         >
           <Smartphone size={14} />
-          {permission === 'denied' ? 'Tilt Access Blocked' : 'Enable Tilt Motion'}
         </button>
       )}
     </div>
