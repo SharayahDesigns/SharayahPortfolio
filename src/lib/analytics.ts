@@ -7,14 +7,9 @@ const GA_DEBUG_STORAGE_KEY = 'ga_debug_mode'
 
 declare global {
   interface Window {
-    dataLayer: unknown[]
+    dataLayer: IArguments[]
     gtag?: (...args: unknown[]) => void
   }
-}
-
-function gtag(...args: unknown[]) {
-  window.dataLayer = window.dataLayer || []
-  window.dataLayer.push(args)
 }
 
 function hasAnalytics() {
@@ -45,8 +40,8 @@ function ensureAnalyticsScript() {
   if (window.gtag) return
 
   window.dataLayer = window.dataLayer || []
-  window.gtag = function analyticsProxy(...args: unknown[]) {
-    gtag(...args)
+  window.gtag = function analyticsProxy(this: Window) {
+    window.dataLayer.push(arguments)
   }
 
   const existing = document.querySelector<HTMLScriptElement>(`script[data-ga="${GA_MEASUREMENT_ID}"]`)
