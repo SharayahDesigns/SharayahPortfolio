@@ -21,17 +21,29 @@ export default function CaseStudyPage() {
 
   useEffect(() => {
     if (!study) return
+    const pageUrl = `${siteConfig.origin}/work/${study.slug}`
+    const heroImage = study.ogImage || study.heroImage || '/og-image.png'
+    const absoluteImage = heroImage.startsWith('http') ? heroImage : `${siteConfig.origin}${heroImage}`
+
     upsertJsonLd('page-jsonld', {
       '@context': 'https://schema.org',
-      '@type': 'CreativeWork',
-      name: study.title,
+      '@type': 'Article',
+      headline: study.title,
       description: study.seo.description,
-      url: `${siteConfig.origin}/work/${study.slug}`,
-      creator: {
+      url: pageUrl,
+      image: absoluteImage,
+      mainEntityOfPage: pageUrl,
+      author: {
         '@type': 'Person',
         name: siteConfig.name,
         url: siteConfig.origin,
       },
+      publisher: {
+        '@type': 'Person',
+        name: siteConfig.name,
+        url: siteConfig.origin,
+      },
+      about: study.technologies,
       keywords: study.technologies.join(', '),
     })
     return () => removeJsonLd('page-jsonld')
@@ -54,7 +66,8 @@ export default function CaseStudyPage() {
         title={study.seo.title}
         description={study.seo.description}
         path={`/work/${study.slug}`}
-        image={study.ogImage}
+        image={study.ogImage || study.heroImage || '/og-image.png'}
+        imageAlt={study.heroImageAlt || `${study.title} case study preview`}
         ogTitle={study.seo.ogTitle}
         ogDescription={study.seo.ogDescription}
       />

@@ -294,13 +294,15 @@ export const portfolioData = {
       ],
     },
     {
-      title: 'Art Director',
+      title: 'Themed Environment Artist / Project Lead',
       company: 'Cemrock Landscapes',
       period: '2015 — 2020',
       color: '#00d97e',
       bullets: [
-        'Increased company profits by $1.2M through process improvements.',
-        'Managed a team of artists and executed large-scale architectural design projects.',
+        'Translated drawings, client concepts, and technical requirements into immersive three-dimensional environments.',
+        'Collaborated across design, construction, and client teams to solve complex visual and functional challenges.',
+        'Adapted designs to real-world constraints while protecting usability, safety, visual consistency, and the intended customer experience.',
+        'Led projects through fabrication, installation, finishing, quality assurance, and final client approval.',
       ],
     },
   ],

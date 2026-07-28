@@ -6,6 +6,7 @@ type SEOProps = {
   description: string
   path: string
   image?: string
+  imageAlt?: string
   type?: string
   noindex?: boolean
   /** Social-share title; falls back to the page title. */
@@ -50,40 +51,52 @@ function removeJsonLd(id: string) {
   if (el) el.remove()
 }
 
-export default function SEO({ title, description, path, image = '/og-image.png', type = 'article', noindex = false, ogTitle, ogDescription }: SEOProps) {
+export default function SEO({
+  title,
+  description,
+  path,
+  image = '/images/shareImage.webp',
+  imageAlt = 'Sharayah Hefner portfolio preview',
+  type = 'article',
+  noindex = false,
+  ogTitle,
+  ogDescription,
+}: SEOProps) {
   useEffect(() => {
     const url = `${siteConfig.origin}${path}`
     const img = image.startsWith('http') ? image : `${siteConfig.origin}${image}`
     const socialTitle = ogTitle || title
     const socialDescription = ogDescription || description
+    const robots = noindex
+      ? 'noindex, follow'
+      : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
 
     document.title = title
 
     upsertMeta('description', description)
+    upsertMeta('author', siteConfig.name)
+    upsertMeta('robots', robots)
     upsertLink('canonical', url)
-
-    if (noindex) {
-      upsertMeta('robots', 'noindex, follow')
-    } else {
-      const robotsEl = document.head.querySelector('meta[name="robots"]')
-      if (robotsEl) robotsEl.remove()
-    }
 
     upsertMeta('og:title', socialTitle, 'property')
     upsertMeta('og:description', socialDescription, 'property')
     upsertMeta('og:url', url, 'property')
     upsertMeta('og:image', img, 'property')
+    upsertMeta('og:image:alt', imageAlt, 'property')
     upsertMeta('og:type', type, 'property')
+    upsertMeta('og:site_name', siteConfig.name, 'property')
+    upsertMeta('og:locale', 'en_US', 'property')
 
     upsertMeta('twitter:card', 'summary_large_image')
     upsertMeta('twitter:title', socialTitle)
     upsertMeta('twitter:description', socialDescription)
     upsertMeta('twitter:image', img)
+    upsertMeta('twitter:image:alt', imageAlt)
 
     return () => {
       removeJsonLd('page-jsonld')
     }
-  }, [title, description, path, image, type, noindex, ogTitle, ogDescription])
+  }, [title, description, path, image, imageAlt, type, noindex, ogTitle, ogDescription])
 
   return null
 }

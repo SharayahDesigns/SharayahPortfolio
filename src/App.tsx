@@ -26,6 +26,9 @@ function HomePage() {
     upsertJsonLd('page-jsonld', {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
+      name: `${siteConfig.name} — ${siteConfig.title}`,
+      description: 'Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences.',
+      url: `${siteConfig.origin}/`,
       mainEntity: {
         '@type': 'Person',
         name: siteConfig.name,
@@ -55,7 +58,8 @@ function HomePage() {
         title={`${siteConfig.name} — ${siteConfig.title}`}
         description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
         path="/"
-        image="/og-image.png"
+        image="/images/shareImage.webp"
+        imageAlt="Sharayah Hefner portfolio preview"
         type="website"
       />
       <Nav />
@@ -91,23 +95,29 @@ function ResumeLayout() {
   useEffect(() => {
     upsertJsonLd('page-jsonld', {
       '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: siteConfig.name,
-      jobTitle: siteConfig.title,
+      '@type': 'ProfilePage',
+      name: `${siteConfig.name} Résumé`,
+      description: 'Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer.',
       url: `${siteConfig.origin}/resume`,
-      email: `mailto:${siteConfig.email}`,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Herriman',
-        addressRegion: 'Utah',
-        addressCountry: 'US',
+      mainEntity: {
+        '@type': 'Person',
+        name: siteConfig.name,
+        jobTitle: siteConfig.title,
+        url: `${siteConfig.origin}/resume`,
+        email: `mailto:${siteConfig.email}`,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Herriman',
+          addressRegion: 'Utah',
+          addressCountry: 'US',
+        },
+        alumniOf: 'Southern New Hampshire University',
+        knowsAbout: ['React', 'Next.js', 'TypeScript', 'UX Design', 'Design Systems', 'E-Commerce', 'Frontend Development', 'Accessibility', 'Animation'],
+        sameAs: [
+          portfolioData.github,
+          portfolioData.linkedin,
+        ],
       },
-      alumniOf: 'Southern New Hampshire University',
-      knowsAbout: ['React', 'Next.js', 'TypeScript', 'UX Design', 'Design Systems', 'E-Commerce', 'Frontend Development', 'Accessibility', 'Animation'],
-      sameAs: [
-        portfolioData.github,
-        portfolioData.linkedin,
-      ],
       subjectOf: {
         '@type': 'DigitalDocument',
         name: 'Sharayah Hefner Résumé',
