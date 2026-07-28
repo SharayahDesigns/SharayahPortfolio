@@ -14,16 +14,32 @@ const statIcons: Record<string, React.ReactNode> = {
   pin: <MapPin size={18} />,
 }
 
-/* Only the right edge animates. The other three sides sit slightly outside the
-   box so descenders and the underline are never clipped by the wipe. */
-const WIPE_CLOSED = 'inset(-18% 100% -30% -4%)'
-const WIPE_OPEN = 'inset(-18% 0% -30% -4%)'
-
 const stepIcons: Record<string, React.ReactNode> = {
   users: <Users size={18} />,
   pen: <PenTool size={18} />,
   code: <Code2 size={18} />,
   send: <Send size={18} />,
+}
+
+function renderScriptLine(line: string, lineIndex: number, writing: boolean, reducedMotion: boolean) {
+  let delayIndex = 0
+
+  return line.split('').map((char, charIndex) => {
+    if (char !== ' ') delayIndex += 1
+    const delay = 0.35 + lineIndex * 0.92 + delayIndex * 0.032
+
+    return (
+      <motion.span
+        className="about-script-char"
+        key={`${lineIndex}-${charIndex}-${char}`}
+        initial={reducedMotion ? false : { opacity: 0 }}
+        animate={writing && char !== ' ' ? { opacity: 1 } : undefined}
+        transition={{ duration: 0.02, delay, ease: 'linear' }}
+      >
+        {char === ' ' ? '\u00A0' : char}
+      </motion.span>
+    )
+  })
 }
 
 export default function About() {
@@ -84,21 +100,9 @@ export default function About() {
             >
               <span className="about-script-lines" aria-hidden="true">
                 {about.scriptLines.map((line, i) => (
-                  <motion.span
-                    className="about-script-line"
-                    key={line}
-                    initial={reducedMotion ? false : { clipPath: WIPE_CLOSED }}
-                    animate={writing ? { clipPath: WIPE_OPEN } : undefined}
-                    transition={{
-                      duration: 0.72,
-                      delay: 0.35 + i * 0.78,
-                      // Soft on both ends: a hand starts and finishes a line
-                      // slower than it moves through the middle of it.
-                      ease: [0.45, 0, 0.3, 1],
-                    }}
-                  >
-                    {line}
-                  </motion.span>
+                  <span className="about-script-line" key={line}>
+                    {renderScriptLine(line, i, writing, reducedMotion)}
+                  </span>
                 ))}
               </span>
               <svg className="about-script-underline" viewBox="0 0 320 14" aria-hidden="true" focusable="false">
@@ -110,7 +114,7 @@ export default function About() {
                   strokeLinecap="round"
                   initial={reducedMotion ? false : { pathLength: 0 }}
                   animate={writing ? { pathLength: 1 } : undefined}
-                  transition={{ duration: 0.55, delay: 1.98, ease: [0.4, 0, 0.4, 1] }}
+                  transition={{ duration: 0.55, delay: 2.22, ease: [0.4, 0, 0.4, 1] }}
                 />
               </svg>
             </motion.p>

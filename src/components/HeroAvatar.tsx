@@ -52,11 +52,11 @@ const HERO_MODEL_HEIGHT = 3.55
  */
 const MODEL_DROP = -0.19
 
-const HERO_MODEL_PATH = '/models/codingChick.glb'
-const DOG_MODEL_PATH = '/models/Meshy_AI_Snowy_Shepherd_with_B_0725220024_texture.glb'
+const HERO_MODEL_PATH = '/models/codingChick-2-optimized.glb'
+const DOG_MODEL_PATH = '/models/Meshy_AI_Snowy_Shepherd_with_B_0725220024_texture-optimized.glb'
 /** Both avatars baked into a single mesh with one texture set: one request, one
     draw call, roughly half the bytes of the desktop pair. */
-const MOBILE_MODEL_PATH = '/models/Hero-Avatars-mobile.glb'
+const MOBILE_MODEL_PATH = '/models/compressed-Hero-Avatar.glb'
 
 function easeOutCubic(value: number) {
   return 1 - Math.pow(1 - value, 3)

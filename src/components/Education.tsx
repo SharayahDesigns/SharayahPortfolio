@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { portfolioData } from '../data/portfolio'
 import { GraduationCap, Award, ChevronDown } from 'lucide-react'
@@ -7,6 +7,7 @@ import { GraduationCap, Award, ChevronDown } from 'lucide-react'
 export default function Education() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 })
   const [showAll, setShowAll] = useState(false)
+  const allCredentialsRef = useRef<HTMLDivElement | null>(null)
 
   const container = {
     hidden: {},
@@ -16,6 +17,15 @@ export default function Education() {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
   }
+
+  useEffect(() => {
+    if (!showAll || !allCredentialsRef.current) return
+
+    allCredentialsRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }, [showAll])
 
   return (
     <section className="section" id="education" ref={ref}>
@@ -63,30 +73,6 @@ export default function Education() {
                 ))}
               </div>
 
-              <AnimatePresence>
-                {showAll && (
-                  <motion.div
-                    id="all-credentials"
-                    className="cert-grid cert-grid--all"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {portfolioData.allCertifications.map((c) => (
-                      <motion.div className="cert-card" key={c.name} variants={item}>
-                        <div className="cert-header">
-                          <span className="cert-dot" />
-                          <span className="cert-year">{c.year}</span>
-                        </div>
-                        <p className="cert-name">{c.name}</p>
-                        {c.source && <p className="cert-source">{c.source}</p>}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
               <button
                 type="button"
                 className="cert-toggle"
@@ -97,6 +83,28 @@ export default function Education() {
                 {showAll ? 'Show Fewer Credentials' : 'View All Credentials'}
                 <ChevronDown size={16} className={showAll ? 'cert-toggle-icon--open' : 'cert-toggle-icon'} />
               </button>
+
+              {showAll && (
+                <motion.div
+                  id="all-credentials"
+                  ref={allCredentialsRef}
+                  className="cert-grid cert-grid--all"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {portfolioData.allCertifications.map((c) => (
+                    <div className="cert-card" key={c.name}>
+                      <div className="cert-header">
+                        <span className="cert-dot" />
+                        <span className="cert-year">{c.year}</span>
+                      </div>
+                      <p className="cert-name">{c.name}</p>
+                      {c.source && <p className="cert-source">{c.source}</p>}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
             </motion.div>
           </div>
         </motion.div>
