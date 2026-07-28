@@ -3,6 +3,7 @@ import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
 import { resumePdfPath, resumePdfFilename } from '../data/siteConfig'
+import { trackResumeDownload } from '../lib/analytics'
 import SEO from './SEO'
 import {
   ArrowLeft, Download, Mail, Github, Linkedin, MapPin, Briefcase,
@@ -16,6 +17,9 @@ function DownloadResumeButton({ className }: { className: string }) {
       download={resumePdfFilename}
       aria-label="Download Sharayah Hefner résumé as PDF"
       className={className}
+      onClick={() => {
+        trackResumeDownload()
+      }}
     >
       <Download size={16} /> Download PDF
     </a>

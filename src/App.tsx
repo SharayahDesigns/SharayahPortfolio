@@ -16,6 +16,7 @@ import CaseStudyPage from './components/CaseStudyPage'
 import ResumePage from './components/ResumePage'
 import NotFoundPage from './components/NotFoundPage'
 import PageLoader from './components/PageLoader'
+import { AnalyticsRouterTracker } from './lib/analytics'
 import SEO from './components/SEO'
 import { upsertJsonLd, removeJsonLd } from './components/SEO'
 import { siteConfig, resumePdfPath } from './data/siteConfig'
@@ -183,6 +184,7 @@ function NotFoundLayout() {
 export default function App() {
   return (
     <BrowserRouter>
+      <AnalyticsRouterTracker />
       <ScrollToTop />
       <CustomCursor />
       <ScrollProgress />
