@@ -3,7 +3,7 @@ export const site = {
   origin: 'https://sharayahdesigns.com',
   title: 'Frontend UX Engineer & Design Engineer',
   email: 'SharayahDesigns@gmail.com',
-  socialImage: '/images/shareImage.webp',
+  socialImage: '/images/shareImage.png',
   socialImageAlt: 'Sharayah Hefner portfolio preview',
 }
 
@@ -13,7 +13,7 @@ export const routes = [
     title: 'Sharayah Hefner — Frontend UX Engineer & Design Engineer',
     description: 'Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences.',
     type: 'website',
-    image: '/images/shareImage.webp',
+    image: '/images/shareImage.png',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/App.tsx',
     jsonLd: {
@@ -48,7 +48,7 @@ export const routes = [
     title: 'Résumé — Sharayah Hefner',
     description: 'Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer. View experience, skills, education, and certifications, or download the PDF.',
     type: 'profile',
-    image: '/images/shareImage.webp',
+    image: '/images/shareImage.png',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/components/ResumePage.tsx',
     jsonLd: {
@@ -140,7 +140,7 @@ export const routes = [
     title: 'Concrete Connections NWA Case Study — Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Concrete Connections NWA.',
     type: 'article',
-    image: '/images/shareImage.webp',
+    image: '/images/shareImage.png',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/data/caseStudies.ts',
     jsonLd: {
@@ -148,7 +148,7 @@ export const routes = [
       '@type': 'Article',
       headline: 'Concrete Connections NWA Case Study',
       description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Concrete Connections NWA.',
-      image: 'https://sharayahdesigns.com/images/shareImage.webp',
+      image: 'https://sharayahdesigns.com/images/shareImage.png',
       author: { '@type': 'Person', name: 'Sharayah Hefner', url: 'https://sharayahdesigns.com' },
       mainEntityOfPage: 'https://sharayahdesigns.com/work/concrete-connections-nwa',
       about: ['React', 'JavaScript', 'Responsive Design', 'Three.js', 'Technical SEO'],
@@ -178,7 +178,7 @@ export const routes = [
     title: 'Atlas League Case Study — Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the product design and frontend engineering of Atlas League.',
     type: 'article',
-    image: '/images/shareImage.webp',
+    image: '/images/shareImage.png',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/data/caseStudies.ts',
     jsonLd: {
@@ -186,7 +186,7 @@ export const routes = [
       '@type': 'Article',
       headline: 'Atlas League Case Study',
       description: 'See how Sharayah Hefner approached the product design and frontend engineering of Atlas League.',
-      image: 'https://sharayahdesigns.com/images/shareImage.webp',
+      image: 'https://sharayahdesigns.com/images/shareImage.png',
       author: { '@type': 'Person', name: 'Sharayah Hefner', url: 'https://sharayahdesigns.com' },
       mainEntityOfPage: 'https://sharayahdesigns.com/work/atlas-league',
       about: ['React', 'JavaScript', 'Game UX', 'Mobile Development'],

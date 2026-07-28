@@ -91,7 +91,7 @@ function HomePage() {
         title={`${siteConfig.name} — ${siteConfig.title}`}
         description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
         path="/"
-        image="/images/shareImage.webp"
+        image="/images/shareImage.png"
         imageAlt="Sharayah Hefner portfolio preview"
         type="website"
       />

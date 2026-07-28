@@ -55,7 +55,7 @@ export default function SEO({
   title,
   description,
   path,
-  image = '/images/shareImage.webp',
+  image = '/images/shareImage.png',
   imageAlt = 'Sharayah Hefner portfolio preview',
   type = 'article',
   noindex = false,
