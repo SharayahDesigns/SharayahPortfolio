@@ -1376,15 +1376,19 @@
 .work-projects-transition {
   position: relative;
   z-index: 2;
+  isolation: isolate;
 }
 .work-projects-transition__track {
   position: relative;
+  isolation: isolate;
 }
 .work-projects-transition__sticky {
   position: sticky;
   top: 0;
   height: 100vh;
   overflow: clip;
+  isolation: isolate;
+  contain: paint;
   background:
     radial-gradient(circle at 60% 20%, rgba(0, 255, 198, 0.06), transparent 24%),
     linear-gradient(180deg, rgb(7, 8, 14), rgb(7, 8, 14));
@@ -1396,6 +1400,19 @@
   align-items: center;
   transform-origin: 53% -4%;
   will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+.work-projects-transition__scene-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(7, 8, 14);
+}
+.work-projects-transition__scene-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  isolation: isolate;
 }
 .work-projects-transition__preview {
   position: absolute;
@@ -1405,6 +1422,8 @@
   pointer-events: none;
   background: rgb(7, 8, 14);
   will-change: clip-path, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 .work-projects-transition__button-overlay {
   position: fixed;
@@ -1505,11 +1524,12 @@
   display: flex;
   justify-content: center;
   position: relative;
+  isolation: isolate;
 }
 .work-image-stage {
   position: absolute;
   top: 18.2%;
-  left: 60%;
+  left: 57.5%;
   z-index: 2;
   width: min(23%, 178px);
   aspect-ratio: 1.18 / 1;
