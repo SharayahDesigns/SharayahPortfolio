@@ -10,9 +10,13 @@ export default function Skills() {
   const reducedMotion = useReducedMotion() ?? false
   // Every box starts closed. A set rather than a single open index, so opening
   // one box does not slam another shut mid-read.
-  const [openBoxes, setOpenBoxes] = useState<Set<string>>(new Set())
+  const [openBoxes, setOpenBoxes] = useState<Set<string>>(() => new Set(['Frontend engineering']))
 
   const { skillGroups, skillsFigure } = portfolioData
+  const backendSecurityGroup = {
+    label: 'Backend & Security',
+    skills: portfolioData.additionalSkills,
+  }
 
   const toggle = (label: string) =>
     setOpenBoxes((prev) => {
@@ -77,14 +81,7 @@ export default function Skills() {
 
             <div className="toolbox-col">
               {right.map(renderBox)}
-              <motion.div className="additional-skills additional-skills--sidebox" variants={item}>
-                <h4 className="additional-skills-label">Backend &amp; Security</h4>
-                <div className="skill-chips">
-                  {portfolioData.additionalSkills.map((s) => (
-                    <span className="skill-chip skill-chip--muted" key={s}>{s}</span>
-                  ))}
-                </div>
-              </motion.div>
+              {renderBox(backendSecurityGroup)}
             </div>
           </motion.div>
         </motion.div>

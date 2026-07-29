@@ -2751,18 +2751,6 @@
   color: var(--text-muted);
   margin-bottom: 16px;
 }
-.additional-skills--sidebox {
-  margin-top: 6px;
-  padding: 18px 18px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
-}
-.additional-skills--sidebox .additional-skills-label {
-  color: var(--teal);
-}
-
 /* Below this the side stacks get too narrow to hold a label plus a count, so
    the figure moves above a single full-width stack. */
 @media (max-width: 900px) {
@@ -2781,9 +2769,6 @@
     margin-bottom: 4px;
   }
   .toolbox-col { gap: 12px; }
-  .additional-skills--sidebox {
-    margin-top: 16px;
-  }
 }
 
 /* ===== EDUCATION ===== */
