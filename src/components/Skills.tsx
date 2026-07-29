@@ -75,15 +75,16 @@ export default function Skills() {
               <p className={`toolbox-hint${openBoxes.size ? ' is-hidden' : ''}`}>Open a box</p>
             </motion.div>
 
-            <div className="toolbox-col">{right.map(renderBox)}</div>
-          </motion.div>
-
-          <motion.div className="additional-skills" variants={item}>
-            <h4 className="additional-skills-label">Additional Experience</h4>
-            <div className="skill-chips">
-              {portfolioData.additionalSkills.map((s) => (
-                <span className="skill-chip skill-chip--muted" key={s}>{s}</span>
-              ))}
+            <div className="toolbox-col">
+              {right.map(renderBox)}
+              <motion.div className="additional-skills additional-skills--sidebox" variants={item}>
+                <h4 className="additional-skills-label">Backend &amp; Security</h4>
+                <div className="skill-chips">
+                  {portfolioData.additionalSkills.map((s) => (
+                    <span className="skill-chip skill-chip--muted" key={s}>{s}</span>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </motion.div>

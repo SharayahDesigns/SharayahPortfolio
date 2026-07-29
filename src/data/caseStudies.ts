@@ -228,6 +228,140 @@ export const caseStudies: CaseStudy[] = [
     },
   },
   {
+    slug: 'monnit-software',
+    title: 'Monnit Software',
+    category: 'IoT SaaS · Device Setup UX · User Flow Redesign',
+    status: 'Product UX Redesign',
+    summary:
+      'A software UX project focused on wireframing and redesigning the setup flow for Monnit devices inside the iMonnit platform.',
+    valueStatement:
+      'Redesigned the device setup experience inside Monnit\'s software to make onboarding and configuration clearer, more guided, and less error-prone.',
+    overviewIntro:
+      'Monnit\'s iMonnit platform is the software hub customers use to manage sensors, gateways, alerts, and monitoring data. My work focused on the software experience for setting up Monnit devices, specifically improving the flow customers move through when getting devices connected and configured.',
+    role: ['UX/UI Design', 'Wireframing', 'User Flow Design', 'Software Experience', 'Onboarding UX'],
+    responsibilities: [
+      'Mapped the existing setup journey and identified friction points',
+      'Created wireframes for the redesigned setup experience',
+      'Reworked the user flow for account access, onboarding, and device configuration',
+      'Focused the interaction model around clarity, sequence, and reduced confusion',
+      'Designed a more structured software experience for customers setting up hardware in the platform',
+    ],
+    platform: 'Web · SaaS Software',
+    client: 'Monnit Software',
+    projectType: 'Internal Product UX Redesign',
+    audience:
+      'Customers using the iMonnit platform to register, configure, and manage Monnit monitoring devices',
+    technologies: ['Wireframing', 'User Flows', 'UX Design', 'SaaS', 'IoT Software'],
+    sections: [
+      {
+        label: 'Project Overview',
+        heading: 'Improving the setup experience inside Monnit\'s device-management software',
+        paragraphs: [
+          'Monnit customers use iMonnit to connect sensors, configure devices, and manage ongoing monitoring. The setup process is one of the most important moments in that experience because it directly affects how quickly a customer can get from hardware in hand to usable data inside the platform.',
+          'My work focused on the software experience rather than the marketing website. I created wireframes and redesigned the user flow system for setting up Monnit software devices, with the goal of making onboarding and configuration more understandable and easier to complete.',
+        ],
+      },
+      {
+        label: 'The Challenge',
+        heading: 'Device setup needed to feel more guided and less fragmented',
+        paragraphs: [
+          'When users are onboarding connected devices, confusion compounds quickly. They are often balancing account access, hardware steps, network understanding, configuration choices, and confirmation feedback at the same time.',
+          'The setup flow needed clearer sequencing so users could understand where they were in the process, what was required next, and how their actions inside the software connected to the physical devices they were trying to bring online.',
+        ],
+        list: [
+          'Reduce friction during device setup and onboarding',
+          'Clarify the sequence of actions users need to take',
+          'Make the software flow easier to understand for non-technical users',
+          'Create wireframes that support a more consistent setup journey',
+          'Improve confidence during configuration and confirmation steps',
+        ],
+      },
+      {
+        label: 'UX Goals',
+        heading: 'The redesign centered on clarity, flow, and confidence',
+        cards: [
+          { title: 'Orientation', description: 'Users should always know what step they are in and what comes next.' },
+          { title: 'Guidance', description: 'The software should support setup with a more directed, sequential experience instead of feeling fragmented.' },
+          { title: 'Efficiency', description: 'Reduce unnecessary hesitation, backtracking, and uncertainty during onboarding.' },
+          { title: 'Trust', description: 'Customers need clear confirmation that devices are being connected and configured correctly.' },
+        ],
+      },
+      {
+        label: 'Process',
+        heading: 'Using wireframes to redesign the setup journey before implementation',
+        steps: [
+          'Reviewed the existing flow and identified the moments most likely to create confusion or drop-off',
+          'Mapped the device setup journey from login and onboarding through configuration and confirmation',
+          'Created wireframes to test a more structured, sequential setup system',
+          'Simplified screen-to-screen transitions so the flow felt more cohesive',
+          'Refined the experience around customer understanding rather than software complexity',
+        ],
+      },
+      {
+        label: 'Design Decisions',
+        heading: 'Structuring the experience around what users need at each step',
+        paragraphs: [
+          'The redesign focused on making each step carry one clear purpose. Instead of forcing users to interpret too many system decisions at once, the flow was organized around the immediate action, the supporting context, and the expected outcome.',
+          'This approach supports users who may be comfortable with the hardware but unfamiliar with the software, as well as users who need the interface to explain the setup path more explicitly.',
+        ],
+        list: [
+          'Clearer progression through setup stages',
+          'More deliberate information hierarchy within each screen',
+          'Reduced ambiguity around configuration actions',
+          'Stronger continuity between onboarding, setup, and confirmation states',
+        ],
+      },
+      {
+        label: 'Outcome',
+        heading: 'A more understandable foundation for software onboarding',
+        paragraphs: [
+          'The resulting wireframes and user flow redesign created a clearer foundation for the Monnit software setup experience. The work was intended to reduce confusion, support customer confidence, and make device onboarding feel more like a guided system than a scattered collection of screens.',
+        ],
+        list: [
+          'Redesigned the setup journey for Monnit software devices',
+          'Created wireframes for a clearer software onboarding experience',
+          'Improved flow continuity between account access, setup, and configuration',
+          'Focused the experience around usability and reduced setup friction',
+        ],
+      },
+      {
+        label: 'Reflection',
+        heading: 'What this project demonstrates',
+        paragraphs: [
+          'This project reflects my strength in software UX: identifying where user understanding breaks down, structuring better flows, and using wireframes to clarify the path before implementation begins. It also shows how I think about connected-product software, where the interface needs to support both digital decisions and real-world device actions.',
+        ],
+      },
+    ],
+    images: [
+      {
+        type: 'dashboard',
+        src: '/images/monnitSoftware.jpg',
+        width: 1200,
+        height: 750,
+        alt: 'Monnit software interface and device setup workflow screens',
+        caption: 'Monnit software setup and management interface',
+        color: '#4dc9ff',
+      },
+    ],
+    color: '#4dc9ff',
+    heroImage: '/images/monnitSoftware.jpg',
+    heroImageAlt: 'Monnit software interface and device setup workflow screens',
+    heroImageWidth: 1200,
+    heroImageHeight: 750,
+    seo: {
+      title: 'Monnit Software Case Study - Sharayah Hefner',
+      description: 'See how Sharayah Hefner approached the UX redesign of Monnit\'s device setup flow inside the iMonnit software platform.',
+      ogTitle: 'Monnit Software - Device Setup UX Case Study',
+      ogDescription:
+        'A UX case study focused on wireframing and redesigning the device setup flow inside Monnit\'s iMonnit software platform.',
+    },
+    finalCta: {
+      heading: 'Need someone to clarify',
+      highlight: 'a complicated software flow?',
+      body: 'I design software experiences that reduce friction, guide users through complex steps, and make product workflows feel more understandable from the first screen forward.',
+    },
+  },
+  {
     slug: 'my-logo-mat',
     title: 'My Logo Mat',
     category: 'Product Customization · E-Commerce · Checkout Engineering',

@@ -79,7 +79,7 @@ export const portfolioData = {
     headingLead: 'Designing is',
     headingAccent: 'Storytelling',
     body:
-      'Every interface is a narrative: where someone starts, what they need, and how they get there. I design the arc before I write the code.',
+      'In a world of AI, copy and paste, I choose to build the exceptional adventures that only the human heart can develop. Let’s build websites where the customer feels connection and returns without a second guess.',
     sky: {
       src: '/images/sky.webp',
       width: 1448,
@@ -182,6 +182,27 @@ export const portfolioData = {
       slug: 'studioplayer',
       link: 'https://studioplayer.com/',
       linkLabel: 'View Live Site',
+      featured: true,
+    },
+    {
+      name: 'Monnit Software',
+      type: 'IoT SaaS · Device Setup UX · User Flow Redesign',
+      summary:
+        'Created wireframes and redesigned the user flow for setting up Monnit software devices, improving how customers move through account access, device onboarding, and configuration inside the iMonnit platform.',
+      role: 'UX/UI Design · Wireframing · User Flow Design · Software Experience',
+      outcome: 'Clarified the device setup experience with a more structured flow designed to reduce friction during onboarding and configuration.',
+      technologies: ['UX Research', 'Wireframing', 'User Flows', 'SaaS', 'IoT'],
+      color: '#4dc9ff',
+      accent: 'blue',
+      visual: null,
+      image: '/images/monnitSoftware.jpg',
+      imageSmall: null,
+      imageWidth: 1200,
+      imageHeight: 750,
+      imageAlt: 'Monnit software interface and device setup workflow screens',
+      slug: 'monnit-software',
+      link: null,
+      linkLabel: null,
       featured: true,
     },
     {
