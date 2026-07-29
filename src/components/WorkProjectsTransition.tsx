@@ -1,19 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { X } from 'lucide-react'
 import Projects from './Projects'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
-const WORK_IMAGE_TEXT = "const title =\n  \"Sharayah's Awesome Projects\";\nrender(title);"
-const WORK_IMAGE_LABEL = "JavaScript snippet showing Sharayah's Awesome Projects"
+const WORK_IMAGE_IDLE = "function onyx() {\n  while (!carrot)\n    stare();\n}"
+const WORK_IMAGE_FED = "carrot = true;\n// exit code 0"
+const WORK_IMAGE_LABEL = "JavaScript snippet showing a function named onyx"
 const TYPE_MS = 38
 
 export default function WorkProjectsTransition() {
   const prefersReduced = useReducedMotion() ?? false
   const typedCount = useMotionValue(0)
-  const typedText = useTransform(typedCount, (v) => WORK_IMAGE_TEXT.slice(0, Math.round(v)))
+  const typedText = useTransform(typedCount, (v) => WORK_IMAGE_IDLE.slice(0, Math.round(v)))
   const buttonTransitionTimeoutRef = useRef<number | null>(null)
+  const fedTimeoutRef = useRef<number | null>(null)
   const [shellRef, shellInView] = useInView({ triggerOnce: true, threshold: 0.55 })
   const [buttonTransitionPhase, setButtonTransitionPhase] = useState<'idle' | 'opening' | 'closing'>('idle')
+  const [fed, setFed] = useState(false)
+  // The on-screen code renders at 5-9px on phones, which is decorative rather
+  // than readable, so touch layouts get a tap-to-open copy at a legible size.
+  const isMobile = useMediaQuery('(max-width: 900px)')
+  const [codeOpen, setCodeOpen] = useState(false)
 
   const scrollToProjects = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
@@ -31,12 +40,20 @@ export default function WorkProjectsTransition() {
 
     if (!projectsSection || buttonTransitionPhase !== 'idle') return
 
-    setButtonTransitionPhase('opening')
+    buttonTransitionTimeoutRef.current = window.setTimeout(() => {
+      setButtonTransitionPhase('opening')
+      buttonTransitionTimeoutRef.current = null
+    }, 120)
+  }
+
+  const giveCarrot = () => {
+    if (fed) return
+    setFed(true)
   }
 
   useEffect(() => {
     if (prefersReduced) {
-      typedCount.set(WORK_IMAGE_TEXT.length)
+      typedCount.set(WORK_IMAGE_IDLE.length)
       return
     }
 
@@ -52,7 +69,7 @@ export default function WorkProjectsTransition() {
       tick = window.setInterval(() => {
         i += 1
         typedCount.set(i)
-        if (i >= WORK_IMAGE_TEXT.length) {
+        if (i >= WORK_IMAGE_IDLE.length) {
           window.clearInterval(tick)
         }
       }, TYPE_MS)
@@ -64,9 +81,34 @@ export default function WorkProjectsTransition() {
     }
   }, [prefersReduced, shellInView, typedCount])
 
+  // Rotating a phone past the breakpoint would otherwise leave the panel
+  // stranded over a layout that no longer has a trigger to close it.
+  useEffect(() => {
+    if (!isMobile) setCodeOpen(false)
+  }, [isMobile])
+
+  useEffect(() => {
+    if (!fed) return
+
+    fedTimeoutRef.current = window.setTimeout(() => {
+      setFed(false)
+      fedTimeoutRef.current = null
+    }, 3000)
+
+    return () => {
+      if (fedTimeoutRef.current != null) {
+        window.clearTimeout(fedTimeoutRef.current)
+        fedTimeoutRef.current = null
+      }
+    }
+  }, [fed])
+
   useEffect(() => () => {
     if (buttonTransitionTimeoutRef.current != null) {
       window.clearTimeout(buttonTransitionTimeoutRef.current)
+    }
+    if (fedTimeoutRef.current != null) {
+      window.clearTimeout(fedTimeoutRef.current)
     }
   }, [])
 
@@ -137,12 +179,45 @@ export default function WorkProjectsTransition() {
           <div className="work-image-shell" ref={shellRef}>
             <div className="work-image-stage">
               <p className="work-image-typed" aria-label={WORK_IMAGE_LABEL}>
-                <span className="work-image-typed-ghost" aria-hidden="true">{WORK_IMAGE_TEXT}</span>
+                <span className="work-image-typed-ghost" aria-hidden="true">{WORK_IMAGE_IDLE}</span>
                 <span className="work-image-typed-live" aria-hidden="true">
-                  <motion.span>{typedText}</motion.span>
-                  {!prefersReduced ? <span className="hero-caret work-image-caret" /> : null}
+                  {fed ? (
+                    WORK_IMAGE_FED
+                  ) : (
+                    <>
+                      <motion.span>{typedText}</motion.span>
+                      {!prefersReduced ? <span className="hero-caret work-image-caret" /> : null}
+                    </>
+                  )}
                 </span>
               </p>
+              {isMobile ? (
+                <button
+                  type="button"
+                  className="work-image-typed-trigger"
+                  aria-expanded={codeOpen}
+                  aria-controls="work-image-code-panel"
+                  onClick={() => setCodeOpen((open) => !open)}
+                >
+                  <span className="work-image-typed-trigger__label">
+                    {codeOpen ? 'Hide the code shown on the screen' : 'Read the code shown on the screen'}
+                  </span>
+                </button>
+              ) : null}
+              <AnimatePresence>
+                {fed ? (
+                  <motion.span
+                    className="work-image-carrot"
+                    initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.85 }}
+                    transition={{ duration: 0.28, ease: 'easeOut' }}
+                    aria-hidden="true"
+                  >
+                    🥕
+                  </motion.span>
+                ) : null}
+              </AnimatePresence>
             </div>
             <img
               className="work-image-figure"
@@ -151,7 +226,42 @@ export default function WorkProjectsTransition() {
               loading="lazy"
               decoding="async"
             />
-            <a href="#projects" className="work-image-cta" onClick={scrollToProjects}>View Projects</a>
+            <AnimatePresence>
+              {isMobile && codeOpen ? (
+                <motion.div
+                  key="work-image-code-panel"
+                  id="work-image-code-panel"
+                  className="work-image-code-panel"
+                  initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                  animate={prefersReduced ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                  transition={{ duration: 0.24, ease: 'easeOut' }}
+                >
+                  <pre className="work-image-code-panel__code">{fed ? WORK_IMAGE_FED : WORK_IMAGE_IDLE}</pre>
+                  <button
+                    type="button"
+                    className="work-image-code-panel__close"
+                    onClick={() => setCodeOpen(false)}
+                    aria-label="Close the code"
+                  >
+                    <X size={14} />
+                  </button>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+            <div className="work-image-actions">
+              <a href="#projects" className="work-image-cta" onClick={scrollToProjects}>
+                cd ~/projects
+              </a>
+              <button
+                type="button"
+                className={`work-image-cta work-image-cta--secondary${fed ? ' is-disabled' : ''}`}
+                onClick={giveCarrot}
+                disabled={fed}
+              >
+                Give(Carrot)
+              </button>
+            </div>
           </div>
         </div>
       </section>

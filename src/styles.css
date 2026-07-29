@@ -1521,6 +1521,9 @@
   padding-bottom: 44px;
 }
 .work-image-shell {
+  /* Vertical anchor for the CTAs, shared so the mobile code panel keeps its
+     clearance above them wherever they sit. */
+  --work-actions-y: 66%;
   display: flex;
   justify-content: center;
   position: relative;
@@ -1540,6 +1543,7 @@
   position: relative;
   margin: 0;
   width: 100%;
+  min-height: calc(1.35em * 4);
   font-family: var(--font-mono);
   font-size: clamp(7px, 0.92vw, 12px);
   line-height: 1.35;
@@ -1556,11 +1560,87 @@
   inset: 0;
   white-space: pre-line;
 }
+.work-image-carrot {
+  /* Inside the screen, tucked under the left end of the code block. Placed with
+     left/top rather than a translate, because Framer Motion owns this element's
+     transform for the pop-in and would overwrite one. */
+  position: absolute;
+  left: 8%;
+  top: 42%;
+  display: block;
+  font-size: clamp(20px, 2.1vw, 30px);
+  line-height: 1;
+  filter: drop-shadow(0 0 10px rgba(255, 148, 74, 0.35));
+}
 .work-image-caret {
   width: 0.52em;
   height: 1em;
   margin-left: 0.04em;
   box-shadow: 0 0 7px rgba(0, 255, 198, 0.45);
+}
+/* Touch-only tap target covering the screen, with a little slop past the stage
+   so the target clears 44px even on the narrowest phone. Rendered on mobile
+   only, so there is nothing to hide at desktop widths. */
+.work-image-typed-trigger {
+  position: absolute;
+  inset: -10% -8%;
+  z-index: 3;
+  padding: 0;
+  border: 1px solid rgba(0, 255, 198, 0.26);
+  border-radius: 6px;
+  background: rgba(0, 255, 198, 0.05);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.work-image-typed-trigger__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* Sits in the gap between the top of the image and the buttons, tracking their
+   anchor so it keeps the same clearance. Centred with auto margins instead of a
+   translate, because Framer Motion owns this element's transform for the
+   open/close slide. */
+.work-image-code-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% - var(--work-actions-y) + 38px);
+  z-index: 4;
+  width: min(300px, 84%);
+  margin: 0 auto;
+  padding: 14px 44px 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 198, 0.3);
+  background: rgba(4, 8, 12, 0.94);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+.work-image-code-panel__code {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--teal);
+  white-space: pre-wrap;
+}
+.work-image-code-panel__close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  cursor: pointer;
 }
 .work-image-figure {
   display: block;
@@ -1569,12 +1649,16 @@
   border-radius: 28px;
   box-shadow: 0 28px 70px rgba(0,0,0,0.34);
 }
-.work-image-cta {
+.work-image-actions {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: var(--work-actions-y);
   z-index: 3;
+  display: flex;
+  gap: 14px;
   transform: translate(-50%, -50%);
+}
+.work-image-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1617,7 +1701,9 @@
   margin-right: 0.5em;
 }
 .work-image-cta:hover {
-  transform: translate(-50%, calc(-50% - 3px));
+  /* Lift only. The centring lives on .work-image-actions, so re-applying a
+     -50% here would drag each button half its own width off to the left. */
+  transform: translateY(-3px);
   border-color: #b8ffc7;
   color: #d6ffdf;
   background:
@@ -1635,11 +1721,55 @@
     0 18px 32px rgba(0, 0, 0, 0.38);
 }
 .work-image-cta:active {
-  transform: translate(-50%, calc(-50% + 2px));
+  transform: translateY(2px);
   box-shadow:
     0 0 0 1px rgba(15, 255, 120, 0.18) inset,
     0 0 12px rgba(74, 255, 132, 0.18),
     0 8px 18px rgba(0, 0, 0, 0.28);
+}
+.work-image-cta--secondary {
+  border-color: rgba(255, 187, 129, 0.92);
+  background:
+    linear-gradient(180deg, rgba(34, 16, 4, 0.96), rgba(52, 24, 7, 0.96)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 187, 129, 0.05) 0,
+      rgba(255, 187, 129, 0.05) 2px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 4px
+    );
+  color: #ffd6b1;
+  box-shadow:
+    0 0 0 1px rgba(255, 170, 94, 0.16) inset,
+    0 0 16px rgba(255, 148, 74, 0.18),
+    0 12px 30px rgba(0, 0, 0, 0.34);
+  text-shadow:
+    0 0 6px rgba(255, 187, 129, 0.3),
+    0 0 14px rgba(255, 148, 74, 0.16);
+}
+.work-image-cta--secondary::before {
+  color: #ffbb81;
+}
+.work-image-cta--secondary:hover {
+  border-color: #ffd8b3;
+  color: #fff0df;
+  background:
+    linear-gradient(180deg, rgba(42, 19, 5, 0.98), rgba(62, 29, 9, 0.98)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 187, 129, 0.07) 0,
+      rgba(255, 187, 129, 0.07) 2px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 4px
+    );
+  box-shadow:
+    0 0 0 1px rgba(255, 170, 94, 0.22) inset,
+    0 0 22px rgba(255, 148, 74, 0.26),
+    0 18px 32px rgba(0, 0, 0, 0.38);
+}
+.work-image-cta.is-disabled {
+  opacity: 0.78;
+  pointer-events: none;
 }
 .projects-section {
   position: relative;
