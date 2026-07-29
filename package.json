@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prebuild": "node scripts/generate-seo-assets.mjs",
+    "prebuild": "node scripts/generate-seo-assets.mjs && node scripts/copy-draco-decoder.mjs",
     "dev": "vite",
     "build": "tsc && vite build && node scripts/postbuild-route-html.mjs",
     "preview": "vite preview"

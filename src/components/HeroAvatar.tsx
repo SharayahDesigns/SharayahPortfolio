@@ -5,6 +5,12 @@ import { Smartphone } from 'lucide-react'
 import * as THREE from 'three'
 import { useDeviceTilt, type Tilt } from '../hooks/useDeviceTilt'
 
+// Self-hosted instead of drei's gstatic.com default: avoids a fresh DNS + TLS
+// handshake on the critical path for ~98KB, and inherits our own cache
+// headers (see vercel.json). Files are copied from three/examples at build
+// time by scripts/copy-draco-decoder.mjs.
+useGLTF.setDecoderPath('/draco/')
+
 type HeroAvatarProps = {
   reducedMotion: boolean
   /** Phones load one merged, decimated model instead of the two full-fat ones. */
@@ -160,10 +166,15 @@ export default function HeroAvatar({ reducedMotion, mobile = false, onReady }: H
 
   return (
     <div className="hero-avatar-canvas">
+      {/* Decorative WebGL; ParticleField's <canvas> already carries this,
+          this one didn't. r3f spreads extra props onto its wrapper div
+          rather than the <canvas> itself, but that still removes the whole
+          subtree from the accessibility tree, which is the actual goal. */}
       <Canvas
         camera={{ position: [0, 0.45, 11.2], fov: 27 }}
         dpr={[1, 1.25]}
         frameloop={reducedMotion ? 'demand' : 'always'}
+        aria-hidden="true"
       >
         <ambientLight intensity={1.9} />
         <directionalLight position={[4, 6, 5]} intensity={2.6} color="#fff6e8" />

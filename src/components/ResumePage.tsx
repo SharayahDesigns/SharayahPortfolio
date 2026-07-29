@@ -110,7 +110,7 @@ export default function ResumePage() {
                 <div className="resume-exp-item" key={exp.company}>
                   <div className="resume-exp-header">
                     <div>
-                      <h4 className="resume-exp-title">{exp.title}</h4>
+                      <h3 className="resume-exp-title">{exp.title}</h3>
                       <p className="resume-exp-company" style={{ color: exp.color }}>
                         {exp.company}
                       </p>
@@ -135,7 +135,7 @@ export default function ResumePage() {
             <div className="resume-skills-grid">
               {portfolioData.skillGroups.map((group) => (
                 <div className="resume-skill-group" key={group.label}>
-                  <h4 className="resume-skill-group-title">{group.label}</h4>
+                  <h3 className="resume-skill-group-title">{group.label}</h3>
                   <div className="resume-skill-tags">
                     {group.skills.map((skill) => (
                       <span className="resume-skill-tag" key={skill}>{skill}</span>
@@ -146,7 +146,7 @@ export default function ResumePage() {
             </div>
             {portfolioData.additionalSkills.length > 0 && (
               <div className="resume-additional-skills">
-                <h4 className="resume-skill-group-title">Additional</h4>
+                <h3 className="resume-skill-group-title">Additional</h3>
                 <div className="resume-skill-tags">
                   {portfolioData.additionalSkills.map((skill) => (
                     <span className="resume-skill-tag resume-skill-tag--muted" key={skill}>{skill}</span>
@@ -162,7 +162,7 @@ export default function ResumePage() {
               {portfolioData.education.map((e) => (
                 <div className="resume-edu-item" key={e.degree}>
                   <div>
-                    <h4 className="resume-edu-degree">{e.degree}</h4>
+                    <h3 className="resume-edu-degree">{e.degree}</h3>
                     <p className="resume-edu-institution">{e.institution}</p>
                   </div>
                   <span className="resume-edu-period">{e.period}</span>

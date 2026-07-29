@@ -188,6 +188,7 @@ export default function CaseStudyPage() {
                     width={study.heroImageWidth}
                     height={study.heroImageHeight}
                     decoding="async"
+                    fetchPriority="high"
                   />
                 </div>
               ) : study.visual ? (
@@ -246,7 +247,7 @@ export default function CaseStudyPage() {
                       transition={{ duration: 0.4, delay: i * 0.08 }}
                     >
                       <div className="cs-feature-dot" style={{ background: study.color }} />
-                      <h4 className="cs-feature-title">{card.title}</h4>
+                      <h3 className="cs-feature-title">{card.title}</h3>
                       <p className="cs-feature-desc">{card.description}</p>
                     </motion.div>
                   ))}
@@ -293,9 +294,9 @@ export default function CaseStudyPage() {
               </ul>
               {study.constraints && study.constraints.length > 0 && (
                 <div className="cs-constraints">
-                  <h4 className="cs-constraints-title">
+                  <h3 className="cs-constraints-title">
                     <AlertCircle size={16} className="gold" /> Constraints
-                  </h4>
+                  </h3>
                   <ul className="cs-constraints-list">
                     {study.constraints.map((c, i) => (
                       <li key={i}>{c}</li>
@@ -325,7 +326,7 @@ export default function CaseStudyPage() {
                         <Icon size={20} />
                       </div>
                       <div className="cs-process-number">0{i + 1}</div>
-                      <h4 className="cs-process-title">{step.title}</h4>
+                      <h3 className="cs-process-title">{step.title}</h3>
                       <p className="cs-process-desc">{step.description}</p>
                     </motion.div>
                   )
@@ -353,7 +354,7 @@ export default function CaseStudyPage() {
                     transition={{ duration: 0.4, delay: i * 0.08 }}
                   >
                     <div className="cs-feature-dot" style={{ background: study.color }} />
-                    <h4 className="cs-feature-title">{f.title}</h4>
+                    <h3 className="cs-feature-title">{f.title}</h3>
                     <p className="cs-feature-desc">{f.description}</p>
                   </motion.div>
                 ))}

@@ -39,6 +39,15 @@ function BelowFoldFallback() {
   return <div className="below-fold-fallback" aria-hidden="true" />
 }
 
+// Route-level lazy chunks (CaseStudyPage, ResumePage) used to fall back to
+// null, so <main> committed empty on the first pass and jumped to full
+// height once the chunk resolved - see the CLS note on `main` in index.css.
+// A space-reserving fallback keeps that jump from happening in the first
+// place, rather than just hiding its effect after the fact.
+function RouteFallback() {
+  return <div className="route-fallback" aria-hidden="true" />
+}
+
 function shouldShowIntroLoader() {
   return !hasShownIntroLoaderInAppSession
 }
@@ -125,12 +134,12 @@ function HomePage() {
         title={`${siteConfig.name} - ${siteConfig.title}`}
         description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
         path="/"
-        image="/images/shareImage.png"
+        image="/images/shareImage.jpg"
         imageAlt="Sharayah Hefner portfolio preview"
         type="website"
       />
       <Nav />
-      <main className="home-main">
+      <main className="home-main" id="main">
         <Hero />
         <div className="home-content-stack">
           {showBelowFoldContent ? (
@@ -157,8 +166,8 @@ function CaseStudyLayout() {
   return (
     <>
       <Nav />
-      <main>
-        <Suspense fallback={null}>
+      <main id="main">
+        <Suspense fallback={<RouteFallback />}>
           <CaseStudyPage />
         </Suspense>
       </main>
@@ -208,8 +217,8 @@ function ResumeLayout() {
   return (
     <>
       <Nav />
-      <main>
-        <Suspense fallback={null}>
+      <main id="main">
+        <Suspense fallback={<RouteFallback />}>
           <ResumePage />
         </Suspense>
       </main>
@@ -232,6 +241,10 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      {/* First focusable element on every route: keyboard users can jump
+          straight to <main id="main"> instead of tabbing through the full
+          nav every time. Hidden until focused (see .skip-link in styles.css). */}
+      <a href="#main" className="skip-link">Skip to content</a>
       <AnalyticsRouterTracker />
       <ScrollToTop />
       {showCustomCursor ? <CustomCursor /> : null}

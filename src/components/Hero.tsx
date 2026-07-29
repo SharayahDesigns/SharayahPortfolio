@@ -74,6 +74,7 @@ function StaticHeroImage({ onReady }: HeroProps) {
         alt="Sharayah Hefner beside her white shepherd, Onyx, shown as a static hero portrait"
         loading="eager"
         decoding="async"
+        fetchPriority="high"
       />
     </div>
   )
@@ -198,16 +199,26 @@ export default function Hero({ onReady }: HeroProps) {
           </motion.p>
 
           <motion.h1 className="hero-headline" variants={headline} aria-label={portfolioData.name}>
-            {HEADLINE_WORDS.map((word) => (
+            {HEADLINE_WORDS.map((word, i) => (
               <motion.span className="hero-headline-word" key={word} variants={headlineWord} aria-hidden="true">
                 {word}
+                {/* Screen readers get the correct name from aria-label above;
+                    this is purely so text extractors (Google's text layer,
+                    LLM scrapers, clipboard) don't read the words as one
+                    fused string. Out of flow, so it can't add visual gap on
+                    top of the word-spacing margin. */}
+                {i < HEADLINE_WORDS.length - 1 && <span className="sr-only"> </span>}
               </motion.span>
             ))}
           </motion.h1>
 
           {/* The ghost copy reserves the final wrapped height so the summary and
-              everything under it never shifts while the line types itself. */}
-          <motion.p className="hero-title" variants={item} aria-label={HERO_TITLE}>
+              everything under it never shifts while the line types itself.
+              aria-label on a <p> is dropped by most AT (no role that accepts
+              a name), so the real text lives in a visually-hidden span
+              instead - same result, valid markup. */}
+          <motion.p className="hero-title" variants={item}>
+            <span className="sr-only">{HERO_TITLE}</span>
             <span className="hero-title-ghost" aria-hidden="true">{HERO_TITLE}</span>
             <span className="hero-title-typed" aria-hidden="true">
               <motion.span>{typedText}</motion.span>

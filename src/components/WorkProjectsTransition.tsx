@@ -178,7 +178,11 @@ export default function WorkProjectsTransition() {
         <div className="container">
           <div className="work-image-shell" ref={shellRef}>
             <div className="work-image-stage">
-              <p className="work-image-typed" aria-label={WORK_IMAGE_LABEL}>
+              {/* aria-label on a <p> is dropped by most AT (no role that
+                  accepts a name); the real text lives in a visually-hidden
+                  span instead. */}
+              <p className="work-image-typed">
+                <span className="sr-only">{WORK_IMAGE_LABEL}</span>
                 <span className="work-image-typed-ghost" aria-hidden="true">{WORK_IMAGE_IDLE}</span>
                 <span className="work-image-typed-live" aria-hidden="true">
                   {fed ? (
@@ -223,6 +227,8 @@ export default function WorkProjectsTransition() {
               className="work-image-figure"
               src="/images/computer2.webp"
               alt="Workspace setup showing computer-based design and development work"
+              width={961}
+              height={1358}
               loading="lazy"
               decoding="async"
             />

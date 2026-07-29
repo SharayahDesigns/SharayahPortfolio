@@ -783,6 +783,10 @@
   min-height: 36vh;
 }
 
+.route-fallback {
+  min-height: 100vh;
+}
+
 @media (max-width: 900px) {
   .home-content-stack {
     border-top-left-radius: 28px;
@@ -882,6 +886,10 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0 0 44px;
+  /* Was a <dl>, now a <ul> (see About.tsx) - drop the browser's default
+     bullets/list padding so it renders identically to before. */
+  list-style: none;
+  padding: 0;
 }
 .about-stat {
   padding: 0 18px;
@@ -1140,16 +1148,6 @@
   margin: 0;
   padding: 0;
 }
-/* connector running through the icon row */
-.approach-steps::before {
-  content: '';
-  position: absolute;
-  top: 24px;
-  left: 12.5%;
-  right: 12.5%;
-  height: 1px;
-  background: var(--border);
-}
 .approach-step {
   position: relative;
 }
@@ -1167,10 +1165,19 @@
   background: var(--bg-secondary);
   color: var(--text-secondary);
 }
-.approach-step-icon.is-first {
-  border-color: var(--teal);
-  color: var(--teal);
-  box-shadow: 0 0 0 4px rgba(0,255,198,0.08);
+/* Connector segment: anchored to this step's own icon centre (24px = half
+   the 48px icon) and stretched across the grid gap to the next icon's centre.
+   Per-step rather than one line across the whole row, so it always lands on
+   the icons regardless of column width. */
+.approach-step-line {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: calc(100% + 24px);
+  height: 1px;
+  background: var(--border);
+  transform-origin: left center;
+  z-index: 0;
 }
 .approach-step-number {
   display: block;
@@ -1261,7 +1268,9 @@
   .about-panel { padding: 32px 24px; }
   .approach-head { grid-template-columns: 1fr; gap: 20px; margin-bottom: 36px; }
   .approach-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
-  .approach-steps::before { display: none; }
+  /* 2-up grid: a step's "next" icon is no longer its visual neighbour once
+     the row wraps, so the connector would cut across rows. */
+  .approach-step-line { display: none; }
 }
 @media (max-width: 600px) {
   /* 40px of its own + the 40px the section used to carry. 120px of runway is a
@@ -3680,7 +3689,10 @@ a.contact-channel:hover .contact-channel-arrow {
   font-size: 14px;
   font-weight: 400;
   color: var(--teal);
-  opacity: 0.5;
+  /* 0.5 rendered at ~4.25:1 against the page background - short of the 4.5:1
+     AA minimum for 14px text. 0.62 lands at ~#04a07f, same shared token used
+     on every case-study page. */
+  opacity: 0.62;
 }
 .cs-section-label {
   font-family: var(--font-display);

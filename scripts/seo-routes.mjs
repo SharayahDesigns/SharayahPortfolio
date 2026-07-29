@@ -3,7 +3,7 @@ export const site = {
   origin: 'https://sharayahdesigns.com',
   title: 'Frontend UX Engineer & Design Engineer',
   email: 'SharayahDesigns@gmail.com',
-  socialImage: '/images/shareImage.png',
+  socialImage: '/images/shareImage.jpg',
   socialImageAlt: 'Sharayah Hefner portfolio preview',
 }
 
@@ -13,7 +13,7 @@ export const routes = [
     title: 'Sharayah Hefner - Frontend UX Engineer & Design Engineer',
     description: 'Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences.',
     type: 'website',
-    image: '/images/shareImage.png',
+    image: '/images/shareImage.jpg',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/App.tsx',
     jsonLd: {
@@ -48,7 +48,7 @@ export const routes = [
     title: 'Resume - Sharayah Hefner',
     description: 'Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer. View experience, skills, education, and certifications, or download the PDF.',
     type: 'profile',
-    image: '/images/shareImage.png',
+    image: '/images/shareImage.jpg',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/components/ResumePage.tsx',
     jsonLd: {
@@ -121,7 +121,7 @@ export const routes = [
     title: 'Monnit Software Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX redesign of Monnit\'s device setup flow inside the iMonnit software platform.',
     type: 'article',
-    image: '/images/monnitSoftware.jpg',
+    image: '/images/monnitSoftware.webp',
     imageAlt: 'Monnit software interface and device setup workflow screens',
     sourceFile: 'src/data/caseStudies.ts',
     jsonLd: {
@@ -129,7 +129,7 @@ export const routes = [
       '@type': 'Article',
       headline: 'Monnit Software Case Study',
       description: 'See how Sharayah Hefner approached the UX redesign of Monnit\'s device setup flow inside the iMonnit software platform.',
-      image: 'https://sharayahdesigns.com/images/monnitSoftware.jpg',
+      image: 'https://sharayahdesigns.com/images/monnitSoftware.webp',
       author: { '@type': 'Person', name: 'Sharayah Hefner', url: 'https://sharayahdesigns.com' },
       mainEntityOfPage: 'https://sharayahdesigns.com/work/monnit-software',
       about: ['Wireframing', 'User Flows', 'UX Design', 'SaaS', 'IoT Software'],
@@ -159,7 +159,7 @@ export const routes = [
     title: 'Concrete Connections NWA Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Concrete Connections NWA.',
     type: 'article',
-    image: '/images/shareImage.png',
+    image: '/images/shareImage.jpg',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/data/caseStudies.ts',
     jsonLd: {
@@ -167,7 +167,7 @@ export const routes = [
       '@type': 'Article',
       headline: 'Concrete Connections NWA Case Study',
       description: 'See how Sharayah Hefner approached the UX design and frontend engineering of Concrete Connections NWA.',
-      image: 'https://sharayahdesigns.com/images/shareImage.png',
+      image: 'https://sharayahdesigns.com/images/shareImage.jpg',
       author: { '@type': 'Person', name: 'Sharayah Hefner', url: 'https://sharayahdesigns.com' },
       mainEntityOfPage: 'https://sharayahdesigns.com/work/concrete-connections-nwa',
       about: ['React', 'JavaScript', 'Responsive Design', 'Three.js', 'Technical SEO'],
@@ -197,7 +197,7 @@ export const routes = [
     title: 'Atlas League Case Study - Sharayah Hefner',
     description: 'See how Sharayah Hefner approached the product design and frontend engineering of Atlas League.',
     type: 'article',
-    image: '/images/shareImage.png',
+    image: '/images/shareImage.jpg',
     imageAlt: 'Sharayah Hefner portfolio preview',
     sourceFile: 'src/data/caseStudies.ts',
     jsonLd: {
@@ -205,7 +205,7 @@ export const routes = [
       '@type': 'Article',
       headline: 'Atlas League Case Study',
       description: 'See how Sharayah Hefner approached the product design and frontend engineering of Atlas League.',
-      image: 'https://sharayahdesigns.com/images/shareImage.png',
+      image: 'https://sharayahdesigns.com/images/shareImage.jpg',
       author: { '@type': 'Person', name: 'Sharayah Hefner', url: 'https://sharayahdesigns.com' },
       mainEntityOfPage: 'https://sharayahdesigns.com/work/atlas-league',
       about: ['React', 'JavaScript', 'Game UX', 'Mobile Development'],

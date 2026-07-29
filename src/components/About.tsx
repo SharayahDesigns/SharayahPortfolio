@@ -21,6 +21,16 @@ const stepIcons: Record<string, React.ReactNode> = {
   send: <Send size={18} />,
 }
 
+// Timing for the "lighting up" sequence: an icon ignites, then the line to
+// the next icon draws, then that icon ignites, and so on down the row.
+const STEP_ICON_ON = 0.28
+const STEP_LINE_DRAW = 0.38
+const stepIconDelay = (i: number) => i * (STEP_ICON_ON + STEP_LINE_DRAW)
+const stepLineDelay = (i: number) => stepIconDelay(i) + STEP_ICON_ON
+
+const stepIconUnlit = { borderColor: 'rgba(255,255,255,0.08)', boxShadow: '0 0 0 0 rgba(0,255,198,0)', color: '#a8a8c2' }
+const stepIconLit = { borderColor: '#00ffc6', boxShadow: '0 0 0 4px rgba(0,255,198,0.08)', color: '#00ffc6' }
+
 function renderScriptLine(line: string, lineIndex: number, writing: boolean, reducedMotion: boolean) {
   let delayIndex = 0
 
@@ -48,6 +58,9 @@ export default function About() {
   // fires long before the script line is actually on screen, so the writing
   // would have finished before anyone could see it.
   const [scriptRef, scriptInView] = useInView({ triggerOnce: true, threshold: 0.9 })
+  // Own observer so the icon-lighting sequence fires when the steps row is
+  // actually on screen, not whenever the (much taller) section is 10% in view.
+  const [approachRef, approachInView] = useInView({ triggerOnce: true, threshold: 0.6 })
   const reducedMotion = useReducedMotion() ?? false
   const writing = !reducedMotion && scriptInView
   const { about } = portfolioData
@@ -79,25 +92,31 @@ export default function About() {
 
             <motion.p className="about-lede" variants={item}>{about.lede}</motion.p>
 
-            <motion.dl className="about-stats" variants={container}>
+            {/* Was a <dl>, but a div wrapping dt/dd may only contain dt/dd -
+                the icon span broke that content model (axe: definition-list).
+                These are stat cards, not term/description pairs, so a plain
+                list is the more honest structure anyway. */}
+            <motion.ul className="about-stats" variants={container}>
               {about.stats.map((stat) => (
-                <motion.div className="about-stat" key={stat.label} variants={item}>
+                <motion.li className="about-stat" key={stat.label} variants={item}>
                   <span className="about-stat-icon">{statIcons[stat.icon]}</span>
-                  <dt className="about-stat-value">{stat.value}</dt>
-                  <dd className="about-stat-label">{stat.label}</dd>
-                </motion.div>
+                  <p className="about-stat-value">{stat.value}</p>
+                  <p className="about-stat-label">{stat.label}</p>
+                </motion.li>
               ))}
-            </motion.dl>
+            </motion.ul>
 
             {/* Written out by hand: each line is wiped in left to right, then
-                the underline draws itself. The sentence lives on aria-label so
-                the split lines stay one phrase to a screen reader. */}
+                the underline draws itself. aria-label on a <p> is dropped by
+                most AT (no role that accepts a name), so the sentence lives
+                in a visually-hidden span instead - still one phrase to a
+                screen reader, valid markup either way. */}
             <motion.p
               className="about-script"
               variants={item}
               ref={scriptRef}
-              aria-label={about.script}
             >
+              <span className="sr-only">{about.script}</span>
               <span className="about-script-lines" aria-hidden="true">
                 {about.scriptLines.map((line, i) => (
                   <span className="about-script-line" key={line}>
@@ -168,17 +187,33 @@ export default function About() {
                 <p className="approach-intro">{about.approach.intro}</p>
               </div>
 
-              <ol className="approach-steps">
-                {about.approach.steps.map((step, i) => (
-                  <li className="approach-step" key={step.title}>
-                    <span className={`approach-step-icon${i === 0 ? ' is-first' : ''}`}>
-                      {stepIcons[step.icon]}
-                    </span>
-                    <span className="approach-step-number">{String(i + 1).padStart(2, '0')}</span>
-                    <h4 className="approach-step-title">{step.title}</h4>
-                    <p className="approach-step-desc">{step.desc}</p>
-                  </li>
-                ))}
+              <ol className="approach-steps" ref={approachRef}>
+                {about.approach.steps.map((step, i) => {
+                  const lit = reducedMotion || approachInView
+                  return (
+                    <li className="approach-step" key={step.title}>
+                      <motion.span
+                        className="approach-step-icon"
+                        initial={reducedMotion ? false : stepIconUnlit}
+                        animate={lit ? stepIconLit : stepIconUnlit}
+                        transition={{ duration: STEP_ICON_ON, delay: reducedMotion ? 0 : stepIconDelay(i), ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        {stepIcons[step.icon]}
+                      </motion.span>
+                      <span className="approach-step-number">{String(i + 1).padStart(2, '0')}</span>
+                      <h4 className="approach-step-title">{step.title}</h4>
+                      <p className="approach-step-desc">{step.desc}</p>
+                      {i < about.approach.steps.length - 1 && (
+                        <motion.span
+                          className="approach-step-line"
+                          initial={reducedMotion ? false : { scaleX: 0 }}
+                          animate={lit ? { scaleX: 1 } : { scaleX: 0 }}
+                          transition={{ duration: STEP_LINE_DRAW, delay: reducedMotion ? 0 : stepLineDelay(i), ease: [0.4, 0, 0.4, 1] }}
+                        />
+                      )}
+                    </li>
+                  )
+                })}
               </ol>
             </motion.div>
 
