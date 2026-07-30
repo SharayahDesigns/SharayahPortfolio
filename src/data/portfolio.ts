@@ -358,7 +358,7 @@ export const portfolioData = {
     },
     {
       label: 'AI-Assisted Workflow',
-      skills: ['Prompt Engineering', 'UX/UI Ideation', 'Frontend Debugging', 'Content Refinement', 'SEO Copy Support', 'QA Checklist Creation', 'Documentation'],
+      skills: ['Agentic AI Tooling', 'Claude Code', 'MCP (Model Context Protocol)', 'GitHub Copilot', 'Prompt Engineering', 'UX/UI Ideation', 'Frontend Debugging', 'Content Refinement', 'SEO Copy Support', 'QA Checklist Creation', 'Documentation'],
     },
     {
       label: 'Delivery & Optimization',
