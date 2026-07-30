@@ -1,9 +1,19 @@
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import SEO from './SEO'
+import { trackPageNotFound } from '../lib/analytics'
 import { ArrowLeft, FolderOpen } from 'lucide-react'
 
 export default function NotFoundPage() {
+  const location = useLocation()
+
+  useEffect(() => {
+    trackPageNotFound(`${location.pathname}${location.search}`)
+    // Fire once per landing on a broken URL, not on every re-render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
       <SEO

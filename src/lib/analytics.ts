@@ -150,4 +150,25 @@ export function trackContactClick(method: string, location: string) {
   })
 }
 
+export function trackNavClick(label: string, destination: string, location: string) {
+  trackEvent('nav_click', {
+    nav_label: label,
+    destination,
+    nav_location: location,
+  })
+}
+
+export function trackSectionView(sectionId: string) {
+  trackEvent('section_view', {
+    section_id: sectionId,
+  })
+}
+
+export function trackPageNotFound(path: string) {
+  trackEvent('page_not_found', {
+    path,
+    referrer: typeof document !== 'undefined' ? document.referrer || '(direct)' : '(direct)',
+  })
+}
+
 export { GA_MEASUREMENT_ID }
