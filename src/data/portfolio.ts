@@ -342,7 +342,7 @@ export const portfolioData = {
   skillGroups: [
     {
       label: 'Frontend Engineering',
-      skills: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'HTML5', 'CSS3', 'Shopify Hydrogen', 'WordPress', 'PHP', 'Responsive Development', 'Component Architecture', 'REST API Integration'],
+      skills: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'HTML5', 'CSS3', 'Shopify Hydrogen', 'WordPress', 'PHP', 'Responsive Development', 'Component Architecture', 'REST API Integration', 'Three.js', 'Motion'],
     },
     {
       label: 'UX & Design',
@@ -350,7 +350,11 @@ export const portfolioData = {
     },
     {
       label: 'E-Commerce & Product',
-      skills: ['Shopify', 'Product Pages', 'Landing Pages', 'Customer Education', 'Custom Product Configuration', 'Conversion-Focused Design', 'Checkout Integrations', 'PayPal', 'Zakeke'],
+      skills: ['Shopify', 'Product Pages', 'Landing Pages', 'Customer Education', 'Custom Product Configuration', 'Conversion-Focused Design', 'Checkout Integrations', 'PayPal', 'Zakeke', 'Klaviyo'],
+    },
+    {
+      label: 'Backend & Data',
+      skills: ['Node.js', 'SQL', 'PostgreSQL', 'MySQL', 'Supabase', 'Postman'],
     },
     {
       label: 'AI-Assisted Workflow',
@@ -362,7 +366,7 @@ export const portfolioData = {
     },
   ],
 
-  additionalSkills: ['Python', 'C#', 'SaltStack', 'Infrastructure-as-Code', 'CIS Benchmarks', 'PCI-DSS', 'DISA STIGs'],
+  additionalSkills: ['Python', 'C#', 'MAMP Pro', 'SaltStack', 'Infrastructure-as-Code', 'CIS Benchmarks', 'PCI-DSS', 'DISA STIGs'],
 
   education: [
     {
