@@ -368,6 +368,25 @@ export const portfolioData = {
 
   additionalSkills: ['Python', 'C#', 'MAMP Pro', 'SaltStack', 'Infrastructure-as-Code', 'CIS Benchmarks', 'PCI-DSS', 'DISA STIGs'],
 
+  testimonials: [
+    {
+      quote:
+        'Sometimes we have the rare privilege of working with someone who ignites our imagination and sharpens our skills. Sharayah is just such a co-worker. Her creativity and dedication to her craft are inspiring. We worked on many projects, and she led with her vision and design concepts. Any company would value her as part of their team.',
+      name: 'Chad Kelley',
+      title: 'Social Media / Email Specialist / Digital Media',
+      company: 'Monnit Corporation',
+      context: 'Worked with Sharayah on different teams',
+    },
+    {
+      quote:
+        "When Sharayah joined us, she hit the ground running and quickly became a vital member of our development team. She has been quick to learn and pick things up, highly focused and excellent attention to detail. Multiple departments here have relied on her expertise and she's been great at adapting to requests, clarifying issues, and communicating needs and deadlines. Any team would be lucky to have her working for them.",
+      name: 'Nathan Novak',
+      title: 'MSSQL Database Admin',
+      company: 'Monnit Corporation',
+      context: 'Worked with Sharayah on the same team',
+    },
+  ],
+
   education: [
     {
       degree: 'B.S. - Graphic Design & Animation',
@@ -378,11 +397,6 @@ export const portfolioData = {
       degree: 'Full Stack Development Certification',
       institution: 'DevPoint Labs',
       period: '2022',
-    },
-    {
-      degree: 'EMT / Firefighter I Training',
-      institution: 'Red Rocks Community College',
-      period: '2007',
     },
   ],
 
@@ -401,10 +415,6 @@ export const portfolioData = {
     { name: 'HTML Essential Training', year: '2019', source: 'LinkedIn' },
     { name: 'Drawing and Painting in Photoshop - The Great Training', year: '2017', source: 'Lynda.com' },
     { name: 'Illustrator CC 2015 Essential Training', year: '2017', source: 'Adobe' },
-    { name: 'NASM Certified Personal Trainer', year: '2012', source: 'National Association Sports Medicine' },
-    { name: 'EMT', year: '2007', source: 'Red Rocks Community College' },
-    { name: 'FireFighter 1', year: '2007', source: 'Red Rocks Community College' },
-    { name: 'First Aid and CPR Basic', year: '2012', source: '' },
     { name: 'SoloLearn PHP Certificate', year: '2023', source: 'SoloLearn' },
     { name: 'SoloLearn Game Dev with JavaScript', year: '2023', source: 'SoloLearn' },
     { name: 'Adobe Photoshop Professional', year: '2024', source: 'LinkedIn Learning' },

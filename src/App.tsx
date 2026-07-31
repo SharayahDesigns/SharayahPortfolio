@@ -21,6 +21,7 @@ const Experience = lazy(() => import('./components/Experience'))
 const Skills = lazy(() => import('./components/Skills'))
 const Education = lazy(() => import('./components/Education'))
 const StoryParallax = lazy(() => import('./components/StoryParallax'))
+const Testimonials = lazy(() => import('./components/Testimonials'))
 const Contact = lazy(() => import('./components/Contact'))
 const CaseStudyPage = lazy(() => import('./components/CaseStudyPage'))
 const ResumePage = lazy(() => import('./components/ResumePage'))
@@ -149,6 +150,7 @@ function HomePage() {
               <Skills />
               <Education />
               <StoryParallax />
+              <Testimonials />
               <Contact />
             </Suspense>
           ) : (

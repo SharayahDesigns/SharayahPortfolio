@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Plus } from 'lucide-react'
@@ -121,41 +121,46 @@ function SkillBox({
         </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            id={panelId}
-            className="skill-box-panel"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={
-              reducedMotion
-                ? { duration: 0 }
-                : {
-                    height: { duration: 0.42, ease: [0.16, 1, 0.3, 1] },
-                    opacity: { duration: 0.26 },
-                  }
-            }
-          >
-            <div className="skill-box-panel-inner">
-              <div className="skill-chips">
-                {group.skills.map((s, i) => (
-                  <motion.span
-                    key={s}
-                    className="skill-chip"
-                    initial={reducedMotion ? false : { opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: reducedMotion ? 0 : 0.08 + i * 0.022, duration: 0.28 }}
-                  >
-                    {s}
-                  </motion.span>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/*
+        Always mounted (never conditionally rendered) so every skill lives in the
+        DOM regardless of accordion state. Crawlers and AI summarizers that render
+        JS but don't click UI would otherwise see only the group opened by default.
+        Collapsed state is done purely with height/opacity, not unmounting.
+      */}
+      <motion.div
+        id={panelId}
+        className="skill-box-panel"
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+        aria-hidden={!isOpen}
+        transition={
+          reducedMotion
+            ? { duration: 0 }
+            : {
+                height: { duration: 0.42, ease: [0.16, 1, 0.3, 1] },
+                opacity: { duration: 0.26 },
+              }
+        }
+      >
+        <div className="skill-box-panel-inner">
+          <div className="skill-chips">
+            {group.skills.map((s, i) => (
+              <motion.span
+                key={s}
+                className="skill-chip"
+                initial={false}
+                animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+                transition={{
+                  delay: isOpen && !reducedMotion ? 0.08 + i * 0.022 : 0,
+                  duration: reducedMotion ? 0 : 0.28,
+                }}
+              >
+                {s}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   )
 }
