@@ -5,6 +5,7 @@ import { portfolioData } from '../data/portfolio'
 import { resumePdfPath, resumePdfFilename } from '../data/siteConfig'
 import { trackResumeDownload } from '../lib/analytics'
 import SEO from './SEO'
+import ScatterField from './ScatterField'
 import {
   ArrowLeft, Download, Mail, Github, Linkedin, MapPin, Briefcase,
   GraduationCap, Award, Code, Wrench,
@@ -45,6 +46,11 @@ export default function ResumePage() {
       >
         {/* ===== HEADER ===== */}
         <header className="resume-header" ref={heroRef}>
+          {/* Pixel-scatter motif, same one the sharayahwebsitedesigns.com hero
+              uses. Renders as a CSS checkerboard, then upgrades itself to the 3D
+              field once WebGL is confirmed - see ScatterField.tsx. */}
+          <ScatterField />
+
           <div className="container resume-header-inner">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

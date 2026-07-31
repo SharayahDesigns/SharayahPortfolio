@@ -5,7 +5,9 @@
       "Bash(npm run *)",
       "WebFetch(domain:mountain.learnframer.site)",
       "Bash(node ref.mjs)",
-      "Bash(git diff *)"
+      "Bash(git diff *)",
+      "Bash(ls ~/Desktop | head -40)",
+      "Read(//Users/sharayahhefner/Desktop/**)"
     ]
   }
 }

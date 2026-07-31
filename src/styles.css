@@ -4226,7 +4226,101 @@ a.contact-channel:hover .contact-channel-arrow {
   filter: blur(150px);
   pointer-events: none;
 }
-.resume-header-inner { position: relative; }
+
+/* ===== SCATTER FIELD (3D square grid) ===== */
+/* The CSS motif that ships on first paint, and the host for the WebGL grid that
+   replaces it. See src/components/ScatterField.tsx. */
+.scatter-field {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(62%, 820px);
+  z-index: 0;
+  pointer-events: none;
+  /* Strength dial for the CSS fallback. Deliberately low: at 50% coverage a
+     checkerboard this size competes with the name it sits behind. */
+  opacity: 0.34;
+  /* Fallback-only mask (WebGL sets `mask-image: none` and fades in-scene
+     instead). Centred right-of-frame so the left edge reaches transparent well
+     before the copy column. Kept to a SINGLE layer: compositing two needs
+     `mask-composite`, whose fallback is union and renders as an opaque slab. */
+  -webkit-mask-image: radial-gradient(
+    78% 64% at 80% 46%,
+    #000 0%,
+    rgba(0, 0, 0, 0.92) 24%,
+    rgba(0, 0, 0, 0.5) 46%,
+    rgba(0, 0, 0, 0.16) 62%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    78% 64% at 80% 46%,
+    #000 0%,
+    rgba(0, 0, 0, 0.92) 24%,
+    rgba(0, 0, 0, 0.5) 46%,
+    rgba(0, 0, 0, 0.16) 62%,
+    transparent 72%
+  );
+}
+.scatter-field::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* GitHub's dark contribution levels. Hard stops rather than a blend, so the
+     fallback quantises the same way the scene does.
+     Keep in sync with LEVELS in src/components/ScatterField.tsx. */
+  background-image: linear-gradient(
+    152deg,
+    #39d353 0%,
+    #39d353 25%,
+    #26a641 25%,
+    #26a641 50%,
+    #006d32 50%,
+    #006d32 75%,
+    #0e4429 75%,
+    #0e4429 100%
+  );
+  -webkit-mask-image: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
+  mask-image: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
+  -webkit-mask-size: 17px 17px;
+  mask-size: 17px 17px;
+}
+/* WebGL took over: hide the checkerboard and drop the CSS drift (the scene has
+   its own motion). Per-cell alpha now lives in the scene (REST_ALPHA /
+   LIFT_ALPHA), so this opacity is a coarse trim rather than the main dial. */
+.scatter-field.is-gl {
+  opacity: 0.85;
+  animation: none;
+  /* The scene fades its own edges directionally (FADE_LEFT / FADE_TOP etc.).
+     Leaving the elliptical mask on top would double-fade and pull the middle
+     down into a dim blob. */
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.scatter-field.is-gl::before { display: none; }
+.scatter-field canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .scatter-field:not(.is-gl) {
+    animation: scatter-drift 18s ease-in-out infinite alternate;
+  }
+}
+@keyframes scatter-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-14px, 12px, 0); }
+}
+/* Single column: the copy runs the full width, so a 62% panel would sit right
+   under it. Span everything at lower strength instead. */
+@media (max-width: 860px) {
+  .scatter-field { width: 100%; opacity: 0.26; }
+  .scatter-field.is-gl { opacity: 0.6; }
+}
+
+/* Sits above the field. .resume-header::before (the teal blur) stays below it. */
+.resume-header-inner { position: relative; z-index: 1; }
 .resume-header-label {
   font-family: var(--font-mono);
   font-size: 12px;
