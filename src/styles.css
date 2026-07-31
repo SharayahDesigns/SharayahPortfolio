@@ -656,6 +656,35 @@
   display: block;
 }
 
+/* Placeholder for the 3D pair. Mirrors .hero-avatar-canvas's box exactly so the
+   poster is framed by the same rectangle the camera renders into, then sized by
+   how much of that frame the models actually fill: the camera sees 5.38 world
+   units of height (fov 27 at z 11.2) and the posed pair spans ~3.6 of them, so
+   ~67%. Get that wrong and the avatars visibly jump on load. */
+.hero-avatar-poster {
+  position: absolute;
+  inset: -60px -80px -120px -80px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 420ms ease;
+}
+.hero-avatar-poster.is-loaded {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-avatar-poster { transition: none; }
+}
+.hero-avatar-poster img {
+  height: 67%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
 .hero-avatar-loading {
   display: inline-flex;
   align-items: center;
@@ -824,6 +853,16 @@
      avatars in one mesh, so <Center> already centres the composition. */
   .hero-avatar-canvas {
     inset: -30px -46px -62px -46px;
+  }
+  /* Same box as the canvas above, and a slightly smaller fill: the merged
+     mobile model is normalised to 0.94 of the desktop height and sits a hair
+     lower, hence the nudge. */
+  .hero-avatar-poster {
+    inset: -30px -46px -62px -46px;
+  }
+  .hero-avatar-poster img {
+    height: 62%;
+    transform: translateY(4%);
   }
   .hero-tilt-button {
     left: auto;

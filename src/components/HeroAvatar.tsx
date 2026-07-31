@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Center, Html, useGLTF } from '@react-three/drei'
+import { Center, useGLTF } from '@react-three/drei'
 import { Smartphone } from 'lucide-react'
 import * as THREE from 'three'
 import { useDeviceTilt, type Tilt } from '../hooks/useDeviceTilt'
@@ -140,14 +140,6 @@ function StaticHeroModel({
   )
 }
 
-function AvatarFallback() {
-  return (
-    <Html center>
-      <div className="hero-avatar-loading">Loading 3D Models</div>
-    </Html>
-  )
-}
-
 function ReadySignal({ onReady }: { onReady?: () => void }) {
   useEffect(() => {
     onReady?.()
@@ -180,7 +172,9 @@ export default function HeroAvatar({ reducedMotion, mobile = false, onReady }: H
         <directionalLight position={[4, 6, 5]} intensity={2.6} color="#fff6e8" />
         <directionalLight position={[-3, 2, 4]} intensity={1.1} color="#86d8ff" />
         <spotLight position={[0, 5, 3]} intensity={1.4} angle={0.38} penumbra={0.9} color="#c7fff1" />
-        <Suspense fallback={<AvatarFallback />}>
+        {/* Nothing to show here while the GLBs stream in - the hero's poster
+            image sits over the canvas until ReadySignal fires below. */}
+        <Suspense fallback={null}>
           {mobile ? (
             /* The pair is already posed relative to each other inside this file,
                so there is nothing to place or parallax; height normalisation is

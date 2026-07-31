@@ -1,4 +1,4 @@
-import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react'
+import { Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -12,6 +12,10 @@ const HeroAvatar = lazy(() => import('./HeroAvatar'))
 const HEADLINE_WORDS = portfolioData.name.split(' ')
 const HERO_TITLE = portfolioData.title
 const HERO_FALLBACK_IMAGE = '/images/fallbackimagehero.webp'
+/** Cut-out render of the same two avatars, framed to sit where the models land.
+    Holds the composition while the ~model chunk + GLBs download, so the hero
+    never shows an empty frame. Preloaded in index.html. */
+const HERO_POSTER_IMAGE = '/images/meAndOnyxHero-no3d.webp'
 /** Per-character cadence: fast enough not to stall, slow enough to read. */
 const TYPE_MS = 26
 
@@ -74,7 +78,9 @@ function StaticHeroImage({ onReady }: HeroProps) {
         alt="Sharayah Hefner beside her white shepherd, Onyx, shown as a static hero portrait"
         loading="eager"
         decoding="async"
-        fetchPriority="high"
+        // React 18 doesn't map the camelCase form and warns; the lowercase
+        // attribute is what the DOM wants either way.
+        {...{ fetchpriority: 'high' }}
       />
     </div>
   )
@@ -83,6 +89,7 @@ function StaticHeroImage({ onReady }: HeroProps) {
 export default function Hero({ onReady }: HeroProps) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [canUseWebGL, setCanUseWebGL] = useState(() => supportsWebGL())
+  const [avatarReady, setAvatarReady] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   const isMobileViewport = useMediaQuery('(max-width: 900px)')
   const isCoarsePointer = useMediaQuery('(pointer: coarse)')
@@ -122,6 +129,15 @@ export default function Hero({ onReady }: HeroProps) {
       clearInterval(tick)
     }
   }, [prefersReduced, typedCount])
+
+  // Fires once the GLBs have resolved and the models are in the scene graph
+  // (or once a fallback has taken over), which is the cue to cross-fade the
+  // poster out. Also covers the error-boundary and no-WebGL paths, so the
+  // poster can never outlive whatever replaced the canvas.
+  const handleAvatarReady = useCallback(() => {
+    setAvatarReady(true)
+    onReady?.()
+  }, [onReady])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -281,15 +297,27 @@ export default function Hero({ onReady }: HeroProps) {
             <div className="avatar-ring avatar-ring--2" />
             <div className="hero-avatar-shell">
               {canUseWebGL ? (
-                <HeroAvatarBoundary fallback={<StaticHeroImage onReady={onReady} />}>
-                  <Suspense fallback={<div className="hero-avatar-loading">Loading 3D Model</div>}>
-                    {/* Same scene either way; mobile just swaps in the merged,
-                        decimated model instead of the two full-resolution ones. */}
-                    <HeroAvatar reducedMotion={reducedMotion} mobile={useMobileHero} onReady={onReady} />
-                  </Suspense>
-                </HeroAvatarBoundary>
+                <>
+                  <HeroAvatarBoundary fallback={<StaticHeroImage onReady={handleAvatarReady} />}>
+                    {/* No text fallback: the poster below covers the frame for
+                        both this chunk load and the GLB load inside it. */}
+                    <Suspense fallback={null}>
+                      {/* Same scene either way; mobile just swaps in the merged,
+                          decimated model instead of the two full-resolution ones. */}
+                      <HeroAvatar reducedMotion={reducedMotion} mobile={useMobileHero} onReady={handleAvatarReady} />
+                    </Suspense>
+                  </HeroAvatarBoundary>
+                  {/* Decorative, like the canvas it stands in for - the hero's
+                      accessible text already names her and Onyx. */}
+                  <div
+                    className={`hero-avatar-poster${avatarReady ? ' is-loaded' : ''}`}
+                    aria-hidden="true"
+                  >
+                    <img src={HERO_POSTER_IMAGE} alt="" decoding="async" {...{ fetchpriority: 'high' }} />
+                  </div>
+                </>
               ) : (
-                <StaticHeroImage onReady={onReady} />
+                <StaticHeroImage onReady={handleAvatarReady} />
               )}
             </div>
             <div className="avatar-badge">

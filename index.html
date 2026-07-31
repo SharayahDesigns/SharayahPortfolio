@@ -5,6 +5,10 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Hero placeholder: paints in the avatar frame before the 3D chunk and
+         GLBs arrive, so the hero is never a hole. ~52KB. -->
+    <link rel="preload" as="image" href="/images/meAndOnyxHero-no3d.webp" type="image/webp" fetchpriority="high" />
+
     <!-- SEO_HEAD_START -->
     <title>Sharayah Hefner - Frontend UX Engineer & Design Engineer</title>
     <meta name="description" content="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences." />

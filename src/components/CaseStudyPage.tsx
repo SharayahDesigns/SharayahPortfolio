@@ -188,7 +188,7 @@ export default function CaseStudyPage() {
                     width={study.heroImageWidth}
                     height={study.heroImageHeight}
                     decoding="async"
-                    fetchPriority="high"
+                    {...{ fetchpriority: 'high' }}
                   />
                 </div>
               ) : study.visual ? (
