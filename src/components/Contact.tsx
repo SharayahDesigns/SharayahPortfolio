@@ -30,8 +30,8 @@ export default function Contact() {
           <div className="contact-layout">
             <motion.div className="contact-info" variants={item}>
               <p className="contact-intro">
-                I'm currently open to Frontend UX Engineer, Design Engineer, and
-                product-focused frontend opportunities. Let's talk about what you're building.
+                I'm currently open to product engineering, design engineering, UI engineering,
+                and customer-facing frontend roles. Let's talk about what you're building.
               </p>
 
               <div className="contact-channels">
@@ -117,9 +117,9 @@ export default function Contact() {
               <p className="contact-cta-eyebrow">Currently Available</p>
               <h3 className="contact-cta-heading">Let's build something polished.</h3>
               <p className="contact-cta-body">
-                Whether you need a design system, an e-commerce experience, or a full
-                frontend build, I'd love to hear about it. The fastest way to reach me
-                is by email.
+                Whether you need a design system, onboarding flow, e-commerce experience,
+                dashboard, or full product UI build, I'd love to hear about it. The fastest
+                way to reach me is by email.
               </p>
               <a
                 href={`mailto:${portfolioData.email}`}

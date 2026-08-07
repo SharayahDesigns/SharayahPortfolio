@@ -1,29 +1,141 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 import { portfolioData } from '../data/portfolio'
-import { resumePdfPath, resumePdfFilename } from '../data/siteConfig'
-import { trackResumeDownload } from '../lib/analytics'
+import {
+  resumePdfPath,
+  resumePdfFilename,
+  resumePrintPdfPath,
+  resumePrintPdfFilename,
+} from '../data/siteConfig'
+import { trackResumeDownloadVariant } from '../lib/analytics'
 import SEO from './SEO'
 import ScatterField from './ScatterField'
 import {
-  ArrowLeft, Download, Mail, Github, Linkedin, MapPin, Briefcase,
+  ArrowLeft, Download, Mail, Github, Linkedin, MapPin, Briefcase, X,
   GraduationCap, Award, Code, Wrench,
 } from 'lucide-react'
 
 function DownloadResumeButton({ className }: { className: string }) {
+  const [chooserOpen, setChooserOpen] = useState(false)
+
+  useEffect(() => {
+    if (!chooserOpen) return
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setChooserOpen(false)
+      }
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKeydown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeydown)
+    }
+  }, [chooserOpen])
+
   return (
-    <a
-      href={resumePdfPath}
-      download={resumePdfFilename}
-      aria-label="Download Sharayah Hefner résumé as PDF"
-      className={className}
-      onClick={() => {
-        trackResumeDownload()
-      }}
-    >
-      <Download size={16} /> Download PDF
-    </a>
+    <>
+      <button
+        type="button"
+        aria-label="Choose a resume version to download"
+        aria-haspopup="dialog"
+        aria-expanded={chooserOpen}
+        className={className}
+        onClick={() => {
+          setChooserOpen(true)
+        }}
+      >
+        <Download size={16} /> Download PDF
+      </button>
+
+      {chooserOpen ? (
+        <div
+          className="resume-download-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="resume-download-title"
+          onClick={() => {
+            setChooserOpen(false)
+          }}
+        >
+          <div
+            className="resume-download-panel"
+            onClick={(event) => {
+              event.stopPropagation()
+            }}
+          >
+            <div className="resume-download-panel-head">
+              <div>
+                <p className="resume-download-panel-label">Choose Version</p>
+                <h2 id="resume-download-title">Which resume would you like?</h2>
+              </div>
+              <button
+                type="button"
+                className="resume-download-close"
+                aria-label="Close resume download chooser"
+                onClick={() => {
+                  setChooserOpen(false)
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="resume-download-panel-copy">
+              Pick the dark creative version for digital viewing, or the white version for print-friendly sharing.
+            </p>
+
+            <div className="resume-download-options">
+              <a
+                href={resumePdfPath}
+                download={resumePdfFilename}
+                className="resume-download-option"
+                onClick={() => {
+                  trackResumeDownloadVariant({
+                    fileName: resumePdfFilename,
+                    filePath: resumePdfPath,
+                    variant: 'creative-dark',
+                  })
+                  setChooserOpen(false)
+                }}
+              >
+                <span className="resume-download-swatch resume-download-swatch--dark" aria-hidden="true" />
+                <span className="resume-download-option-copy">
+                  <strong>Black Version</strong>
+                  <span>Creative dark resume for screen viewing</span>
+                </span>
+              </a>
+
+              <a
+                href={resumePrintPdfPath}
+                download={resumePrintPdfFilename}
+                className="resume-download-option"
+                onClick={() => {
+                  trackResumeDownloadVariant({
+                    fileName: resumePrintPdfFilename,
+                    filePath: resumePrintPdfPath,
+                    variant: 'print-white',
+                  })
+                  setChooserOpen(false)
+                }}
+              >
+                <span className="resume-download-swatch resume-download-swatch--light" aria-hidden="true" />
+                <span className="resume-download-option-copy">
+                  <strong>White Version</strong>
+                  <span>Print-friendly version with a light background</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   )
 }
 
@@ -34,7 +146,7 @@ export default function ResumePage() {
     <>
       <SEO
         title="Resume - Sharayah Hefner"
-        description="Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer. View experience, skills, education, and certifications, or download the PDF."
+        description="Online résumé for Sharayah Hefner, product engineer, design engineer, and frontend UX engineer. View experience, skills, education, and certifications, or download the PDF."
         path="/resume"
       />
 

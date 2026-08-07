@@ -14,13 +14,13 @@ export default function Footer() {
           animate={{ x: '-50%' }}
           transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
         >
-          <span>FRONTEND UX ENGINEER</span>
+          <span>PRODUCT ENGINEER</span>
           <span className="teal">●</span>
           <span>DESIGN ENGINEER</span>
           <span className="teal">●</span>
           <span>SHARAYAH HEFNER</span>
           <span className="teal">●</span>
-          <span>FRONTEND UX ENGINEER</span>
+          <span>PRODUCT ENGINEER</span>
           <span className="teal">●</span>
           <span>DESIGN ENGINEER</span>
           <span className="teal">●</span>
@@ -36,8 +36,8 @@ export default function Footer() {
               <span className="nav-logo-bracket">&lt;</span>SH<span className="nav-logo-bracket">/&gt;</span>
             </Link>
             <p className="footer-tagline">
-              Frontend UX Engineer & Design Engineer building polished, production-ready
-              digital products.
+              Product engineer and design engineer building polished, production-ready
+              customer-facing digital products.
             </p>
           </div>
 

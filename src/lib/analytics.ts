@@ -5,7 +5,7 @@ const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID?.trim()
 const GA_DEBUG_MODE = import.meta.env.VITE_GA_DEBUG_MODE === 'true'
 const GA_DEBUG_STORAGE_KEY = 'ga_debug_mode'
 const PAGE_TITLE_BY_PATH: Record<string, string> = {
-  '/': 'Sharayah Hefner - Frontend UX Engineer & Design Engineer',
+  '/': 'Sharayah Hefner - Product Engineer, Design Engineer & Frontend UX Engineer',
   '/resume': 'Resume - Sharayah Hefner',
 }
 
@@ -99,14 +99,31 @@ export function AnalyticsRouterTracker() {
 }
 
 export function trackResumeDownload() {
+  trackResumeDownloadVariant({
+    fileName: 'Sharayah_Hefner_Resume_Creative.pdf',
+    filePath: '/Sharayah_Hefner_Resume_Creative.pdf',
+    variant: 'creative-dark',
+  })
+}
+
+export function trackResumeDownloadVariant({
+  fileName,
+  filePath,
+  variant,
+}: {
+  fileName: string
+  filePath: string
+  variant: string
+}) {
   if (!hasAnalytics() || !window.gtag) return
   const debugMode = isDebugModeEnabled()
 
   window.gtag('event', 'resume_download', {
-    file_name: 'Sharayah_Hefner_Frontend_UX_Engineer_Resume.pdf',
+    file_name: fileName,
     file_extension: 'pdf',
-    link_url: `${window.location.origin}/Sharayah_Hefner_Frontend_UX_Engineer_Resume.pdf`,
+    link_url: `${window.location.origin}${filePath}`,
     content_type: 'resume',
+    resume_variant: variant,
     debug_mode: debugMode,
   })
 }

@@ -65,7 +65,7 @@ function HomePage() {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
       name: `${siteConfig.name} - ${siteConfig.title}`,
-      description: 'Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences.',
+      description: 'Product engineer and design engineer specializing in React, Next.js, UX, design systems, e-commerce, accessibility, and polished customer-facing product experiences.',
       url: `${siteConfig.origin}/`,
       mainEntity: {
         '@type': 'Person',
@@ -80,7 +80,7 @@ function HomePage() {
           addressCountry: 'US',
         },
         alumniOf: 'Southern New Hampshire University',
-        knowsAbout: ['React', 'Next.js', 'TypeScript', 'UX Design', 'Design Systems', 'E-Commerce', 'Frontend Development', 'Accessibility', 'Animation'],
+        knowsAbout: ['React', 'Next.js', 'TypeScript', 'Product Engineering', 'UX Design', 'Design Systems', 'E-Commerce', 'Frontend Development', 'Accessibility', 'Animation'],
         sameAs: [
           portfolioData.github,
           portfolioData.linkedin,
@@ -133,7 +133,7 @@ function HomePage() {
       />
       <SEO
         title={`${siteConfig.name} - ${siteConfig.title}`}
-        description="Frontend UX Engineer and Design Engineer specializing in React, Next.js, e-commerce, design systems, interaction design, and polished production experiences."
+        description="Product engineer and design engineer specializing in React, Next.js, UX, design systems, e-commerce, accessibility, and polished customer-facing product experiences."
         path="/"
         image="/images/shareImage.jpg"
         imageAlt="Sharayah Hefner portfolio preview"
@@ -185,7 +185,7 @@ function ResumeLayout() {
       '@context': 'https://schema.org',
       '@type': 'ProfilePage',
       name: `${siteConfig.name} Résumé`,
-      description: 'Online résumé for Sharayah Hefner, Frontend UX Engineer and Design Engineer.',
+      description: 'Online résumé for Sharayah Hefner, product engineer, design engineer, and frontend UX engineer.',
       url: `${siteConfig.origin}/resume`,
       mainEntity: {
         '@type': 'Person',
@@ -200,7 +200,7 @@ function ResumeLayout() {
           addressCountry: 'US',
         },
         alumniOf: 'Southern New Hampshire University',
-        knowsAbout: ['React', 'Next.js', 'TypeScript', 'UX Design', 'Design Systems', 'E-Commerce', 'Frontend Development', 'Accessibility', 'Animation'],
+        knowsAbout: ['React', 'Next.js', 'TypeScript', 'Product Engineering', 'UX Design', 'Design Systems', 'E-Commerce', 'Frontend Development', 'Accessibility', 'Animation'],
         sameAs: [
           portfolioData.github,
           portfolioData.linkedin,

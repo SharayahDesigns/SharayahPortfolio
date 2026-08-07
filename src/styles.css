@@ -1981,20 +1981,34 @@
 .project-card-hover-action svg {
   color: var(--teal);
 }
-.project-card:hover .project-card-hover-wash,
-.project-card:hover .project-card-hover-cue,
 .project-card:focus-within .project-card-hover-wash,
 .project-card:focus-within .project-card-hover-cue {
   opacity: 1;
 }
-.project-card:hover .project-card-hover-cue,
 .project-card:focus-within .project-card-hover-cue {
   transform: translateY(0) scale(1);
 }
-.project-card:hover .project-card-hover-beam,
 .project-card:focus-within .project-card-hover-beam {
   opacity: 1;
   translate: 18% 0;
+}
+/* Hover-only reveal, gated to real pointer devices. Touch browsers apply
+   :hover on a long-press with no matching "unhover" event, which left this
+   wash/cue/beam trio stuck visible after the finger lifted, an empty teal
+   box sitting over the card. :focus-within above still covers keyboard
+   users on any device. */
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card-hover-wash,
+  .project-card:hover .project-card-hover-cue {
+    opacity: 1;
+  }
+  .project-card:hover .project-card-hover-cue {
+    transform: translateY(0) scale(1);
+  }
+  .project-card:hover .project-card-hover-beam {
+    opacity: 1;
+    translate: 18% 0;
+  }
 }
 
 .project-card-body {
@@ -4366,6 +4380,130 @@ a.resume-contact-item:hover { color: var(--teal); }
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.resume-download-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 10, 9, 0.72);
+  backdrop-filter: blur(14px);
+}
+
+.resume-download-panel {
+  width: min(100%, 640px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(0, 255, 198, 0.12), transparent 38%),
+    rgba(10, 12, 18, 0.96);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.resume-download-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.resume-download-panel-label {
+  margin: 0 0 8px;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8ef7dd;
+}
+
+.resume-download-panel-head h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.resume-download-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f3f7ff;
+  cursor: pointer;
+}
+
+.resume-download-panel-copy {
+  margin: 14px 0 0;
+  color: rgba(229, 236, 250, 0.78);
+  line-height: 1.65;
+}
+
+.resume-download-options {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.resume-download-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.resume-download-option:hover,
+.resume-download-option:focus-visible,
+.resume-download-close:hover,
+.resume-download-close:focus-visible {
+  border-color: rgba(0, 255, 198, 0.42);
+  background: rgba(0, 255, 198, 0.08);
+  outline: none;
+}
+
+.resume-download-option:hover,
+.resume-download-option:focus-visible {
+  transform: translateY(-1px);
+}
+
+.resume-download-swatch {
+  width: 52px;
+  height: 72px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.resume-download-swatch--dark {
+  background: linear-gradient(180deg, #07110f 0%, #0f1c1b 100%);
+}
+
+.resume-download-swatch--light {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f4f8 100%);
+}
+
+.resume-download-option-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.resume-download-option-copy strong {
+  font-size: 1.02rem;
+}
+
+.resume-download-option-copy span {
+  color: rgba(229, 236, 250, 0.72);
 }
 
 .resume-body {

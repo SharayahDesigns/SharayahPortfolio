@@ -1,6 +1,6 @@
 export const portfolioData = {
   name: 'Sharayah Hefner',
-  title: 'Frontend UX Engineer · Design Engineer · E-Commerce Frontend Developer',
+  title: 'Product Engineer · Design Engineer · Frontend UX Engineer',
   tagline: 'Creative Engineer',
   email: 'SharayahDesigns@gmail.com',
   linkedin: 'https://linkedin.com/in/SharayahHefner',
@@ -8,7 +8,7 @@ export const portfolioData = {
   location: 'Herriman, Utah',
   availability: 'Remote-friendly',
   summary:
-    'I’m Sharayah Hefner, a product-focused frontend engineer with 4+ years of production development experience and 15+ years in visual design and animation. I combine thoughtful UX with reliable React, Next.js, and e-commerce engineering to turn complex workflows into clear, polished experiences.',
+    'I’m Sharayah Hefner, a product-focused engineer with 4+ years of production development experience and 15+ years in visual design and animation. I build the layer where users experience the product, combining UX thinking, React and Next.js implementation, and customer-facing product strategy to turn complex workflows into clear, polished experiences.',
 
   stats: [
     { number: '10+', label: 'E-Commerce Brands' },
@@ -19,15 +19,15 @@ export const portfolioData = {
   about: {
     eyebrow: 'About Me',
     headingLines: [
-      { lead: 'Designing', accent: 'experiences.' },
-      { lead: 'Engineering', accent: 'solutions.' },
+      { lead: 'Owning', accent: 'product experiences.' },
+      { lead: 'Designing', accent: 'the layer users feel.' },
     ],
     lede:
-      'I’m a Frontend UX Engineer and Design Engineer based in Herriman, Utah. I bridge the gap between design thinking and production engineering to build digital products that are not just functional, but meaningful.',
-    script: 'I care about details, users, and outcomes.',
+      'I’m a product-focused engineer and design engineer based in Herriman, Utah. I work across interface strategy, UX, and production frontend implementation to build digital products that feel clear, trustworthy, and easy to use.',
+    script: 'I care about clarity, systems, and outcomes.',
     // Split explicitly: the write-on wipes one line at a time, and a single
     // wrapped block would reveal both lines together, column by column.
-    scriptLines: ['I care about details,', 'users, and outcomes.'],
+    scriptLines: ['I care about clarity,', 'systems, and outcomes.'],
     portrait: {
       src: '/images/meandOnyx.webp',
       alt: 'Illustrated portrait of Sharayah Hefner in a code-print tee beside her white shepherd, Onyx, shown on a phone screen',
@@ -57,17 +57,17 @@ export const portfolioData = {
       eyebrow: 'My Approach',
       title: 'From idea',
       titleSecond: 'to impact',
-      intro: 'I follow a user-centered, iterative process that blends design thinking with engineering precision.',
+      intro: 'I follow a product-centered process that blends design thinking, engineering precision, and customer-facing business goals.',
       steps: [
         { icon: 'users', title: 'Understand', desc: 'I listen, research, and align on user needs and business goals.' },
-        { icon: 'pen', title: 'Design', desc: 'I wireframe, prototype, and validate solutions that solve real problems.' },
-        { icon: 'code', title: 'Engineer', desc: 'I build clean, scalable, and accessible interfaces.' },
-        { icon: 'send', title: 'Deliver', desc: 'I test, iterate, and ship high-quality products that make an impact.' },
+        { icon: 'pen', title: 'Shape', desc: 'I map journeys, wireframe flows, and define the interaction patterns that make the product feel intuitive.' },
+        { icon: 'code', title: 'Engineer', desc: 'I build scalable, accessible interfaces and reusable systems that hold up in production.' },
+        { icon: 'send', title: 'Deliver', desc: 'I test, refine, and ship experiences that support performance, trust, conversion, and product adoption.' },
       ],
     },
     note: {
       quote:
-        'I’ve always been driven by curiosity and creativity. From visual design and animation to frontend engineering, I love turning complex ideas into simple, beautiful, and intuitive experiences.',
+        'I like work where interface quality matters because that is where users decide whether a product feels trustworthy, intuitive, and worth returning to.',
       location: 'Herriman, Utah',
       ctaLabel: 'Let’s build something great together',
       ctaHref: '/#contact',
@@ -342,7 +342,7 @@ export const portfolioData = {
   skillGroups: [
     {
       label: 'Frontend Engineering',
-      skills: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'HTML5', 'CSS3', 'Shopify Hydrogen', 'WordPress', 'PHP', 'Responsive Development', 'Component Architecture', 'REST API Integration', 'Three.js', 'Motion'],
+      skills: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'HTML5', 'CSS3', 'Shopify Hydrogen', 'WordPress', 'PHP', 'Responsive Development', 'Component Architecture', 'REST API Integration', 'GraphQL', 'Three.js', 'Motion'],
     },
     {
       label: 'UX & Design',

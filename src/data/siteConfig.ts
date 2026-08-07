@@ -2,7 +2,7 @@ export const siteConfig = {
   name: 'Sharayah Hefner',
   origin: 'https://sharayahdesigns.com',
   email: 'SharayahDesigns@gmail.com',
-  title: 'Frontend UX Engineer & Design Engineer',
+  title: 'Product Engineer, Design Engineer & Frontend UX Engineer',
 }
 
 export type NavItem = {
@@ -21,5 +21,7 @@ export const navItems: NavItem[] = [
   { label: 'Résumé', href: '/resume', route: true },
 ]
 
-export const resumePdfPath = '/Sharayah_Hefner_Frontend_UX_Engineer_Resume.pdf'
-export const resumePdfFilename = 'Sharayah_Hefner_Frontend_UX_Engineer_Resume.pdf'
+export const resumePdfPath = '/Sharayah_Hefner_Resume_Creative.pdf'
+export const resumePdfFilename = 'Sharayah_Hefner_Resume_Creative.pdf'
+export const resumePrintPdfPath = '/Sharayah_Hefner_Resume_Creative_Print.pdf'
+export const resumePrintPdfFilename = 'Sharayah_Hefner_Resume_Creative_Print.pdf'

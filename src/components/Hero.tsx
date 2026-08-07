@@ -211,7 +211,7 @@ export default function Hero({ onReady }: HeroProps) {
         <motion.div className="hero-content" variants={containerVariants} initial="hidden" animate="show">
           <motion.p className="hero-label" variants={item}>
             <span className="hero-label-dot" />
-            Available for Frontend UX & Design Engineering Opportunities
+            Available for Product, Design, and Frontend Engineering Opportunities
           </motion.p>
 
           <motion.h1 className="hero-headline" variants={headline} aria-label={portfolioData.name}>

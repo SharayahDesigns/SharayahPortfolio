@@ -512,11 +512,11 @@ export default function CaseStudyPage() {
                 <h3 className="cs-contact-heading">
                   Have a product that needs equal parts{' '}
                   <br />
-                  <span className="teal">design thinking and frontend engineering?</span>
+                  <span className="teal">design thinking and product engineering?</span>
                 </h3>
                 <p className="cs-contact-body">
-                  I'm currently open to Frontend UX Engineer, Design Engineer, and
-                  product-focused frontend opportunities. Let's talk about what you're building.
+                  I'm currently open to product engineering, design engineering, UI engineering,
+                  and customer-facing frontend roles. Let's talk about what you're building.
                 </p>
                 <a
                   href={`mailto:${portfolioData.email}`}
