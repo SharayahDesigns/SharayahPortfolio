@@ -3,6 +3,8 @@ export const siteConfig = {
   origin: 'https://sharayahdesigns.com',
   email: 'SharayahDesigns@gmail.com',
   title: 'Product Engineer, Design Engineer & Frontend UX Engineer',
+  repository: 'https://github.com/SharayahDesigns/SharayahPortfolio',
+  repositoryCommits: 'https://github.com/SharayahDesigns/SharayahPortfolio/commits/main/',
 }
 
 export type NavItem = {

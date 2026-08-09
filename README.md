@@ -36,6 +36,22 @@ npm run preview
 
 GitHub: https://github.com/SharayahDesigns/SharayahPortfolio
 
+## State Architecture
+
+The portfolio deliberately avoids a global client-side store because it has no shared mutable product data. State is separated by responsibility:
+
+- **Durable content:** typed modules in `src/data/portfolio.ts` and `src/data/caseStudies.ts` keep portfolio content independent from UI components.
+- **Navigation state:** React Router owns the URL, route, and case-study slug so every primary view has a shareable source of truth.
+- **Interaction state:** menus, disclosures, loaders, WebGL capability checks, and other temporary UI state stay in the closest owning component.
+- **Motion state:** Framer Motion values and scroll progress remain inside the presentation that consumes them, separated from navigation and content.
+- **Analytics state:** route tracking and event helpers live behind `src/lib/analytics.ts`; analytics never becomes application state.
+
+This keeps updates local, avoids duplicated sources of truth, and leaves room to introduce a server cache or global store later if the product gains genuinely shared mutable data.
+
+## Public and Private Work
+
+This repository and its commit history are public for implementation review. Client production repositories remain private, so client work is represented through case studies and live releases rather than unverifiable source-code claims. Public community contributions will be linked from the portfolio when they are independently reviewable.
+
 ## Structure
 
 - `src/` contains the React app, page data, and component logic.
