@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { portfolioData } from '../data/portfolio'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useLowBandwidthMode } from '../hooks/useLowBandwidthMode'
 
 const LAG = {
   sky: 0.95,
@@ -12,7 +13,8 @@ const LAG = {
 
 export default function StoryParallax() {
   const stageRef = useRef<HTMLDivElement>(null)
-  const reducedMotion = useReducedMotion() ?? false
+  const isLowBandwidth = useLowBandwidthMode()
+  const reducedMotion = (useReducedMotion() ?? false) || isLowBandwidth
   const [stageH, setStageH] = useState(0)
   const isMobile = useMediaQuery('(max-width: 900px)')
 

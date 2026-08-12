@@ -13,10 +13,12 @@ import {
   CheckCircle2, AlertCircle, Lightbulb, Wrench, Target, Layers, Rocket,
 } from 'lucide-react'
 import { useEffect } from 'react'
+import { useLowBandwidthMode } from '../hooks/useLowBandwidthMode'
 
 const processIcons = [Target, Lightbulb, Layers, Wrench, CheckCircle2, Rocket]
 
 export default function CaseStudyPage() {
+  const isLowBandwidth = useLowBandwidthMode()
   const { slug } = useParams<{ slug: string }>()
   const study = slug ? getCaseStudy(slug) : undefined
 
@@ -179,14 +181,16 @@ export default function CaseStudyPage() {
               {study.heroImage ? (
                 <div className="project-shot">
                   <img
-                    src={study.heroImage}
-                    srcSet={study.heroImageSmall && study.heroImageWidth
+                    src={isLowBandwidth && study.heroImageSmall ? study.heroImageSmall : study.heroImage}
+                    srcSet={!isLowBandwidth && study.heroImageSmall && study.heroImageWidth
                       ? `${study.heroImageSmall} 720w, ${study.heroImage} ${study.heroImageWidth}w`
                       : undefined}
-                    sizes={study.heroImageSmall ? '(max-width: 900px) 100vw, 560px' : undefined}
+                    sizes={!isLowBandwidth && study.heroImageSmall ? '(max-width: 900px) 100vw, 560px' : undefined}
                     alt={study.heroImageAlt || `${study.title} website homepage`}
-                    width={study.heroImageWidth}
-                    height={study.heroImageHeight}
+                    width={isLowBandwidth && study.heroImageSmall ? 720 : study.heroImageWidth}
+                    height={isLowBandwidth && study.heroImageSmall && study.heroImageWidth && study.heroImageHeight
+                      ? Math.round((720 / study.heroImageWidth) * study.heroImageHeight)
+                      : study.heroImageHeight}
                     decoding="async"
                     {...{ fetchpriority: 'high' }}
                   />
@@ -407,14 +411,16 @@ export default function CaseStudyPage() {
                       {img.src ? (
                         <picture>
                           <img
-                            src={img.src}
-                            srcSet={img.srcSmall && img.width
+                            src={isLowBandwidth && img.srcSmall ? img.srcSmall : img.src}
+                            srcSet={!isLowBandwidth && img.srcSmall && img.width
                               ? `${img.srcSmall} 720w, ${img.src} ${img.width}w`
                               : undefined}
-                            sizes={img.srcSmall ? '(max-width: 940px) 100vw, 900px' : undefined}
+                            sizes={!isLowBandwidth && img.srcSmall ? '(max-width: 940px) 100vw, 900px' : undefined}
                             alt={img.alt}
-                            width={img.width || 1200}
-                            height={img.height || 750}
+                            width={isLowBandwidth && img.srcSmall ? 720 : (img.width || 1200)}
+                            height={isLowBandwidth && img.srcSmall && img.width && img.height
+                              ? Math.round((720 / img.width) * img.height)
+                              : (img.height || 750)}
                             loading={i > 0 ? 'lazy' : 'eager'}
                             decoding="async"
                             className="cs-gallery-screenshot"

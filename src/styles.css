@@ -563,6 +563,29 @@
   min-height: 860px;
   overflow: visible;
 }
+
+html[data-low-bandwidth='true'] .hero {
+  position: relative;
+  top: 0;
+  min-height: auto;
+}
+
+html[data-low-bandwidth='true'] .hero-orb,
+html[data-low-bandwidth='true'] .hero-noise,
+html[data-low-bandwidth='true'] .hero-scroll,
+html[data-low-bandwidth='true'] .avatar-ring,
+html[data-low-bandwidth='true'] .project-card-hover-wash,
+html[data-low-bandwidth='true'] .project-card-hover-beam,
+html[data-low-bandwidth='true'] .project-card-hover-cue {
+  display: none !important;
+}
+
+html[data-low-bandwidth='true'] .nav,
+html[data-low-bandwidth='true'] .nav--scrolled,
+html[data-low-bandwidth='true'] .back-to-top,
+html[data-low-bandwidth='true'] .mobile-menu {
+  backdrop-filter: none;
+}
 .avatar-frame {
   position: relative;
   width: min(100%, 440px);

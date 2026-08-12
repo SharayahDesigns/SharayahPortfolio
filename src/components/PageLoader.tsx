@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useLowBandwidthMode } from '../hooks/useLowBandwidthMode'
 
 const LOADER_TEXT = 'Loading frontend experience'
 const TYPE_MS = 42
@@ -11,9 +12,15 @@ type PageLoaderProps = {
 }
 
 export default function PageLoader({ visible, onComplete }: PageLoaderProps) {
+  const isLowBandwidth = useLowBandwidthMode()
   const [typedCount, setTypedCount] = useState(0)
 
   useEffect(() => {
+    if (isLowBandwidth) {
+      onComplete?.()
+      return
+    }
+
     if (!visible) return
 
     setTypedCount(0)
@@ -30,7 +37,9 @@ export default function PageLoader({ visible, onComplete }: PageLoaderProps) {
     }, TYPE_MS)
 
     return () => window.clearInterval(timer)
-  }, [visible, onComplete])
+  }, [isLowBandwidth, visible, onComplete])
+
+  if (isLowBandwidth) return null
 
   return (
     <AnimatePresence>

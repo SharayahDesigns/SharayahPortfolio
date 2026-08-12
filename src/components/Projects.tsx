@@ -8,6 +8,7 @@ import { caseStudies } from '../data/caseStudies'
 import { ArrowUpRight, BriefcaseBusiness, ExternalLink, Heart } from 'lucide-react'
 import ProjectVisual, { type ProjectVisualType } from './ProjectVisual'
 import { trackExternalLinkClick, trackProjectClick } from '../lib/analytics'
+import { useLowBandwidthMode } from '../hooks/useLowBandwidthMode'
 
 /** `type` is a '·'-joined discipline list; a card only has room for the headline one. */
 function primaryDiscipline(type: string) {
@@ -34,7 +35,8 @@ type ProjectCardItem = {
 }
 
 function ProjectCards({ items }: { items: ProjectCardItem[] }) {
-  const reducedMotion = useReducedMotion() ?? false
+  const isLowBandwidth = useLowBandwidthMode()
+  const reducedMotion = (useReducedMotion() ?? false) || isLowBandwidth
 
   const item = {
     hidden: { opacity: 0 },
@@ -137,14 +139,16 @@ function ProjectCards({ items }: { items: ProjectCardItem[] }) {
             <div className="project-card-media">
               {p.image ? (
                 <img
-                  src={p.image}
-                  srcSet={p.imageSmall && p.imageWidth
+                  src={isLowBandwidth && p.imageSmall ? p.imageSmall : p.image}
+                  srcSet={!isLowBandwidth && p.imageSmall && p.imageWidth
                     ? `${p.imageSmall} 720w, ${p.image} ${p.imageWidth}w`
                     : undefined}
-                  sizes={p.imageSmall ? '(max-width: 600px) 100vw, 380px' : undefined}
+                  sizes={!isLowBandwidth && p.imageSmall ? '(max-width: 600px) 100vw, 380px' : undefined}
                   alt={p.imageAlt || `${p.name} website screenshot`}
-                  width={p.imageWidth ?? undefined}
-                  height={p.imageHeight ?? undefined}
+                  width={isLowBandwidth && p.imageSmall ? 720 : (p.imageWidth ?? undefined)}
+                  height={isLowBandwidth && p.imageSmall && p.imageWidth && p.imageHeight
+                    ? Math.round((720 / p.imageWidth) * p.imageHeight)
+                    : (p.imageHeight ?? undefined)}
                   loading="lazy"
                   decoding="async"
                 />

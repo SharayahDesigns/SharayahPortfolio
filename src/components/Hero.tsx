@@ -6,6 +6,7 @@ import ParticleField from './ParticleField'
 import { portfolioData } from '../data/portfolio'
 import { Github, Linkedin, Mail, ArrowDown, FileText } from 'lucide-react'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useLowBandwidthMode } from '../hooks/useLowBandwidthMode'
 
 const HeroAvatar = lazy(() => import('./HeroAvatar'))
 
@@ -87,7 +88,7 @@ function StaticHeroImage({ onReady }: HeroProps) {
 }
 
 export default function Hero({ onReady }: HeroProps) {
-  const [reducedMotion, setReducedMotion] = useState(false)
+  const isLowBandwidth = useLowBandwidthMode()
   const [canUseWebGL, setCanUseWebGL] = useState(() => supportsWebGL())
   const [avatarReady, setAvatarReady] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
@@ -99,6 +100,7 @@ export default function Hero({ onReady }: HeroProps) {
   // deliberate for the 3D avatar. The text animations need the value on the
   // first render instead, or the typewriter starts and then restarts.
   const prefersReduced = useReducedMotion() ?? false
+  const reducedMotion = prefersReduced || isLowBandwidth
 
   // Typed out by advancing a character count, so the string updates outside
   // React's render loop rather than re-rendering the hero ~70 times.
@@ -140,13 +142,8 @@ export default function Hero({ onReady }: HeroProps) {
   }, [onReady])
 
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mq.matches)
-  }, [])
-
-  useEffect(() => {
-    setCanUseWebGL(supportsWebGL())
-  }, [])
+    setCanUseWebGL(!isLowBandwidth && supportsWebGL())
+  }, [isLowBandwidth])
 
   // The hero sticks so the content below scrolls up over it. When the hero is
   // taller than the viewport it pins at a negative offset instead of 0, so the
@@ -154,6 +151,11 @@ export default function Hero({ onReady }: HeroProps) {
   useEffect(() => {
     const el = heroRef.current
     if (!el) return
+
+    if (isLowBandwidth) {
+      el.style.setProperty('--hero-sticky-top', '0px')
+      return
+    }
 
     const updateStickyOffset = () => {
       const overflow = Math.max(0, el.offsetHeight - window.innerHeight)
@@ -168,7 +170,7 @@ export default function Hero({ onReady }: HeroProps) {
       observer.disconnect()
       window.removeEventListener('resize', updateStickyOffset)
     }
-  }, [])
+  }, [isLowBandwidth])
 
   const containerVariants = {
     hidden: {},
@@ -199,8 +201,8 @@ export default function Hero({ onReady }: HeroProps) {
       }
 
   return (
-    <section className="hero" id="hero" ref={heroRef}>
-      {!reducedMotion && !useMobileHero && <ParticleField />}
+    <section className={`hero${isLowBandwidth ? ' hero--low-bandwidth' : ''}`} id="hero" ref={heroRef}>
+      {!reducedMotion && !useMobileHero && !isLowBandwidth && <ParticleField />}
 
       <div className="hero-noise" />
 

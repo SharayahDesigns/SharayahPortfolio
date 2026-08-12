@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { MotionConfig } from 'framer-motion'
 import CustomCursor from './components/CustomCursor'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
@@ -15,6 +16,7 @@ import { upsertJsonLd, removeJsonLd } from './components/SEO'
 import { siteConfig, resumePdfPath } from './data/siteConfig'
 import { portfolioData } from './data/portfolio'
 import { useMediaQuery } from './hooks/useMediaQuery'
+import { LowBandwidthModeProvider, useLowBandwidthMode } from './hooks/useLowBandwidthMode'
 
 const AboutProjectsStack = lazy(() => import('./components/AboutProjectsStack'))
 const Experience = lazy(() => import('./components/Experience'))
@@ -54,11 +56,12 @@ function shouldShowIntroLoader() {
 }
 
 function HomePage() {
+  const isLowBandwidth = useLowBandwidthMode()
   const isMobileViewport = useMediaQuery('(max-width: 900px)')
   const isCoarsePointer = useMediaQuery('(pointer: coarse)')
-  const deferHeavyContent = isMobileViewport || isCoarsePointer
-  const [showBelowFoldContent, setShowBelowFoldContent] = useState(!deferHeavyContent)
-  const [showIntroLoader, setShowIntroLoader] = useState(() => shouldShowIntroLoader())
+  const deferHeavyContent = !isLowBandwidth && (isMobileViewport || isCoarsePointer)
+  const [showBelowFoldContent, setShowBelowFoldContent] = useState(isLowBandwidth || !deferHeavyContent)
+  const [showIntroLoader, setShowIntroLoader] = useState(() => !isLowBandwidth && shouldShowIntroLoader())
 
   useEffect(() => {
     upsertJsonLd('page-jsonld', {
@@ -91,12 +94,17 @@ function HomePage() {
   }, [])
 
   useEffect(() => {
+    if (isLowBandwidth) {
+      setShowIntroLoader(false)
+      return
+    }
+
     if (!showIntroLoader) return
     hasShownIntroLoaderInAppSession = true
-  }, [showIntroLoader])
+  }, [isLowBandwidth, showIntroLoader])
 
   useEffect(() => {
-    if (!deferHeavyContent) {
+    if (isLowBandwidth || !deferHeavyContent) {
       setShowBelowFoldContent(true)
       return
     }
@@ -121,7 +129,7 @@ function HomePage() {
         window.clearTimeout(timeoutId)
       }
     }
-  }, [deferHeavyContent])
+  }, [deferHeavyContent, isLowBandwidth])
 
   return (
     <>
@@ -239,24 +247,36 @@ function NotFoundLayout() {
 }
 
 export default function App() {
-  const showCustomCursor = useMediaQuery('(hover: hover) and (pointer: fine)')
+  return (
+    <LowBandwidthModeProvider>
+      <AppShell />
+    </LowBandwidthModeProvider>
+  )
+}
+
+function AppShell() {
+  const isLowBandwidth = useLowBandwidthMode()
+  const hasFinePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
+  const showCustomCursor = !isLowBandwidth && hasFinePointer
 
   return (
-    <BrowserRouter>
-      {/* First focusable element on every route: keyboard users can jump
-          straight to <main id="main"> instead of tabbing through the full
-          nav every time. Hidden until focused (see .skip-link in styles.css). */}
-      <a href="#main" className="skip-link">Skip to content</a>
-      <AnalyticsRouterTracker />
-      <ScrollToTop />
-      {showCustomCursor ? <CustomCursor /> : null}
-      <ScrollProgress />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/work/:slug" element={<CaseStudyLayout />} />
-        <Route path="/resume" element={<ResumeLayout />} />
-        <Route path="*" element={<NotFoundLayout />} />
-      </Routes>
-    </BrowserRouter>
+    <MotionConfig reducedMotion={isLowBandwidth ? 'always' : 'user'}>
+      <BrowserRouter>
+        {/* First focusable element on every route: keyboard users can jump
+            straight to <main id="main"> instead of tabbing through the full
+            nav every time. Hidden until focused (see .skip-link in styles.css). */}
+        <a href="#main" className="skip-link">Skip to content</a>
+        <AnalyticsRouterTracker />
+        <ScrollToTop />
+        {showCustomCursor ? <CustomCursor /> : null}
+        {!isLowBandwidth ? <ScrollProgress /> : null}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/work/:slug" element={<CaseStudyLayout />} />
+          <Route path="/resume" element={<ResumeLayout />} />
+          <Route path="*" element={<NotFoundLayout />} />
+        </Routes>
+      </BrowserRouter>
+    </MotionConfig>
   )
 }
