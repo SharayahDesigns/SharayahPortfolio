@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
@@ -54,7 +55,10 @@ function DownloadResumeButton({ className }: { className: string }) {
         <Download size={16} /> Download PDF
       </button>
 
-      {chooserOpen ? (
+      {/* Portalled to <body>: the resume header is `overflow: hidden` with an
+          animated (transformed) wrapper, which clips the fixed overlay and cuts
+          the panel off at the Summary section on small screens. */}
+      {chooserOpen ? createPortal(
         <div
           className="resume-download-modal"
           role="dialog"
@@ -133,7 +137,8 @@ function DownloadResumeButton({ className }: { className: string }) {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </>
   )

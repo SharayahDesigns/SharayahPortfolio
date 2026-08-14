@@ -491,24 +491,52 @@
   border-radius: 100px;
   transition: all var(--transition);
   border: 1px solid transparent;
+  /* Kills Chrome's double-tap-zoom wait before the click fires, and drops the
+     grey flash so our own :active state is the only press feedback. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-primary {
   background: var(--teal);
   color: var(--bg-primary);
-}
-.btn-primary:hover {
-  background: #00e6b3;
-  box-shadow: 0 0 24px var(--teal-glow);
-  transform: translateY(-2px);
 }
 .btn-ghost {
   background: transparent;
   color: var(--text-primary);
   border-color: var(--border);
 }
-.btn-ghost:hover {
+
+/* Hover lift only where a real pointer exists - on touch it sticks after the
+   tap and fights the pressed state below. */
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    background: #00e6b3;
+    box-shadow: 0 0 24px var(--teal-glow);
+    transform: translateY(-2px);
+  }
+  .btn-ghost:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+}
+
+/* Pressed state. Fires on touchdown, so it lands well before the click handler
+   mounts the modal - the tap reads as instant even when React is still working.
+   Short, self-contained transition; `all var(--transition)` is 300ms. */
+.btn:active {
+  transform: scale(0.96);
+  transition: transform 80ms ease-out, background 80ms ease-out, box-shadow 80ms ease-out;
+}
+.btn-primary:active {
+  background: #00e6b3;
+  box-shadow: 0 0 18px var(--teal-glow);
+}
+.btn-ghost:active {
   border-color: var(--teal);
   color: var(--teal);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:active { transform: none; }
 }
 
 .hero-meta-row {
@@ -4579,6 +4607,9 @@ a.resume-contact-item:hover { color: var(--teal); }
 .resume-download-modal {
   position: fixed;
   inset: 0;
+  /* dvh so the panel stays inside the visible area when mobile browser
+     chrome is showing - `inset: 0` alone sizes to the large viewport. */
+  height: 100dvh;
   z-index: 200;
   display: grid;
   place-items: center;
@@ -4589,6 +4620,10 @@ a.resume-contact-item:hover { color: var(--teal); }
 
 .resume-download-panel {
   width: min(100%, 640px);
+  max-height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 28px;
   padding: 24px;
@@ -4698,6 +4733,34 @@ a.resume-contact-item:hover { color: var(--teal); }
 
 .resume-download-option-copy span {
   color: rgba(229, 236, 250, 0.72);
+}
+
+@media (max-width: 600px) {
+  .resume-download-modal {
+    padding: 16px;
+    /* A full-screen 14px backdrop blur costs a slow first paint on mobile GPUs,
+       which is most of the lag between tap and the panel appearing. Cheaper
+       blur + a more opaque scrim reads the same at this size. */
+    backdrop-filter: blur(6px);
+    background: rgba(2, 10, 9, 0.86);
+  }
+  .resume-download-panel {
+    border-radius: 22px;
+    padding: 20px;
+  }
+  .resume-download-panel-head h2 { font-size: 1.35rem; }
+  .resume-download-panel-copy { margin-top: 12px; }
+  .resume-download-options { margin-top: 18px; }
+  .resume-download-option {
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+  .resume-download-swatch {
+    width: 40px;
+    height: 56px;
+    border-radius: 10px;
+  }
 }
 
 .resume-body {
